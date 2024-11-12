@@ -19,11 +19,6 @@ typedef struct AwaleBoard {
  */
 void initAwaleBoard(AwaleBoard* awaleBoard);
 
-/**
-@brief affiche un plateau de jeu
-@param awaleBoard plateau a afficher
- */
-void displayAwaleBoard(const AwaleBoard* awaleBoard);
 
 /**
 @brief libere la memoire allouee pour un plateau de jeu

@@ -45,33 +45,42 @@ int updateAwaleBoard(Game* game, int move, const Player* player) {
     // Distribute the seeds
     int i = move + 1;
     
-    if(i + nbSeeds == 12 && comparePlayers(player, game->p2) || i + nbSeeds == 6 && comparePlayers(player, game->p1)) {
+    if(move + nbSeeds == 12 && comparePlayers(player, game->p2) || move + nbSeeds == 6 && comparePlayers(player, game->p1)) {
         ret = 1; // the player plays again
     }
 
     while(nbSeeds > 0) {
-            if (i == 6){
-                i = 11;
-                game->scoreP1++;
-            }
-            if (i == 12){
-                i = 0;
-                game->scoreP2++;
-            }
-
-            awaleBoard->board[i]++;
+        if(i == 6) {
+            game->scoreP1++;
+            nbSeeds--; 
+        } else if(i == 12) {
+            game->scoreP2++;
             nbSeeds--;
-
-            if(i < 6 && i >= 0){
-                printf("index 1: %d\n", i);
-                i++;
-            } else if (i < 12 && i >= 6){
-                printf("index 2: %d\n", i);
-                i--;
-            }
+            i = 0;
+        }
+        awaleBoard->board[i]++;
+        nbSeeds--;
+        i++;  
     }
     return ret;
 }
+
+void displayAwaleBoard(const Game* game){
+    AwaleBoard* awaleBoard = game->board;
+    printf("+--1-+--2-+--3-+--4-+--5-+--6-+\n");
+    printf("-------------------------------\n");
+    for (int i = 0; i < 6; i++) 
+        printf("| %2d ", awaleBoard->board[i]);
+    printf("|\tJoueur 1: %s\n", game->p1->nickname);
+
+    for (int i = 11; i > 5 ; i--) 
+        printf("| %2d ", awaleBoard->board[i]);
+    printf("|\tJoueur 2: %s\n", game->p2->nickname);
+
+    printf("-------------------------------\n");
+    printf("+--6-+--5-+--4-+--3-+--2-+--1-+\n");
+}
+
 
 void freeGame(void* game) {
     Game* g = (Game*)game;
@@ -92,7 +101,7 @@ void printGame(void* game) {
         time_t duration = g->end - g->start;
         printf("Duree de la partie: %ld", duration);
     }
-    displayAwaleBoard(g->board);
+    displayAwaleBoard(g);
 }
 
 

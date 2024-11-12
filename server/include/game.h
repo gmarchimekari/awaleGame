@@ -53,6 +53,13 @@ void endGame(Game* game);
 int updateAwaleBoard(Game* game, int move, const Player* player); 
 
 /**
+@brief affiche un plateau de jeu
+@param Game partie en cours
+ */
+void displayAwaleBoard(const Game* game);
+
+
+/**
 @brief verifie si la partie est terminee
 @param game partie a verifier
 @return 1 si la partie est terminee, 0 sinon

@@ -17,8 +17,9 @@ int main() {
     Player *player = game->p1;
     while(!game->end) {
         int move;
-        displayAwaleBoard(game->board);
-        printf("Selectionnez votre coup: ");
+        displayAwaleBoard(game);
+        printf("C'est a %s de jouer, selectionne ton coup: ", player->nickname);
+        
         scanf("%d", &move);
         if(move < 1 || move > 6) {
             printf("Coup invalide\n");
