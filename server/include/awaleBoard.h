@@ -7,10 +7,10 @@
 
 /**
 @brief structure qui contient les informations d'un plateau de jeu Awale
-@AwaleBoard tableau de tableau de int qui represente le plateau. Chaque case contient le nombre de graines dans la case
+@AwaleBoard tableau de int qui represente le plateau. Chaque case contient le nombre de graines dans la case
  */
 typedef struct AwaleBoard {
-    int** board;
+    int* board;
 } AwaleBoard;
 
 /**

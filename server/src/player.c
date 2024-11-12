@@ -9,9 +9,7 @@ void initializePlayer(Player *player, const char *name, const char *password) {
     initList(player->games);
 }
 
-int comparePlayers(void *player1, void *player2) {
-    Player *p1 = (Player *)player1;
-    Player *p2 = (Player *)player2;
+int comparePlayers(const Player* p1, const Player* p2) {
     return strcmp(p1->nickname, p2->nickname) == 0;
 }
 

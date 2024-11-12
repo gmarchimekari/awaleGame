@@ -35,7 +35,7 @@ typedef struct Game {
 @param p1 premier joueur
 @param p2 deuxieme joueur
 */
-void initGame(Game* game, const Player* p1, const Player* p2);
+void initializeGame(Game* game, Player* p1, Player* p2);
 
 /**
 @brief termine une partie
@@ -45,21 +45,19 @@ void endGame(Game* game);
 
 /**
 @brief met a jour le plateau de jeu apres un coup
-@param awaleBoard plateau a mettre a jour
-@param player joueur qui a joue
+@param game contient les informations de la partie et le plateau de jeu
 @param move coup joue. represente la case jouee
+@param player joueur qui joue
 @return 1 si le joueur rejoue, 0 sinon
  */
-int updateAwaleBoard(AwaleBoard* awaleBoard, const Player* player, int move);
+int updateAwaleBoard(Game* game, int move, const Player* player); 
 
 /**
-@brief verifie si un coup est valide
-@param awaleBoard plateau de jeu
-@param player joueur qui joue
-@param move coup joue
-@return 1 si le coup est valide, 0 sinon
+@brief verifie si la partie est terminee
+@param game partie a verifier
+@return 1 si la partie est terminee, 0 sinon
  */
-int isValidMove(const AwaleBoard* awaleBoard, const Player* player, int move);
+int checkEndGame(Game* game);
 
 /** 
 @brief libere la memoire allouee pour une partie

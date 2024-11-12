@@ -43,7 +43,7 @@ void freePlayer(void *player);
 @param player2 deuxieme joueur
 @return 1 si les joueurs sont egaux, 0 sinon
  */
-int comparePlayers(void *player1, void *player2); // TODO: non doublon nom
+int comparePlayers(const Player *p1, const Player *p2); // TODO: non doublon nom
 
 
 #endif // PLAYER_H
