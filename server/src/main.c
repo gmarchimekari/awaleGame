@@ -4,7 +4,16 @@
 #include <player.h>
 
 int main() {
-    Player *p1, *p2; 
+    
+    
+
+    
+    return 0;
+}
+
+
+/**
+Player *p1, *p2; 
     p1 = (Player*)malloc(sizeof(Player));
     p2 = (Player*)malloc(sizeof(Player));
 
@@ -38,9 +47,4 @@ int main() {
             endGame(game);
             printf("Partie terminee\n");
         }
-    }
-    
-
-    
-    return 0;
-}
+    } */
