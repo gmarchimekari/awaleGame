@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <game.h>
-#include <player.h>
+#include <client.h>
 #include <string.h>
 
 #include <sys/types.h>
@@ -90,21 +90,21 @@ int test(int argc, char** argv) // TODO
 
 
 /**
-Player *p1, *p2; 
-    p1 = (Player*)malloc(sizeof(Player));
-    p2 = (Player*)malloc(sizeof(Player));
+Client *p1, *p2; 
+    p1 = (Client*)malloc(sizeof(Client));
+    p2 = (Client*)malloc(sizeof(Client));
 
-    initializePlayer(p1, "yano", "password1");
-    initializePlayer(p2, "xGdoubleMx", "password2");
+    initializeClient(p1, "yano", "password1");
+    initializeClient(p2, "xGdoubleMx", "password2");
 
     Game *game = (Game*)malloc(sizeof(Game));
     initializeGame(game, p1, p2);
     
-    Player *player = game->p1;
+    Client *Client = game->p1;
     while(!game->end) {
         int move;
         displayAwaleBoard(game);
-        printf("C'est a %s de jouer, selectionne ton coup: ", player->nickname);
+        printf("C'est a %s de jouer, selectionne ton coup: ", Client->nickname);
         
         scanf("%d", &move);
         if(move < 1 || move > 6) {
@@ -112,12 +112,12 @@ Player *p1, *p2;
             continue;
         }
 
-        if(comparePlayers(game->p1, player)) { // player 1
-            if(!updateAwaleBoard(game, move, player))
-                player = game->p2;
-        } else { // player 2
-            if(!updateAwaleBoard(game, move + 6, player))
-                player = game->p1;  
+        if(compareClients(game->p1, Client)) { // Client 1
+            if(!updateAwaleBoard(game, move, Client))
+                Client = game->p2;
+        } else { // Client 2
+            if(!updateAwaleBoard(game, move + 6, Client))
+                Client = game->p1;  
         }
 
         if(checkEndGame(game)) {

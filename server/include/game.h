@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <player.h>
+#include <client.h>
 #include <time.h>
 #include <awaleBoard.h>
 
@@ -19,11 +19,11 @@
 @board plateau de jeu
  */
 typedef struct Game {
-    Player* p1; 
-    Player* p2; 
+    Client* p1; 
+    Client* p2; 
     int scoreP1; 
     int scoreP2; 
-    Player* winner; 
+    Client* winner; 
     time_t start;
     time_t end;
     AwaleBoard* board;
@@ -35,7 +35,7 @@ typedef struct Game {
 @param p1 premier joueur
 @param p2 deuxieme joueur
 */
-void initializeGame(Game* game, Player* p1, Player* p2);
+void initializeGame(Game* game, Client* p1, Client* p2);
 
 /**
 @brief termine une partie
@@ -47,10 +47,10 @@ void endGame(Game* game);
 @brief met a jour le plateau de jeu apres un coup
 @param game contient les informations de la partie et le plateau de jeu
 @param move coup joue. represente la case jouee
-@param player joueur qui joue
+@param Client joueur qui joue
 @return 1 si le joueur rejoue, 0 sinon
  */
-int updateAwaleBoard(Game* game, int move, const Player* player); 
+int updateAwaleBoard(Game* game, int move, const Client* Client); 
 
 /**
 @brief affiche un plateau de jeu

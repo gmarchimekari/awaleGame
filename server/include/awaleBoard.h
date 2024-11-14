@@ -2,7 +2,7 @@
 #define AwaleBoard_H
 
 #include <stdio.h>
-#include <player.h>
+#include <client.h>
 #include <stdlib.h>
 
 /**

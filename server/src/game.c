@@ -1,6 +1,6 @@
 #include <game.h>
 
-void initializeGame(Game* game, Player* p1, Player* p2) {
+void initializeGame(Game* game, Client* p1, Client* p2) {
     game->p1 = p1;
     game->p2 = p2;
     game->scoreP1 = 0;
@@ -32,9 +32,9 @@ int checkEndGame(Game* game) {
 }
 
 
-int updateAwaleBoard(Game* game, int move, const Player* player) {    
+int updateAwaleBoard(Game* game, int move, const Client* Client) {    
     AwaleBoard* awaleBoard = game->board;
-    int ret = 0; // return code, 0 if the player doesn't play again, 1 otherwise
+    int ret = 0; // return code, 0 if the Client doesn't play again, 1 otherwise
     move--; // for the array indexes
     // Get the number of seeds in the chosen pit
     int nbSeeds = awaleBoard->board[move];
@@ -45,8 +45,8 @@ int updateAwaleBoard(Game* game, int move, const Player* player) {
     // Distribute the seeds
     int i = move + 1;
     
-    if(move + nbSeeds == 12 && comparePlayers(player, game->p2) || move + nbSeeds == 6 && comparePlayers(player, game->p1)) {
-        ret = 1; // the player plays again
+    if(move + nbSeeds == 12 && compareClients(Client, game->p2) || move + nbSeeds == 6 && compareClients(Client, game->p1)) {
+        ret = 1; // the Client plays again
     }
 
     while(nbSeeds > 0) {

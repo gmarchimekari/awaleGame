@@ -3,8 +3,8 @@
 #include <errno.h>
 #include <string.h>
 
-#include <server.h>
-#include <client2.h>
+#include "server.h"
+#include "client.h"
 
 static void init(void)
 {
@@ -92,7 +92,7 @@ static void app(void)
          FD_SET(csock, &rdfs);
 
          Client c = { csock };
-         strncpy(c.name, buffer, BUF_SIZE - 1);
+         strncpy(c.nickname, buffer, BUF_SIZE - 1);
          clients[actual] = c;
          actual++;
       }
@@ -111,7 +111,7 @@ static void app(void)
                {
                   closesocket(clients[i].sock);
                   remove_client(clients, i, &actual);
-                  strncpy(buffer, client.name, BUF_SIZE - 1);
+                  strncpy(buffer, client.nickname, BUF_SIZE - 1);
                   strncat(buffer, " disconnected !", BUF_SIZE - strlen(buffer) - 1);
                   send_message_to_all_clients(clients, client, actual, buffer, 1);
                }
@@ -158,7 +158,7 @@ static void send_message_to_all_clients(Client *clients, Client sender, int actu
       {
          if(from_server == 0)
          {
-            strncpy(message, sender.name, BUF_SIZE - 1);
+            strncpy(message, sender.nickname, BUF_SIZE - 1);
             strncat(message, " : ", sizeof message - strlen(message) - 1);
          }
          strncat(message, buffer, sizeof message - strlen(message) - 1);
