@@ -15,11 +15,11 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
     initList(Client->friends_requests);
 }
 
-int compareClients(const void* p1, const void* p2) {
-    Client *c1 = (Client *)p1;
-    Client *c2 = (Client *)p2;
-    printf("Comparing %s and %s\n", c1->nickname, c2->nickname); // TODO: remove
-    return strcmp(c1->nickname, c2->nickname) == 0;
+int compareClientsNames(const void* p1, const void* p2) {
+    char *c1 = (char *)p1;
+    char *c2 = (char *)p2;
+    printf("[DEBUG] Comparing %s and %s\n", c1, c2); // TODO: remove
+    return strcmp(c1, c2) == 0;
 }
 
 void printClient(void *c) {
@@ -35,12 +35,16 @@ void freeClient(void *c) {
     free(p);
 }
 
-void client_add_friend_request(Client sender, Client* receiver){
-    printf("in the client_add_friend_request\n");
-    printf("the sender is %s\n", sender.nickname);
-    printf("the receiver is %s\n", receiver->nickname);
-    insertNode(receiver->friends_requests, &sender, freeClient, printClient);
+void client_add_friend_request(Client* receiver, char* sender) {
+    printf("[DEBUG] receiver name %s, sender name %s\n", receiver->nickname, sender); // BUG
+    insertNode(receiver->friends_requests, sender, NULL, client_print_name);
+    printf("[DEBUG] friend request list of %s\n", receiver->nickname); // BUG
     displayList(receiver->friends_requests);
+}
+
+void client_print_name(void *name) {
+    char *p = (char *)name;
+    printf("Client: %s\n", p);
 }
 
 void client_get_profile_information(const Client c, char* buffer) {

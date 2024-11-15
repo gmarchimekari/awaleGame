@@ -70,8 +70,8 @@ static void display_games();
 static void display_client_profile(const Client c);  
 static void watch_finished_game(const Client c); 
 static int getValue(const char *val);
-static void send_friend_request(const Client sender, Client* receiver);
-static Client get_client_by_name(const Client* clients, const int actual, const char* name);
+static void send_friend_request(Client sender, Client* receiver);
+static Client* get_client_by_name(Client* clients, const int actual, const char* name);
 
 /**
 @brief fonction pour repondre a une demande d'ami

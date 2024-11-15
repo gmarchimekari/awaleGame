@@ -132,24 +132,13 @@ static void app(void)
 
                      case APF: {
                         printf("[LOG] Sending friend request from %s to %s\n", client.nickname, buffer + 4);
-                        Client* receiver;
-                        int found = 0;
-                        for(int j = 0; j < actual; j++) {
-                           if(strcmp(clients[j].nickname, buffer + 4) == 0) {
-                              receiver = clients + j;
-                              found = 1;
-                              break;
-                           }
-                        }
-                        if(!found)
+                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
+                        printf("[DEBUG] %s\n", receiver->nickname); // BUG remove
+                        if(!receiver)
                            send_message_to_client(client, "Player not found\n");
                         else {
-                           printf("before the friend request\n");
-                           displayList(receiver->friends_requests); // TODO BUG
                            send_friend_request(client, receiver);
                            send_message_to_client(client, "Friend request sent\n");
-                           printf("after the friend request in the switch case again\n");
-                           displayList(receiver->friends_requests); // TODO BUG
                         }
                         break;
                      }
@@ -200,24 +189,24 @@ static void app(void)
 
                      case ACT: {
                         printf("[LOG] %s accepting friend request from %s\n", client.nickname, buffer + 4);
-                        Client receiver; 
-                        int found = 0;
-                        for(int i = 0; i < actual; i++) {
-                           if(strcmp(clients[i].nickname, buffer + 4) == 0) {
-                              receiver = clients[i];
-                              found = 1;
-                              break;
-                           }
-                        }
-                        if(!found) {
+                        printf("[DEBUG] Friends requests list of %s\n", client.nickname); // BUG
+
+                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
+                        printf("[DEBUG] %s\n", receiver->nickname); // BUG remove
+
+                        if(!receiver) {
                            send_message_to_client(client, "Player not found\n");
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           printf("PLAYER name %s\n", client.nickname);
-                           displayList(client.friends_requests); // TODO remove
-                           if(findNode(client.friends_requests, &receiver, compareClients)) // BUG
-                              reply_to_friend_request(&client, &receiver, 1);
+                           if(findNode(client.friends_requests, receiver->nickname, compareClientsNames)) {
+                              printf("[DEBUG] reciever %s, sender %s\n", receiver->nickname, client.nickname); // BUG
+                              reply_to_friend_request(&client, receiver, 1);
+                              printf("[DEBUG] client friend list %s\n", client.nickname); // BUG
+                              displayList(client.friends);
+                              printf("[DEBUG] receiver friend list %s\n", receiver->nickname); // BUG
+                              displayList(receiver->friends);
+                           }
                            else 
                               send_message_to_client(client, "No friend request from this player\n");
                         }
@@ -230,7 +219,7 @@ static void app(void)
                         break;
 
                      case LFR:
-                        
+                        //displayClientProfile(clients[i]); 
                         break;
 
                      case LSF:
@@ -425,41 +414,31 @@ static void send_message_to_client(const Client client, const char *buffer) {
    write_client(client.sock, buffer);
 }
 
-static void send_friend_request(const Client sender, Client* receiver) {
-   printf("before the friend request\n");
-   displayList(receiver->friends_requests); // TODO BUG
-
-   printf("in the send_friend_request\n");
-   printf("the sender is %s\n", sender.nickname);
-   printf("the receiver is %s\n", receiver->nickname);
-   
+static void send_friend_request(Client sender, Client* receiver) {
+   printf("[DEBUG] sender name %s, receiver name %s\n", sender.nickname, receiver->nickname); // BUG
    char buffer[BUF_SIZE];
    strcpy(buffer, "Friend request from ");
    strcat(buffer, sender.nickname);
    strcat(buffer, "\n[ACT] Accept\t[RJT] Reject : followed by the name of the user\n");
-   client_add_friend_request(sender, receiver); // adding the request to the receiver for him to accept or reject
+   client_add_friend_request(receiver, sender.nickname); // adding the name of the sender to the friend requests list of the receiver
+   printf("[DEBUG IN SERVEUR.C] friend request list of %s\n", receiver->nickname); // BUG
+   displayList(receiver->friends_requests);
    send_message_to_client(*receiver, buffer);
-
-   printf("after the friend request in the function\n");
-   displayList(receiver->friends_requests); // TODO BUG
-
 }
 
-static Client get_client_by_name(const Client* clients, const int actual, const char* name) { // TODO use
-   Client receiver;
+static Client* get_client_by_name(Client* clients, const int actual, const char* name) { 
    for(int j = 0; j < actual; j++) {
-      if(strcmp(clients[j].nickname, name) == 0) {
-         receiver = clients[j];
-         break;
-      }
+      if(strcmp(clients[j].nickname, name) == 0) 
+         return &clients[j];
    }
-   return receiver;
+   return NULL;
 }
 
 static void reply_to_friend_request(Client* sender, Client* receiver, const int reply) {
    if(reply) {
       insertNode(sender->friends, receiver, freeClient, printClient);
       insertNode(receiver->friends, sender, freeClient, printClient);
+      send_message_to_client(*receiver, "Friend request accepted\n");
    }
    else {
       send_message_to_client(*receiver, "Friend request rejected\n");

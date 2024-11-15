@@ -45,9 +45,10 @@ int updateAwaleBoard(Game* game, int move, const Client* Client) {
     // Distribute the seeds
     int i = move + 1;
     
-    if(move + nbSeeds == 12 && compareClients(Client, game->p2) || move + nbSeeds == 6 && compareClients(Client, game->p1)) {
-        ret = 1; // the Client plays again
-    }
+    // TODO fix client was object now name
+    // if(move + nbSeeds == 12 && compareClients(Client, game->p2) || move + nbSeeds == 6 && compareClients(Client, game->p1)) {
+    //     ret = 1; // the Client plays again
+    // }
 
     while(nbSeeds > 0) {
         if(i == 6) {
