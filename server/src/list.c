@@ -37,3 +37,14 @@ void freeList(List* list) {
     }
     list->head = NULL;
 }
+
+int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
+    Node* current = list->head;
+    while (current != NULL) {
+        if (compare(current->data, data)) {
+            return 1;
+        }
+        current = current->next;
+    }
+    return 0;
+}

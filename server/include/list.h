@@ -43,6 +43,14 @@ void initList(List* list);
 @param print fonction qui affiche la donnee du noeud
 */
 void insertNode(List* list, void* data, handler free, handler print);
+/**
+@brief fonction qui cherche un element dans la liste chainee
+@param list liste dans laquelle chercher
+@param data donnee a chercher
+@param compare fonction qui compare deux donnees
+@return 1 si l'element est trouve, 0 sinon
+ */
+int findNode(List* list, void* data, int (*compare)(const void*, const void*));
 
 /**
 @brief affiche une liste chainee

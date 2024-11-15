@@ -91,8 +91,22 @@ static void app(void)
 
          FD_SET(csock, &rdfs);
 
-         Client c = { csock };
-         strncpy(c.nickname, buffer, BUF_SIZE - 1);
+         char name[BUF_SIZE] = {0};
+         char bio[BUF_SIZE] = {0};
+         strncpy(name, buffer, BUF_SIZE - 1);
+
+         // TODO add
+         // the client also sends its bio
+         // if(read_client(csock, buffer) == -1)
+         // {
+         //    /* disconnected */
+         //    continue;
+         // }
+
+         strncpy(bio, buffer, BUF_SIZE - 1);
+
+         Client c; 
+         initializeClient(&c, name, bio, csock);
          clients[actual] = c;
          actual++;
          send_main_menu(c);
@@ -127,10 +141,29 @@ static void app(void)
                         display_online_players(clients, actual, client);
                         break;
 
-                     case APF:
-                        //displayGames();
+                     case APF: {
+                        printf("[LOG] Sending friend request from %s to %s\n", client.nickname, buffer + 4);
+                        Client* receiver;
+                        int found = 0;
+                        for(int j = 0; j < actual; j++) {
+                           if(strcmp(clients[j].nickname, buffer + 4) == 0) {
+                              receiver = clients + j;
+                              found = 1;
+                              break;
+                           }
+                        }
+                        if(!found)
+                           send_message_to_client(client, "Player not found\n");
+                        else {
+                           printf("before the friend request\n");
+                           displayList(receiver->friends_requests); // TODO BUG
+                           send_friend_request(client, receiver);
+                           send_message_to_client(client, "Friend request sent\n");
+                           printf("after the friend request in the switch case again\n");
+                           displayList(receiver->friends_requests); // TODO BUG
+                        }
                         break;
-
+                     }
                      case CAP:
                         //displayClientProfile(clients[i]); 
                         break;
@@ -144,12 +177,16 @@ static void app(void)
                         break;
 
                      case SND:  
-                        //send_message_to_all_clients(clients, client, actual, buffer, 0);
+                        send_message_to_all_clients(clients, client, actual, buffer, 0);
                         break;
 
-                     case DYP:
-                        //displayClientProfile(clients[i]); 
+                     case DYP: {
+                        char profile[BUF_SIZE];
+                        client_get_profile_information(client, profile); 
+                        send_message_to_client(client, profile);
                         break;
+                     }
+
 
                      case BIO:
                         //displayClientProfile(clients[i]); 
@@ -161,6 +198,45 @@ static void app(void)
                      
                      case SVG:
                         //displayClientProfile(clients[i]); 
+                        break;
+
+                     case ACT: {
+                        printf("[LOG] %s accepting friend request from %s\n", client.nickname, buffer + 4);
+                        Client receiver; 
+                        int found = 0;
+                        for(int i = 0; i < actual; i++) {
+                           if(strcmp(clients[i].nickname, buffer + 4) == 0) {
+                              receiver = clients[i];
+                              found = 1;
+                              break;
+                           }
+                        }
+                        if(!found) {
+                           send_message_to_client(client, "Player not found\n");
+                           break;
+                        } else { // player found
+                           // check if the player requested to be a friend
+                           printf("PLAYER name %s\n", client.nickname);
+                           displayList(client.friends_requests); // TODO remove
+                           if(findNode(client.friends_requests, &receiver, compareClients)) // BUG
+                              reply_to_friend_request(&client, &receiver, 1);
+                           else 
+                              send_message_to_client(client, "No friend request from this player\n");
+                        }
+                        break;
+                     }
+
+
+                     case RJT:
+                        //displayClientProfile(clients[i]); 
+                        break;
+
+                     case LFR:
+                        //displayClientProfile(clients[i]); 
+                        break;
+
+                     case LSF:
+                        
                         break;
 
                      default:
@@ -298,6 +374,14 @@ static int getValue(const char *val)
       return PVM;
    } else if(strcmp(val, "SVG") == 0) {
       return SVG;
+   } else if(strcmp(val, "ACT") == 0) {
+      return ACT;
+   } else if(strcmp(val, "RJT") == 0) {
+      return RJT;
+   } else if(strcmp(val, "LFR") == 0) {
+      return LFR;
+   } else if(strcmp(val, "LSF") == 0) {
+      return LSF;
    } else {
       return -1;
    }
@@ -307,7 +391,6 @@ static void display_online_players(const Client *clients, const int actual, cons
    char buffer[BUF_SIZE] = {"Online Players:\n\0"};
    for(int i = 0; i < actual; i++) {
       if(clients[i].sock > 0) { 
-         printf("Client %s\n", clients[i].nickname);
          char temp[BUF_SIZE];
          strcpy(temp, " - ");
          strcat(temp, clients[i].nickname);
@@ -330,6 +413,8 @@ static void send_main_menu(const Client client) {
    "[BIO] [**new bio**] Modify your bio\n" 
    "[PVM] [**on/off**] Turn private mode on/off\n"
    "[SVG] Save next game to watch later\n"
+   "[LFR] List friend requests\n"
+   "[LSF] List friends\n"
    "Select your option by entering the command: ";
    send_message_to_client(client, c);
 
@@ -342,6 +427,50 @@ static void send_message_to_client(const Client client, const char *buffer) {
    write_client(client.sock, buffer);
 }
 
+static void send_friend_request(const Client sender, Client* receiver) {
+   printf("before the friend request\n");
+   displayList(receiver->friends_requests); // TODO BUG
+
+   printf("in the send_friend_request\n");
+   printf("the sender is %s\n", sender.nickname);
+   printf("the receiver is %s\n", receiver->nickname);
+   
+   char buffer[BUF_SIZE];
+   strcpy(buffer, "Friend request from ");
+   strcat(buffer, sender.nickname);
+   strcat(buffer, "\n[ACT] Accept\t[RJT] Reject : followed by the name of the user\n");
+   client_add_friend_request(sender, receiver); // adding the request to the receiver for him to accept or reject
+   send_message_to_client(*receiver, buffer);
+
+   printf("after the friend request in the function\n");
+   displayList(receiver->friends_requests); // TODO BUG
+
+}
+
+static Client get_client_by_name(const Client* clients, const int actual, const char* name) { // TODO use
+   Client receiver;
+   for(int j = 0; j < actual; j++) {
+      if(strcmp(clients[j].nickname, name) == 0) {
+         receiver = clients[j];
+         break;
+      }
+   }
+   return receiver;
+}
+
+static void reply_to_friend_request(Client* sender, Client* receiver, const int reply) {
+   if(reply) {
+      insertNode(sender->friends, receiver, freeClient, printClient);
+      insertNode(receiver->friends, sender, freeClient, printClient);
+   }
+   else {
+      send_message_to_client(*receiver, "Friend request rejected\n");
+   }
+}
+
+
+
+
 int main(int argc, char **argv)
 {
    init();
@@ -352,3 +481,9 @@ int main(int argc, char **argv)
 
    return EXIT_SUCCESS;
 }
+
+// TODO make the client nickname unique
+// TODO make the friend requests unique, dont have multiple friend requests from the same person
+// TODO check if the user has a frined request from the sender before accepting the request
+// TODO cannot send request to yourself 
+// TODO cannot send to a friend that is already in the friends list
