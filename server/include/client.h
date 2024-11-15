@@ -13,14 +13,12 @@ typedef struct Client Client;
 /**
 @brief structure qui contient les informations d'un joueur
 @nickname pseudo du joueur
-@password mot de passe du joueur
 @games liste des parties jouees par le joueur
 @sock socket du joueur
  */
 typedef struct Client{
     SOCKET sock;
     char nickname[BUF_SIZE];
-    char password[BUF_SIZE]; // TODO : hash password
     List* games; 
 } Client;
 
@@ -28,9 +26,8 @@ typedef struct Client{
 @brief initialise un joueur
 @param Client joueur a initialiser
 @param name pseudo du joueur
-@param password mot de passe du joueur
  */
-void initializeClient(Client *Client, const char *name, const char *password); // TODO
+void initializeClient(Client *Client, const char *name); // TODO
 
 /**
 @brief affiche un joueur

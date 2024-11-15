@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-void initializeClient(Client *Client, const char *name, const char *password) {
+void initializeClient(Client *Client, const char *name) {
     strcpy(Client->nickname, name);
-    strcpy(Client->password, password);
     Client->games = malloc(sizeof(List));
     initList(Client->games);
 }
