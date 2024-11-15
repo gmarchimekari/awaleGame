@@ -92,21 +92,10 @@ static void app(void)
          FD_SET(csock, &rdfs);
 
          char name[BUF_SIZE] = {0};
-         char bio[BUF_SIZE] = {0};
          strncpy(name, buffer, BUF_SIZE - 1);
 
-         // TODO add
-         // the client also sends its bio
-         // if(read_client(csock, buffer) == -1)
-         // {
-         //    /* disconnected */
-         //    continue;
-         // }
-
-         strncpy(bio, buffer, BUF_SIZE - 1);
-
          Client c; 
-         initializeClient(&c, name, bio, csock);
+         initializeClient(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
          actual++;
          send_main_menu(c);
@@ -177,19 +166,28 @@ static void app(void)
                         break;
 
                      case SND:  
-                        send_message_to_all_clients(clients, client, actual, buffer, 0);
+                        send_message_to_all_clients(clients, client, actual, buffer + 4, 0);
                         break;
 
                      case DYP: {
-                        char profile[BUF_SIZE];
+                        char profile[BUF_SIZE] = {0};
+
+                        printf("profile before %s\n", profile);   
                         client_get_profile_information(client, profile); 
+                        printf("profile after %s\n", profile);
                         send_message_to_client(client, profile);
                         break;
                      }
 
 
-                     case BIO:
-                        //displayClientProfile(clients[i]); 
+                     case BIO: {
+                        strcpy(client.bio, buffer + 4);
+                        clients[i] = client;
+                        printf("[LOG] %s bio updated\n", client.nickname);
+                        printf("%s\n", client.bio);
+                        send_message_to_client(client, "Bio updated\n");
+                        break;
+                     }
                         break;
 
                      case PVM:   
@@ -232,7 +230,7 @@ static void app(void)
                         break;
 
                      case LFR:
-                        //displayClientProfile(clients[i]); 
+                        
                         break;
 
                      case LSF:
@@ -403,14 +401,14 @@ static void display_online_players(const Client *clients, const int actual, cons
 
 static void send_main_menu(const Client client) {
    char* c = "Welcome to the Awale game\n"
-   "[LOP] List online players\n"
-   "[APF] [**player name**] Add a player to your friends list\n"
-   "[CAP] [**player name**] Challenge a player\n"
+   "[LOP] List online players\n" // DONE
+   "[APF] [**player name**] Add a player to your friends list\n" // BUG
+   "[CAP] [**player name**] Challenge a player\n" 
    "[LOG] List ongoing games\n"
    "[WAG] [**game id**] Watch a game\n"
-   "[SND] [**message**] Chat with online players\n"
-   "[DYP] Display your profile\n"
-   "[BIO] [**new bio**] Modify your bio\n" 
+   "[SND] [**message**] Chat with online players\n" // DONE 
+   "[DYP] Display your profile\n" // DONE
+   "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n"
    "[SVG] Save next game to watch later\n"
    "[LFR] List friend requests\n"

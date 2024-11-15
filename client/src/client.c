@@ -25,7 +25,7 @@ static void end(void)
 #endif
 }
 
-static void app(const char *address, const char *name, const char *bio)
+static void app(const char *address, const char *name)
 {
    SOCKET sock = init_connection(address);
    char buffer[BUF_SIZE];
@@ -34,7 +34,6 @@ static void app(const char *address, const char *name, const char *bio)
 
    /* send our name */
    write_server(sock, name);
-   // TODO write_server(sock, bio);
 
    while(1)
    {
@@ -158,7 +157,7 @@ int main(int argc, char **argv)
 
    init();
 
-   app(argv[1], argv[2], ""); // TODO add the bio
+   app(argv[1], argv[2]);
 
    end();
 
