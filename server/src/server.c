@@ -124,6 +124,9 @@ static void app(void)
                   const char val[] = {buffer[0], buffer[1], buffer[2], '\0'};
                   printf("[LOG] User Option %s\n", val);
                   printf("[LOG] Value from enum %d\n", getValue(val));
+                  // printf("\n\n ---- DEBUG ---- \n\n"); // BUG
+                  // debug(clients, actual); // BUG
+                  // printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
 
                   switch(getValue(val)) {
                      case LOP:
@@ -132,14 +135,18 @@ static void app(void)
 
                      case APF: {
                         printf("[LOG] Sending friend request from %s to %s\n", client.nickname, buffer + 4);
+                        printf("[DEBUG] before sending the friend request\n"); // BUG
+                        // debug(clients, actual); // BUG
                         Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        printf("[DEBUG] %s\n", receiver->nickname); // BUG remove
                         if(!receiver)
                            send_message_to_client(client, "Player not found\n");
                         else {
                            send_friend_request(client, receiver);
                            send_message_to_client(client, "Friend request sent\n");
                         }
+
+                        printf("[DEBUG] after sending the friend request\n"); // BUG
+                        // debug(clients, actual); // BUG
                         break;
                      }
                      case CAP:
@@ -189,30 +196,23 @@ static void app(void)
 
                      case ACT: {
                         printf("[LOG] %s accepting friend request from %s\n", client.nickname, buffer + 4);
-                        printf("[DEBUG] Friends requests list of %s\n", client.nickname); // BUG
-
+                        printf("[DEBUG] before accepting the friend request\n"); // BUG
+                        // debug(clients, actual); // BUG
                         Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        printf("[DEBUG] %s\n", receiver->nickname); // BUG remove
-
                         if(!receiver) {
                            send_message_to_client(client, "Player not found\n");
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(client.friends_requests, receiver->nickname, compareClientsNames)) {
-                              printf("[DEBUG] reciever %s, sender %s\n", receiver->nickname, client.nickname); // BUG
+                           if(findNode(client.friends_requests, receiver->nickname, compareClientsNames))
                               reply_to_friend_request(&client, receiver, 1);
-                              printf("[DEBUG] client friend list %s\n", client.nickname); // BUG
-                              displayList(client.friends);
-                              printf("[DEBUG] receiver friend list %s\n", receiver->nickname); // BUG
-                              displayList(receiver->friends);
-                           }
                            else 
                               send_message_to_client(client, "No friend request from this player\n");
                         }
+                        printf("[DEBUG] after accepting the friend request\n"); // BUG
+                        // debug(clients, actual); // BUG
                         break;
-                     }
-
+                     } 
 
                      case RJT:
                         //displayClientProfile(clients[i]); 
@@ -230,6 +230,9 @@ static void app(void)
                         printf("Option invalide\n");
                         break;
                   }
+                  printf("\n\n ---- DEBUG ---- \n\n"); // BUG
+                  debug(clients, actual); // BUG
+                  printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
                }
                break;
             }
@@ -415,26 +418,24 @@ static void send_message_to_client(const Client client, const char *buffer) {
 }
 
 static void send_friend_request(Client sender, Client* receiver) {
-   printf("[DEBUG] sender name %s, receiver name %s\n", sender.nickname, receiver->nickname); // BUG
    char buffer[BUF_SIZE];
    strcpy(buffer, "Friend request from ");
    strcat(buffer, sender.nickname);
    strcat(buffer, "\n[ACT] Accept\t[RJT] Reject : followed by the name of the user\n");
    client_add_friend_request(receiver, sender.nickname); // adding the name of the sender to the friend requests list of the receiver
-   printf("[DEBUG IN SERVEUR.C] friend request list of %s\n", receiver->nickname); // BUG
-   displayList(receiver->friends_requests);
    send_message_to_client(*receiver, buffer);
 }
 
 static Client* get_client_by_name(Client* clients, const int actual, const char* name) { 
    for(int j = 0; j < actual; j++) {
       if(strcmp(clients[j].nickname, name) == 0) 
-         return &clients[j];
+         return &clients[j]; 
    }
    return NULL;
 }
 
 static void reply_to_friend_request(Client* sender, Client* receiver, const int reply) {
+
    if(reply) {
       insertNode(sender->friends, receiver, freeClient, printClient);
       insertNode(receiver->friends, sender, freeClient, printClient);
@@ -443,6 +444,12 @@ static void reply_to_friend_request(Client* sender, Client* receiver, const int 
    else {
       send_message_to_client(*receiver, "Friend request rejected\n");
    }
+
+   // remove the friend request from the list
+   printf("[DEBUG] before removing the friend request\n"); // BUG
+   displayList(sender->friends_requests);
+   removeNode(sender->friends_requests, receiver->nickname, compareClientsNames);
+   displayList(sender->friends_requests);
 }
 
 
@@ -464,3 +471,19 @@ int main(int argc, char **argv)
 // TODO check if the user has a frined request from the sender before accepting the request
 // TODO cannot send request to yourself 
 // TODO cannot send to a friend that is already in the friends list
+
+
+void debug(Client* clients, int actual) {
+   printf("\n[DEBUG FUNCTION START]\n");
+   for(int i = 0; i < actual; i++) {
+      printf("#################################################\n"); 
+      printf("Client %s\n", clients[i].nickname);
+      printf("--- LIST OF FRIEND REQUESTS ---\n");
+      displayList(clients[i].friends_requests);
+      printf("\n--- LIST OF FRIENDS ---\n");
+      displayList(clients[i].friends);
+      printf("#################################################\n"); 
+   }
+   printf("\n[DEBUG FUNCTION END]\n");
+
+}

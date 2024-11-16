@@ -48,3 +48,24 @@ int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     }
     return 0;
 }
+
+void removeNode(List* list, void* data, int (*compare)(const void*, const void*)) {
+    printf("Removing node\n"); // BUG
+    Node* current = list->head;
+    Node* previous = NULL;
+    while (current != NULL) {
+        if (compare(current->data, data)) {
+            if (previous == NULL) {
+                list->head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            if(current->free != NULL)
+                current->free(current->data);
+            free(current);
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+}

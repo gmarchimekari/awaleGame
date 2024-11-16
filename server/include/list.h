@@ -64,4 +64,7 @@ void displayList(const List* list);
  */
 void freeList(List* list);
 
+void removeNode(List* list, void* data, int (*compare)(const void*, const void*)); 
+
+
 #endif // LIST_H
