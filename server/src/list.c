@@ -1,5 +1,6 @@
 #include <List.h>
 #include <stdlib.h>
+#include "Client.h"
 
 void initList(List* list) {
     list->head = NULL;
@@ -49,23 +50,25 @@ int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     return 0;
 }
 
-void removeNode(List* list, void* data, int (*compare)(const void*, const void*)) {
-    printf("Removing node\n"); // BUG
+// frees the node, but not the data in the node
+void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     Node* current = list->head;
     Node* previous = NULL;
     while (current != NULL) {
         if (compare(current->data, data)) {
+            void* removedData = current->data;  // Correctly assign data            
+            // Remove the node from the list
             if (previous == NULL) {
                 list->head = current->next;
             } else {
                 previous->next = current->next;
             }
-            if(current->free != NULL)
-                current->free(current->data);
-            free(current);
-            return;
+            
+            free(current);  // Free the node
+            return removedData;  // Return the data
         }
         previous = current;
         current = current->next;
     }
+    return NULL; // Data not found
 }
