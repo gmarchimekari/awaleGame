@@ -105,5 +105,10 @@ void printGame(void* game) {
     displayAwaleBoard(g);
 }
 
+int game_check_game_players(const void* game, const void* name) {
+    Game* g = (Game*)game;
+    char* n = (char*)name;
+    return strcmp(g->p1->nickname, n) == 0 || strcmp(g->p2->nickname, n) == 0;
+}
 
 

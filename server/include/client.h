@@ -58,14 +58,14 @@ void freeClient(void *Client);
 @param nom du deuxieme joueur
 @return 1 si les joueurs sont egaux, 0 sinon
  */
-int compareClientsNames(const void *p1, const void *p2); // TODO: non doublon nom
+int compareClients(void *p1, void *p2); // TODO: non doublon nom
 
 /**
 @brief fonction pour ajouter une demande d'ami a la liste d'amis
 @param receiver joueur qui a recu la demande
-@param sender nom du joueur qui a envoye la demande
+@param sender joueur qui a envoye la demande
  */
-void client_add_friend_request(Client* receiver, char* sender); 
+void client_add_friend_request(Client* receiver, Client* sender); 
 
 void client_get_profile_information(const Client c, char* buffer);
 

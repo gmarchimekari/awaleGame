@@ -48,6 +48,8 @@ typedef struct in_addr IN_ADDR;
 #define RJT 12
 #define LFR 13
 #define LSF 14
+#define ACC 15
+#define RJC 16
 
 #include "client.h"
 
@@ -70,7 +72,7 @@ static void display_games();
 static void display_client_profile(const Client c);  
 static void watch_finished_game(const Client c); 
 static int getValue(const char *val);
-static void send_friend_request(Client sender, Client* receiver);
+static void send_friend_request(Client* sender, Client* receiver);
 static Client* get_client_by_name(Client* clients, const int actual, const char* name);
 
 /**
@@ -82,5 +84,7 @@ static Client* get_client_by_name(Client* clients, const int actual, const char*
 static void reply_to_friend_request(Client* sender, Client* receiver, const int reply);
 
 static void send_game_invite(Client* sender, Client* receiver); 
+
+static void reply_to_game_invite(Client* sender, Client* receiver, int reply, List* games);
 
 #endif /* guard */

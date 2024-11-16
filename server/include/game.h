@@ -78,5 +78,10 @@ void freeGame(void* game);
 */
 void printGame(void* game);
 
+/**
+@brief fonction pour verifier si le joueur est bien un joueur de la partie
+ */
+int game_check_game_players(const void* game, const void* name);
+
 
 #endif // GAME_H

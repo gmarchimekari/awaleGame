@@ -21,10 +21,11 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
     initList(Client->finished_games);
 }
 
-int compareClientsNames(const void* p1, const void* p2) {
-    char *c1 = (char *)p1;
-    char *c2 = (char *)p2;
-    return strcmp(c1, c2) == 0;
+int compareClients(void* p1, void* p2) {
+    Client *c1 = (Client *)p1;
+    Client *c2 = (Client *)p2;
+    
+    return strcmp(c1->nickname, c2->nickname) == 0;
 }
 
 void printClient(void *c) {
@@ -40,13 +41,13 @@ void freeClient(void *c) {
     free(p);
 }
 
-void client_add_friend_request(Client* receiver, char* sender) {
+void client_add_friend_request(Client* receiver, Client* sender) {
     insertNode(receiver->friends_requests, sender, NULL, client_print_name);
 }
 
-void client_print_name(void *name) {
-    char *p = (char *)name;
-    printf("Client: %s\n", p);
+void client_print_name(void *c) {
+    Client *p = (Client *)c;
+    printf("Client: %s\n", p->nickname);
 }
 
 void client_get_profile_information(const Client c, char* buffer) {
