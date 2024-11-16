@@ -25,6 +25,10 @@ typedef struct Client{
     List* games; 
     List* friends; 
     List* friends_requests;
+    
+    List* game_invites; 
+    List* ongoing_games;
+    List* finished_games;
 } Client;
 
 /**

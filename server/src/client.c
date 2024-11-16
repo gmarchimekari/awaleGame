@@ -9,10 +9,16 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
     Client->games = malloc(sizeof(List));
     Client->friends = malloc(sizeof(List));
     Client->friends_requests = malloc(sizeof(List));
+    Client->game_invites = malloc(sizeof(List));
+    Client->ongoing_games = malloc(sizeof(List));
+    Client->finished_games = malloc(sizeof(List));
 
     initList(Client->games);
     initList(Client->friends);
     initList(Client->friends_requests);
+    initList(Client->game_invites);
+    initList(Client->ongoing_games);
+    initList(Client->finished_games);
 }
 
 int compareClientsNames(const void* p1, const void* p2) {

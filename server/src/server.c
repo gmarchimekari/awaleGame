@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "server.h"
+#include "game.h"
 #include "client.h"
 
 static void init(void)
@@ -149,10 +150,20 @@ static void app(void)
                         // debug(clients, actual); // BUG
                         break;
                      }
-                     case CAP:
-                        //displayClientProfile(clients[i]); 
+                     case CAP: {
+                        printf("[LOG] %s challenging %s\n", client.nickname, buffer + 4);
+                        // checking if the player is online
+                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
+                        if(!receiver)
+                           send_message_to_client(client, "Player not found\n");
+                        else { // player found
+                           send_game_invite(&client, receiver);  // TODO to be modified later to save the game
+                           send_message_to_client(client, "Game invite sent\n");
+                        }
+                        printf("[DEBUG] after sending the game invite\n"); // BUG
+                        debug_game_challenge(clients, actual);
                         break;
-
+                     }
                      case LOG:
                         //watchFinishedGame(clients[i]); 
                         break;
@@ -230,9 +241,9 @@ static void app(void)
                         printf("Option invalide\n");
                         break;
                   }
-                  printf("\n\n ---- DEBUG ---- \n\n"); // BUG
-                  debug(clients, actual); // BUG
-                  printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
+                  // printf("\n\n ---- DEBUG ---- \n\n"); // BUG
+                  // debug(clients, actual); // BUG
+                  // printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
                }
                break;
             }
@@ -452,6 +463,21 @@ static void reply_to_friend_request(Client* sender, Client* receiver, const int 
    displayList(sender->friends_requests);
 }
 
+static void send_game_invite(Client* sender, Client* receiver) {
+   char buffer[BUF_SIZE];
+   strcpy(buffer, "Game invite from ");
+   strcat(buffer, sender->nickname);
+   strcat(buffer, "\n[ACC] Accept Challenge\t[RJC] Reject Challenge : followed by the name of the user\n");
+
+   // creation of the game that will be sent to the client and that will be stored in the game invites
+   Game *game = (Game*)malloc(sizeof(Game));
+   initializeGame(game, sender, receiver);
+
+   // adding it to the list of game invites of the reciever
+   insertNode(receiver->game_invites, game, freeGame, printGame);
+   send_message_to_client(*receiver, buffer);
+}
+
 
 
 
@@ -485,5 +511,18 @@ void debug(Client* clients, int actual) {
       printf("#################################################\n"); 
    }
    printf("\n[DEBUG FUNCTION END]\n");
+
+}
+
+void debug_game_challenge(Client* clients, int actual) {
+   printf("\n[DEBUG FUNCTION START FOR GAME INVITES]\n");
+   for(int i = 0; i < actual; i++) {
+      printf("#################################################\n"); 
+      printf("Client %s\n", clients[i].nickname);
+      printf("--- LIST OF GAME INVITES ---\n");
+      displayList(clients[i].game_invites);
+      printf("#################################################\n"); 
+   }
+   printf("\n[DEBUG FUNCTION END GAME INVITES]\n");
 
 }

@@ -81,4 +81,6 @@ static Client* get_client_by_name(Client* clients, const int actual, const char*
  */
 static void reply_to_friend_request(Client* sender, Client* receiver, const int reply);
 
+static void send_game_invite(Client* sender, Client* receiver); 
+
 #endif /* guard */
