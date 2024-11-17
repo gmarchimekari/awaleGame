@@ -65,7 +65,7 @@ int compareClients(const void *p1, const void *p2); // TODO: non doublon nom
 @param clientAdded joueur qui a recu la demande
 @param clientAdding joueur qui a envoye la demande
  */
-void client_add_friend_request(Client* clientAdded, Client* clientAdding); 
+void client_add_friend_request(Client* clientAdded, Client* clientAdding); // TODO remove, can be done directy in the main
 
 void client_get_profile_information(const Client* c, char* buffer);
 

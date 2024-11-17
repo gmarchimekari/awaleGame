@@ -37,7 +37,7 @@ typedef struct in_addr IN_ADDR;
 #define LOP 1
 #define APF 2
 #define CAP 3
-#define LOG 4
+#define LSG 4
 #define WAG 5
 #define SND 6
 #define DYP 7

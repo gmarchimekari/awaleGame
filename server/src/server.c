@@ -161,8 +161,11 @@ static void app(void)
                         }
                         break;
                      }
-                     case LOG:
-                        //watchFinishedGame(clients[i]); 
+                     case LSG:
+                        printf("[LOG] List of ongoing games\n");
+                        strcpy(buffer, "Ongoing games:\n");
+                        sprintList(buffer, games);
+                        send_message_to_client(sender, buffer);
                         break;
 
                      case WAG:
@@ -262,7 +265,7 @@ static void app(void)
                         break;
                      }
                      case RJC: {
-                        printf("[LOG] %s rececting game invite from %s\n", sender->nickname, buffer + 4);
+                        printf("[LOG] %s rejecting game invite from %s\n", sender->nickname, buffer + 4);
                         reciever = get_client_by_name(clients, actual, buffer + 4);
                         if(!reciever) {
                            send_message_to_client(sender, "Player not found\n");
@@ -399,8 +402,8 @@ static int getValue(const char *val)
       return APF;
    } else if(strcmp(val, "CAP") == 0) {
       return CAP;
-   } else if(strcmp(val, "LOG") == 0) {
-      return LOG;
+   } else if(strcmp(val, "LSG") == 0) {
+      return LSG;
    } else if(strcmp(val, "WAG") == 0) {
       return WAG;
    } else if(strcmp(val, "SND") == 0) {
@@ -449,15 +452,15 @@ static void send_main_menu(const Client* reciever) {
    "[LOP] List online players\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
    "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
-   "[LOG] List ongoing games\n"
+   "[LSG] List ongoing games\n"
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n"
    "[SVG] Save next game to watch later\n"
-   "[LFR] List friend requests\n"
-   "[LSF] List friends\n"
+   "[LFR] List friend requests\n" // DONE
+   "[LSF] List friends\n" // DONE
    "Select your option by entering the command: ";
    send_message_to_client(reciever, buffer);
 
