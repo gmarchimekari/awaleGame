@@ -195,9 +195,21 @@ static void app(void)
                      }
                         break;
 
-                     case PVM:   
-                        //displayClientProfile(clients[i]); 
+                     case PVM: {  
+                        printf("[LOG] %s changing his mode\n", sender->nickname); 
+                        char mode[15]; // giving extra space for the string to not overflow
+                        strcpy(mode, buffer + 4); 
+                        if(!strcmp(mode, "on")) {
+                           sender->private = ON;
+                           send_message_to_client(sender, "Private mode on\n");
+                        } else if(!strcmp(mode, "off")) {
+                           sender->private = OFF;
+                           send_message_to_client(sender, "Private mode off\n");
+                        } else {
+                           send_message_to_client(sender, "Invalid mode\n");
+                        }
                         break;
+                     }
                      
                      case SVG:
                         //displayClientProfile(clients[i]); 
@@ -452,7 +464,7 @@ static void send_main_menu(const Client* reciever) {
    "[LOP] List online players\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
    "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
-   "[LSG] List ongoing games\n"
+   "[LSG] List ongoing games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE

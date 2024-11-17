@@ -6,6 +6,7 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
     strcpy(Client->nickname, name);
     strcpy(Client->bio, bio);
     Client->sock = sock;
+    Client->private = OFF; // at the beginning, the player is not in private mode
     Client->games = malloc(sizeof(List));
     Client->friends = malloc(sizeof(List));
     Client->friends_requests = malloc(sizeof(List));

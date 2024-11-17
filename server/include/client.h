@@ -6,6 +6,10 @@
 #include <list.h>
 
 typedef struct Client Client;  
+typedef int PRIVATE_MODE; // 0 for public, 1 for private, used for spectating matches
+
+#define ON 1
+#define OFF 0
 
 #include "server.h"
 
@@ -13,6 +17,8 @@ typedef struct Client Client;
 /**
 @brief structure qui contient les informations d'un joueur
 @nickname pseudo du joueur
+@bio biographie du joueur
+@mode mode du joueur (public ou prive), utilise pour l'observation des parties
 @games liste des parties jouees par le joueur
 @friends liste des amis du joueur
 @friends_requests liste des demandes d'amis recues par le joueur
@@ -22,10 +28,10 @@ typedef struct Client{
     SOCKET sock;
     char nickname[10];
     char bio[90];
+    PRIVATE_MODE private; 
     List* games; 
     List* friends; 
     List* friends_requests;
-    
     List* game_invites; 
     List* ongoing_games;
     List* finished_games;
