@@ -20,8 +20,8 @@ typedef struct Client Client;
  */
 typedef struct Client{
     SOCKET sock;
-    char nickname[BUF_SIZE];
-    char bio[BUF_SIZE];
+    char nickname[10];
+    char bio[90];
     List* games; 
     List* friends; 
     List* friends_requests;
@@ -58,7 +58,7 @@ void freeClient(void *Client);
 @param nom du deuxieme joueur
 @return 1 si les joueurs sont egaux, 0 sinon
  */
-int compareClients(void *p1, void *p2); // TODO: non doublon nom
+int compareClients(const void *p1, const void *p2); // TODO: non doublon nom
 
 /**
 @brief fonction pour ajouter une demande d'ami a la liste d'amis
@@ -68,6 +68,8 @@ int compareClients(void *p1, void *p2); // TODO: non doublon nom
 void client_add_friend_request(Client* clientAdded, Client* clientAdding); 
 
 void client_get_profile_information(const Client* c, char* buffer);
+
+void client_sprint(char* buffer, void* data);
 
 
 #endif // CLIENT_H

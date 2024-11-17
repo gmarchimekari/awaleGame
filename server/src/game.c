@@ -1,4 +1,6 @@
 #include <game.h>
+#include <stdio.h>
+#include <string.h>
 
 void initializeGame(Game* game, Client* p1, Client* p2) {
     game->p1 = p1;
@@ -111,5 +113,26 @@ int game_check_player(const void* game, const void* player) {
     Client* p = (Client*)player;
     return strcmp(g->p1->nickname, p->nickname) == 0 || strcmp(g->p2->nickname, p->nickname) == 0;
 }
+
+void game_sprint(char* buffer, void* data) {
+    Game* g = (Game*)data;
+    char temp[256];
+    sprintf(temp, "Partie: %s VS %s\nScore: %d - %d\n", g->p1->nickname, g->p2->nickname, g->scoreP1, g->scoreP2);
+    strcat(buffer, temp);
+    if(g->winner != NULL) {
+        sprintf(temp, "Gagnant: %s\n", g->winner->nickname);
+        strcat(buffer, temp);
+    } else {
+        sprintf(temp, "Egalite\n");
+        strcat(buffer, temp);
+    }
+    if(g->end != 0) {
+        time_t duration = g->end - g->start;
+        sprintf(temp, "Duree de la partie: %ld", duration);
+        strcat(buffer, temp);
+    }
+    awaleBoard_sprint(buffer, g->board);
+}
+
 
 

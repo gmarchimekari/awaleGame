@@ -83,5 +83,7 @@ void printGame(void* game);
  */
 int game_check_player(const void* game, const void* player);
 
+void game_sprint(char* buffer, void* data);
+
 
 #endif // GAME_H

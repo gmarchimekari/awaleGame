@@ -21,7 +21,7 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
     initList(Client->finished_games);
 }
 
-int compareClients(void* p1, void* p2) {
+int compareClients(const void* p1, const void* p2) {
     Client *c1 = (Client *)p1;
     Client *c2 = (Client *)p2;
     
@@ -42,7 +42,7 @@ void freeClient(void *c) {
 }
 
 void client_add_friend_request(Client* clientAdded, Client* clientAdding) {
-    insertNode(clientAdded->friends_requests, clientAdding, NULL, printClient);
+    insertNode(clientAdded->friends_requests, clientAdding, NULL, printClient, client_sprint);
 }
 
 void client_get_profile_information(const Client* c, char* buffer) {
@@ -53,4 +53,10 @@ void client_get_profile_information(const Client* c, char* buffer) {
     strcat(buffer, "\n");
 }
 
+void client_sprint(char* buffer, void* data) {
+    Client *c = (Client *)data;
+    char temp[256];
+    sprintf(temp, "Name: %s\nBio: %s\n", c->nickname, c->bio);
+    strcat(buffer, temp);
+}
 

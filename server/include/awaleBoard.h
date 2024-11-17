@@ -26,4 +26,6 @@ void initAwaleBoard(AwaleBoard* awaleBoard);
  */
 void freeAwaleBoard(AwaleBoard* awaleBoard);
 
+void awaleBoard_sprint(char* buffer, void* data);
+
 #endif // AwaleBoard_H

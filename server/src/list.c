@@ -6,7 +6,7 @@ void initList(List* list) {
     list->head = NULL;
 }
 
-void insertNode(List* list, void* data, handler free, handler print) {
+void insertNode(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*)) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
         fprintf(stderr, "Error: malloc failed\n");
@@ -16,6 +16,7 @@ void insertNode(List* list, void* data, handler free, handler print) {
     newNode->next = list->head;
     newNode->free = free;
     newNode->print = print;
+    newNode->sprint = sprint;
     list->head = newNode;
 }
 
@@ -71,4 +72,15 @@ void* removeNode(List* list, void* data, int (*compare)(const void*, const void*
         current = current->next;
     }
     return NULL; // Data not found
+}
+
+void sprintList(char* buffer, const List* list) {
+    Node* current = list->head;
+    while (current != NULL) {
+        if(current->sprint != NULL)
+            current->sprint(buffer, current->data);
+        else
+            printf("[ERROR] No sprint function for the data\n");
+        current = current->next;
+    }
 }

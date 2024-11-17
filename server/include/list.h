@@ -17,6 +17,7 @@ typedef struct Node {
     struct Node* next;
     handler print;
     handler free;
+    void (*sprint)(char*, void*); // fonction pour copier les informations du noeud dans un buffer
 } Node;
 
 
@@ -41,8 +42,9 @@ void initList(List* list);
 @param data donnee du noeud
 @param free fonction qui libere la memoire allouee pour la donnee du noeud  
 @param print fonction qui affiche la donnee du noeud
+@param sprint fonction qui copie les informations du noeud dans un buffer
 */
-void insertNode(List* list, void* data, handler free, handler print);
+void insertNode(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*));
 /**
 @brief fonction qui cherche un element dans la liste chainee
 @param list liste dans laquelle chercher
@@ -65,6 +67,8 @@ void displayList(const List* list);
 void freeList(List* list);
 
 void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)); 
+
+void sprintList(char* buffer, const List* list);
 
 
 #endif // LIST_H

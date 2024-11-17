@@ -184,7 +184,7 @@ static void app(void)
                      }
 
                      case BIO: {
-                        strcpy(sender->bio, buffer + 4);
+                        strncpy(sender->bio, buffer + 4, sizeof(sender->bio) - 1);
                         printf("[LOG] %s bio updated\n", sender->nickname);
                         printf("%s\n", sender->bio);
                         send_message_to_client(sender, "Bio updated\n");
@@ -233,11 +233,17 @@ static void app(void)
                      }
 
                      case LFR:
-                        //displayClientProfile(clients[i]); 
+                        printf("[LOG] Friend requests list of %s\n", sender->nickname);
+                        strcpy(buffer, "Friend requests:\n");
+                        sprintList(buffer, sender->friends_requests);
+                        send_message_to_client(sender, buffer);
                         break;
 
                      case LSF:
-                        
+                        printf("[LOG] Friends list of %s\n", sender->nickname);
+                        strcpy(buffer, "Friends:\n");
+                        sprintList(buffer, sender->friends);
+                        send_message_to_client(sender, buffer);
                         break;
 
                      case ACC: {
@@ -275,9 +281,6 @@ static void app(void)
                         printf("Option invalide\n");
                         break;
                   }
-                  printf("[DEBUG] list of games\n");
-                  debug_game_challenge(clients, actual, games);
-                  printf("[DEBUG] end of list\n");
                }
                break;
             }
@@ -445,7 +448,7 @@ static void send_main_menu(const Client* reciever) {
    char* buffer = "Welcome to the Awale game\n"
    "[LOP] List online players\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
-   "[CAP] [**player name**] Challenge a player\n" // BUG
+   "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
    "[LOG] List ongoing games\n"
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
@@ -487,8 +490,8 @@ static Client* get_client_by_name(Client* clients, const int actual, const char*
 static void reply_to_friend_request(Client* sender, Client* reciever, const int reply) {
 
    if(reply) {
-      insertNode(sender->friends, reciever, freeClient, printClient);
-      insertNode(reciever->friends, sender, freeClient, printClient);
+      insertNode(sender->friends, reciever, NULL, printClient, client_sprint);
+      insertNode(reciever->friends, sender, NULL, printClient, client_sprint);
       send_message_to_client(reciever, "Friend request accepted\n");
    }
    else {
@@ -510,7 +513,7 @@ static void send_game_invite(Client* sender, Client* reciever) {
    initializeGame(game, sender, reciever);
 
    // adding it to the list of game invites of the reciever
-   insertNode(reciever->game_invites, game, freeGame, printGame);
+   insertNode(reciever->game_invites, game, NULL, printGame, game_sprint);
    send_message_to_client(reciever, buffer);
 }
 
@@ -519,9 +522,9 @@ static void reply_to_game_invite(Client* sender, Client* reciever, int reply, Li
       // remove the game invite from the list
       void* data = removeNode(sender->game_invites, reciever, game_check_player);
       // add the game to the ongoing games of the two players
-      insertNode(sender->ongoing_games, data, NULL, printGame);
-      insertNode(reciever->ongoing_games, data, NULL, printGame);
-      insertNode(games, data, freeGame, printGame);
+      insertNode(sender->ongoing_games, data, NULL, printGame, game_sprint); 
+      insertNode(reciever->ongoing_games, data, NULL, printGame, game_sprint); 
+      insertNode(games, data, freeGame, printGame, game_sprint); 
       send_message_to_client(reciever, "Game invite accepted\n");
    }
    else {
@@ -551,7 +554,7 @@ int main(int argc, char **argv)
 // TODO cannot send request to yourself 
 // TODO cannot send to a friend that is already in the friends list
 // TODO dont let the player send multiple friend requests and game invites (before finising a game) to the same player
-
+// TODO when a client sends a friend request or a challenge and disconnects before getting a reply, the lists of the reciever should be updated
 
 void debug(Client* clients, int actual) {
    printf("\n[DEBUG FUNCTION START]\n");
