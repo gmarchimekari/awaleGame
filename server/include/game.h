@@ -44,6 +44,15 @@ void initializeGame(Game* game, Client* p1, Client* p2);
 void endGame(Game* game);
 
 /**
+@brief verifie si un joueur peut capturer toutes les graines de l'adversaire
+@param game partie en cours
+@param client joueur qui joue
+@param move coup joue
+@return 1 si le joueur peut capturer toutes les graines de l'adversaire, 0 sinon
+ */
+int checkPriseToutesGraines(Game* game, const Client* client, int move);
+
+/**
 @brief met a jour le plateau de jeu apres un coup
 @param game contient les informations de la partie et le plateau de jeu
 @param move coup joue. represente la case jouee

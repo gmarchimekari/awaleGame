@@ -5,6 +5,7 @@
 
 #include "server.h"
 #include "client.h"
+#include "game.h"
 
 static void init(void)
 {
@@ -450,13 +451,49 @@ static void reply_to_friend_request(Client* sender, Client* receiver, const int 
 
 int main(int argc, char **argv)
 {
-   init();
+   // init();
 
-   app();
+   // app();
 
-   end();
+   // end();
 
+  Client *p1, *p2; 
+   p1 = (Client*)malloc(sizeof(Client));
+   p2 = (Client*)malloc(sizeof(Client));
+
+   initializeClient(p1, "yano", "password1", 1);
+   initializeClient(p2, "xGdoubleMx", "password2", 1);
+
+   Game *game = (Game*) malloc(sizeof(Game));
+   initializeGame(game, p1, p2);
+   
+   Client *Client = game->p1;
+   while(!game->end) {
+   int move;
+   displayAwaleBoard(game);
+   printf("C'est a %s de jouer, selectionne ton coup: ", Client->nickname);
+   
+   scanf("%d", &move);
+   if(move < 1 || move > 6) {
+      printf("Coup invalide\n");
+      continue;
+   }
+
+   if(compareClientsNames(game->p1->nickname, Client->nickname)) { // Client 1
+      if(!updateAwaleBoard(game, move, Client))
+            Client = game->p2;
+   } else { // Client 2
+      if(!updateAwaleBoard(game, move + 6, Client))
+            Client = game->p1;  
+   }
+
+   if(checkEndGame(game)) {
+      endGame(game);
+      printf("Partie terminee\n");
+   }
+}
    return EXIT_SUCCESS;
+
 }
 
 // TODO make the client nickname unique

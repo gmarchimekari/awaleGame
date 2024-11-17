@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 # Set the project name
 project(Awale)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
+
 # Specify directories for client and server source files
 set(CLIENT_DIR ${CMAKE_SOURCE_DIR}/client)
 set(SERVER_DIR ${CMAKE_SOURCE_DIR}/server)
@@ -37,6 +39,7 @@ target_include_directories(server PRIVATE
 # CLIENT
 # Add the executable
 add_executable(client ${CLIENT_SOURCES})
+
 
 # Add include directories for this target (client executable)
 target_include_directories(client PRIVATE

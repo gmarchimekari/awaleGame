@@ -18,7 +18,7 @@ void initializeClient(Client *Client, const char *name, const char* bio, SOCKET 
 int compareClientsNames(const void* p1, const void* p2) {
     char *c1 = (char *)p1;
     char *c2 = (char *)p2;
-    printf("[DEBUG] Comparing %s and %s\n", c1, c2); // TODO: remove
+    // printf("[DEBUG] Comparing %s and %s\n", c1, c2); // TODO: remove
     return strcmp(c1, c2) == 0;
 }
 
