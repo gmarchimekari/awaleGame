@@ -25,11 +25,10 @@ void endGame(Game* game) {
 }
 
 int checkEndGame(Game* game) {
-    AwaleBoard* awaleBoard = game->board;
-    for(int i = 0; i < 12; i++)
-        if(awaleBoard->board[i] != 0) 
-            return 0;
-    return 1;
+
+    if (game->scoreP1 >= 25 || game->scoreP2 >= 25) 
+        return 1;
+    
 }
 
 int checkPriseToutesGraines(Game* game, const Client* client, int move) {
@@ -96,6 +95,70 @@ int checkPriseToutesGraines(Game* game, const Client* client, int move) {
     return 1; // All pits are empty 
 }
 
+int simulationFamine(Game* game, const Client* client, int move) {
+    AwaleBoard* awaleBoard = game->board;
+    int opponentStart, opponentEnd;
+
+    if (client == game->p2) {
+        opponentStart = 0;
+        opponentEnd = 5;
+    } else {
+        opponentStart = 6;
+        opponentEnd = 11;
+    }
+
+    // Simulate the move
+    int nbSeeds = awaleBoard->board[move];
+    int tempBoard[12];
+    memcpy(tempBoard, awaleBoard->board, sizeof(tempBoard));
+    tempBoard[move] = 0;
+
+    int i = (move + 1) % 12;
+    while (nbSeeds > 0) {
+        if (i == move) {
+            i++;
+            i %= 12;
+            continue;
+        }
+        tempBoard[i]++;
+        nbSeeds--;
+        i++;
+        i %= 12;
+    }
+
+    // Check if at least one seed is given to the opponent
+    for (int j = opponentStart; j <= opponentEnd; j++) {
+        if (tempBoard[j] > 0) {
+            return 1; // At least one seed is given to the opponent
+        }
+    }
+
+    return 0; // No seeds are given to the opponent
+}
+
+int checkImpossibleFamineResolution(Game* game, const Client* client) {
+    AwaleBoard* awaleBoard = game->board;
+    int playerStart, playerEnd;
+
+    if (client == game->p2) {
+        playerStart = 6;
+        playerEnd = 11;
+    } else {
+        playerStart = 0;
+        playerEnd = 5;
+    }
+
+    for (int i = playerStart; i <= playerEnd; i++) {
+        if (awaleBoard->board[i] > 0) {
+            if (simulationFamine(game, client, i) == 1) {
+                return 0; // At least one move can resolve the famine
+            }
+        }
+    }
+
+    return -1; // No move can resolve the famine
+}
+
 int updateAwaleBoard(Game* game, int move, const Client* client) {
     AwaleBoard* awaleBoard = game->board;
     int ret = 0; // Code de retour, 0 si le client ne rejoue pas, 1 sinon
@@ -103,6 +166,30 @@ int updateAwaleBoard(Game* game, int move, const Client* client) {
 
     int priseToutesGraines = checkPriseToutesGraines(game, client, move);
 
+    // Gestion Famine
+    if (simulationFamine(game, client, move) == 0) {
+        if (checkImpossibleFamineResolution(game, client) == -1) {
+            printf("Fin par famine - Impossible de donner des graines à l'adversaire\n");
+            // Capture all remaining seeds and end the game
+            int playerStart = (client == game->p1) ? 6 : 0;
+            int playerEnd = (client == game->p1) ? 11 : 5;
+            for (int i = playerStart; i <= playerEnd; i++) {
+                if (client == game->p1) {
+                    game->scoreP1 += awaleBoard->board[i];
+                } else {
+                    game->scoreP2 += awaleBoard->board[i];
+                }
+                awaleBoard->board[i] = 0;
+            }
+            game->end = time(NULL);
+            return ret;
+        } else {
+            printf("Vous devez donner des graines à l'adversaire\n");
+            return 1;
+        }
+    }
+
+ 
     // Si le joueur a choisi un coup valide, continuer à distribuer les graines
     int nbSeeds = awaleBoard->board[move];
     awaleBoard->board[move] = 0; // Vider le trou choisi
