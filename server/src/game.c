@@ -3,6 +3,8 @@
 #include <string.h>
 
 void initializeGame(Game* game, Client* p1, Client* p2) {
+    static int ID = 1000; // static variable to generate unique ID
+    game->ID = ID++;
     game->p1 = p1;
     game->p2 = p2;
     game->scoreP1 = 0;
@@ -95,6 +97,7 @@ void freeGame(void* game) {
 void printGame(void* game) {
     Game* g = (Game*)game;
     printf("Partie: %s VS %s\n", g->p1->nickname, g->p2->nickname);
+    printf("Identifiant: %d\n", g->ID);
     printf("Score: %d - %d\n", g->scoreP1, g->scoreP2);
     if(g->winner != NULL) {
         printf("Gagnant: %s\n", g->winner->nickname);
@@ -118,6 +121,8 @@ void game_sprint(char* buffer, void* data) {
     Game* g = (Game*)data;
     char temp[256];
     sprintf(temp, "Partie: %s VS %s\nScore: %d - %d\n", g->p1->nickname, g->p2->nickname, g->scoreP1, g->scoreP2);
+    strcat(buffer, temp);
+    sprintf(temp, "Identifiant: %d\n", g->ID);
     strcat(buffer, temp);
     if(g->winner != NULL) {
         sprintf(temp, "Gagnant: %s\n", g->winner->nickname);

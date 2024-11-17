@@ -17,6 +17,7 @@
 @start temps de debut de la partie
 @end temps de fin de la partie
 @board plateau de jeu
+@ID identifiant de la partie
  */
 typedef struct Game {
     Client* p1; 
@@ -27,6 +28,7 @@ typedef struct Game {
     time_t start;
     time_t end;
     AwaleBoard* board;
+    int ID; 
 } Game;
 
 /**

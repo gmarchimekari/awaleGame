@@ -210,7 +210,7 @@ static void app(void)
                         }
                         break;
                      }
-                     
+
                      case SVG:
                         //displayClientProfile(clients[i]); 
                         break;
@@ -466,10 +466,11 @@ static void send_main_menu(const Client* reciever) {
    "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
    "[LSG] List ongoing games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
+   "[MMG] [**game id**] [**move**] Make a move in a game\n" 
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
-   "[PVM] [**on/off**] Turn private mode on/off\n"
+   "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
    "[SVG] Save next game to watch later\n"
    "[LFR] List friend requests\n" // DONE
    "[LSF] List friends\n" // DONE
