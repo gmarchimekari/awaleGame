@@ -44,12 +44,16 @@ typedef struct in_addr IN_ADDR;
 #define BIO 8
 #define PVM 9
 #define SVG 10
-#define ACT 11
-#define RJT 12
+#define ACF 11
+#define RJF 12
 #define LFR 13
 #define LSF 14
 #define ACC 15
 #define RJC 16
+
+// Replies that the client can send
+#define ACCEPT 1
+#define REJECT 0
 
 #include "client.h"
 
@@ -60,17 +64,17 @@ static int init_connection(void);
 static void end_connection(int sock);
 static int read_client(SOCKET sock, char *buffer);
 static void write_client(SOCKET sock, const char *buffer);
-static void send_message_to_all_clients(Client *clients, Client client, int actual, const char *buffer, char from_server);
-static void remove_client(Client *clients, int to_remove, int *actual);
-static void clear_clients(Client *clients, int actual);
+static void send_message_to_all_clients(Client *clients, Client client, int ACFual, const char *buffer, char from_server);
+static void remove_client(Client *clients, int to_remove, int *ACFual);
+static void clear_clients(Client *clients, int ACFual);
 
 // Functions added
 static void send_message_to_client(const Client* sender, const char *buffer);
 static void send_main_menu(const Client* reciever); 
-static void display_online_players(const Client* clients, const int actual, const Client* sender); 
+static void display_online_players(const Client* clients, const int ACFual, const Client* sender); 
 static int getValue(const char *val);
 static void send_friend_request(Client* sender, Client* reciever);
-static Client* get_client_by_name(Client* clients, const int actual, const char* name);
+static Client* get_client_by_name(Client* clients, const int ACFual, const char* name);
 
 /**
 @brief fonction pour repondre a une demande d'ami
