@@ -38,7 +38,7 @@ static void app(void)
    Client clients[MAX_CLIENTS];
 
    // list of all the games that were accepted by the players
-   List* games = malloc(sizeof(List)); // will be used to free the games at the end
+   List* games = (List*) malloc(sizeof(List)); // will be used to free the games at the end
    initList(games);
 
    fd_set rdfs;
@@ -103,7 +103,7 @@ static void app(void)
          initializeClient(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
          actual++;
-         send_main_menu(c);
+         send_main_menu(&c);
       }
       else
       {
@@ -126,6 +126,9 @@ static void app(void)
                }
                else
                {
+                  Client* sender = &clients[i];
+                  Client* reciever = NULL;
+
                   const char val[] = {buffer[0], buffer[1], buffer[2], '\0'};
                   printf("[LOG] User Option %s\n", val);
                   printf("[LOG] Value from enum %d\n", getValue(val));
@@ -135,19 +138,19 @@ static void app(void)
 
                   switch(getValue(val)) {
                      case LOP:
-                        display_online_players(clients, actual, client);
+                        display_online_players(clients, actual, sender);
                         break;
 
                      case APF: {
-                        printf("[LOG] Sending friend request from %s to %s\n", client.nickname, buffer + 4);
+                        printf("[LOG] Sending friend request from %s to %s\n", sender->nickname, buffer + 4);
                         printf("[DEBUG] before sending the friend request\n"); // BUG
                         // debug(clients, actual); // BUG
-                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        if(!receiver)
-                           send_message_to_client(client, "Player not found\n");
+                        reciever = get_client_by_name(clients, actual, buffer + 4);
+                        if(!reciever)
+                           send_message_to_client(sender, "Player not found\n");
                         else {
-                           // TODO send_friend_request(client, receiver);
-                           send_message_to_client(client, "Friend request sent\n");
+                           send_friend_request(sender, reciever);
+                           send_message_to_client(sender, "Friend request sent\n");
                         }
 
                         printf("[DEBUG] after sending the friend request\n"); // BUG
@@ -155,17 +158,17 @@ static void app(void)
                         break;
                      }
                      case CAP: {
-                        printf("[LOG] %s challenging %s\n", client.nickname, buffer + 4);
+                        printf("[LOG] %s challenging %s\n", sender->nickname, buffer + 4);
                         // checking if the player is online
-                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        if(!receiver)
-                           send_message_to_client(client, "Player not found\n");
+                        reciever = get_client_by_name(clients, actual, buffer + 4);
+                        if(!reciever)
+                           send_message_to_client(sender, "Player not found\n");
                         else { // player found
-                           send_game_invite(&client, receiver);  // TODO to be modified later to save the game
-                           send_message_to_client(client, "Game invite sent\n");
+                           send_game_invite(sender, reciever);  // TODO to be modified later to save the game
+                           send_message_to_client(sender, "Game invite sent\n");
                         }
                         printf("[DEBUG] after sending the game invite\n"); // BUG
-                        debug_game_challenge(clients, actual, games);
+                        // debug_game_challenge(clients, actual, games);
                         break;
                      }
                      case LOG:
@@ -177,26 +180,25 @@ static void app(void)
                         break;
 
                      case SND:  
-                        send_message_to_all_clients(clients, client, actual, buffer + 4, 0);
+                        send_message_to_all_clients(clients, *sender, actual, buffer + 4, 0);
                         break;
 
                      case DYP: {
                         char profile[BUF_SIZE] = {0};
 
                         printf("profile before %s\n", profile);   
-                        client_get_profile_information(client, profile); 
+                        client_get_profile_information(sender, profile); 
                         printf("profile after %s\n", profile);
-                        send_message_to_client(client, profile);
+                        send_message_to_client(sender, profile);
                         break;
                      }
 
 
                      case BIO: {
-                        strcpy(client.bio, buffer + 4);
-                        clients[i] = client;
-                        printf("[LOG] %s bio updated\n", client.nickname);
-                        printf("%s\n", client.bio);
-                        send_message_to_client(client, "Bio updated\n");
+                        strcpy(sender->bio, buffer + 4);
+                        printf("[LOG] %s bio updated\n", sender->nickname);
+                        printf("%s\n", sender->bio);
+                        send_message_to_client(sender, "Bio updated\n");
                         break;
                      }
                         break;
@@ -210,19 +212,19 @@ static void app(void)
                         break;
 
                      case ACT: {
-                        printf("[LOG] %s accepting friend request from %s\n", client.nickname, buffer + 4);
+                        printf("[LOG] %s accepting friend request from %s\n", sender->nickname, buffer + 4);
                         printf("[DEBUG] before accepting the friend request\n"); // BUG
                         // debug(clients, actual); // BUG
-                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        if(!receiver) {
-                           send_message_to_client(client, "Player not found\n");
+                        reciever = get_client_by_name(clients, actual, buffer + 4);
+                        if(!reciever) {
+                           send_message_to_client(sender, "Player not found\n");
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(client.friends_requests, receiver->nickname, compareClients)) // TODO change the name of the function
-                              reply_to_friend_request(&client, receiver, 1);
+                           if(findNode(sender->friends_requests, reciever, compareClients)) // TODO change the name of the function
+                              reply_to_friend_request(sender, reciever, 1);
                            else 
-                              send_message_to_client(client, "No friend request from this player\n");
+                              send_message_to_client(sender, "No friend request from this player\n");
                         }
                         printf("[DEBUG] after accepting the friend request\n"); // BUG
                         // debug(clients, actual); // BUG
@@ -242,20 +244,20 @@ static void app(void)
                         break;
 
                      case ACC: {
-                        printf("[LOG] %s accepting game invite from %s\n", client.nickname, buffer + 4);
-                        Client* receiver = get_client_by_name(clients, actual, buffer + 4);
-                        if(!receiver) {
-                           send_message_to_client(client, "Player not found\n");
+                        printf("[LOG] %s accepting game invite from %s\n", sender->nickname, buffer + 4);
+                        reciever = get_client_by_name(clients, actual, buffer + 4);
+                        if(!reciever) {
+                           send_message_to_client(sender, "Player not found\n");
                            break;
                         } else { // player found
                            // check if the player requested to play a game
-                           if(findNode(client.game_invites, receiver->nickname, game_check_game_players))
-                              reply_to_game_invite(&client, receiver, 1, games);
+                           if(findNode(sender->game_invites, reciever, game_check_player))
+                              reply_to_game_invite(sender, reciever, 1, games);
                            else 
-                              send_message_to_client(client, "No game invite from this player\n");
+                              send_message_to_client(sender, "No game invite from this player\n");
                         }
                         printf("[DEBUG] after accepting the game invite\n"); // BUG
-                        debug_game_challenge(clients, actual, games); // BUG
+                        // debug_game_challenge(clients, actual, games); // BUG
                         break;
                      }
                      case RJC:
@@ -266,9 +268,9 @@ static void app(void)
                         printf("Option invalide\n");
                         break;
                   }
-                  // printf("\n\n ---- DEBUG ---- \n\n"); // BUG
-                  // debug(clients, actual); // BUG
-                  // printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
+                  printf("\n\n ---- DEBUG ---- \n\n"); // BUG
+                  debug_game_challenge(clients, actual, games); // BUG
+                  printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
                }
                break;
             }
@@ -418,7 +420,7 @@ static int getValue(const char *val)
    }
 }
 
-static void display_online_players(const Client *clients, const int actual, const Client c) {
+static void display_online_players(const Client *clients, const int actual, const Client* sender) {
    char buffer[BUF_SIZE] = {"Online Players:\n\0"};
    for(int i = 0; i < actual; i++) {
       if(clients[i].sock > 0) { 
@@ -429,11 +431,11 @@ static void display_online_players(const Client *clients, const int actual, cons
          strcat(buffer, temp);
       }
    }
-   send_message_to_client(c, buffer);
+   send_message_to_client(sender, buffer);
 }
 
-static void send_main_menu(const Client client) {
-   char* c = "Welcome to the Awale game\n"
+static void send_main_menu(const Client* reciever) {
+   char* buffer = "Welcome to the Awale game\n"
    "[LOP] List online players\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // BUG
    "[CAP] [**player name**] Challenge a player\n" 
@@ -447,25 +449,24 @@ static void send_main_menu(const Client client) {
    "[LFR] List friend requests\n"
    "[LSF] List friends\n"
    "Select your option by entering the command: ";
-   send_message_to_client(client, c);
+   send_message_to_client(reciever, buffer);
 
    // TODO
    // voir pour le ranking des joueurs si le time nous 5alina
 
 }
 
-static void send_message_to_client(const Client client, const char *buffer) {
-   write_client(client.sock, buffer);
+static void send_message_to_client(const Client* sender, const char *buffer) {
+   write_client(sender->sock, buffer);
 }
 
-static void send_friend_request(Client* sender, Client* receiver) {
+static void send_friend_request(Client* sender, Client* reciever) {
    char buffer[BUF_SIZE];
    strcpy(buffer, "Friend request from ");
    strcat(buffer, sender->nickname);
    strcat(buffer, "\n[ACT] Accept\t[RJT] Reject : followed by the name of the user\n");
-   client_add_friend_request(receiver, sender); // adding the name of the sender to the friend requests list of the receiver
-   // TODO put back
-   // send_message_to_client(*receiver, buffer);
+   client_add_friend_request(reciever, sender); 
+   send_message_to_client(reciever, buffer);
 }
 
 static Client* get_client_by_name(Client* clients, const int actual, const char* name) { 
@@ -476,22 +477,22 @@ static Client* get_client_by_name(Client* clients, const int actual, const char*
    return NULL;
 }
 
-static void reply_to_friend_request(Client* sender, Client* receiver, const int reply) {
+static void reply_to_friend_request(Client* sender, Client* reciever, const int reply) {
 
    if(reply) {
-      insertNode(sender->friends, receiver, freeClient, printClient);
-      insertNode(receiver->friends, sender, freeClient, printClient);
-      // TODO send_message_to_client(*receiver, "Friend request accepted\n");
+      insertNode(sender->friends, reciever, freeClient, printClient);
+      insertNode(reciever->friends, sender, freeClient, printClient);
+      send_message_to_client(reciever, "Friend request accepted\n");
    }
    else {
-      // TODO send_message_to_client(*receiver, "Friend request rejected\n");
+      send_message_to_client(reciever, "Friend request rejected\n");
    }
 
    // remove the friend request from the list
-   removeNode(sender->friends_requests, receiver, compareClients); // TODO fuite de memoire, et nom de la fonction a changer, donc ce qu'on passe
+   removeNode(sender->friends_requests, reciever, compareClients); // TODO fuite de memoire, et nom de la fonction a changer, donc ce qu'on passe
 }
 
-static void send_game_invite(Client* sender, Client* receiver) {
+static void send_game_invite(Client* sender, Client* reciever) {
    char buffer[BUF_SIZE];
    strcpy(buffer, "Game invite from ");
    strcat(buffer, sender->nickname);
@@ -499,27 +500,27 @@ static void send_game_invite(Client* sender, Client* receiver) {
 
    // creation of the game that will be sent to the client and that will be stored in the game invites
    Game *game = (Game*)malloc(sizeof(Game));
-   initializeGame(game, sender, receiver);
+   initializeGame(game, sender, reciever);
 
    // adding it to the list of game invites of the reciever
-   insertNode(receiver->game_invites, game, freeGame, printGame);
-   send_message_to_client(*receiver, buffer);
+   insertNode(reciever->game_invites, game, freeGame, printGame);
+   send_message_to_client(reciever, buffer);
 }
 
-static void reply_to_game_invite(Client* sender, Client* receiver, int reply, List* games) {
+static void reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games) {
    if(reply) {
       // remove the game invite from the list
-      void* data = removeNode(sender->game_invites, receiver->nickname, game_check_game_players);
+      void* data = removeNode(sender->game_invites, reciever->nickname, game_check_player);
       // add the game to the ongoing games of the two players
       insertNode(sender->ongoing_games, data, NULL, printGame);
-      insertNode(receiver->ongoing_games, data, NULL, printGame);
+      insertNode(reciever->ongoing_games, data, NULL, printGame);
       insertNode(games, data, freeGame, printGame);
    }
    else {
-      void* data = removeNode(receiver->game_invites, sender->nickname, game_check_game_players);
+      void* data = removeNode(reciever->game_invites, sender->nickname, game_check_player);
       Game* game = (Game*)data;
       freeGame(game); // since the game is not going to be played
-      send_message_to_client(*receiver, "Game invite rejected\n");
+      send_message_to_client(reciever, "Game invite rejected\n");
    }
 }
 
@@ -527,48 +528,48 @@ static void reply_to_game_invite(Client* sender, Client* receiver, int reply, Li
 
 int main(int argc, char **argv)
 {
-   // init();
+   init();
 
-   // app();
+   app();
 
-   // end();
+   end();
 
 
-   Client clients[10]; 
-   Client* c1 = malloc(sizeof(Client));
-   initializeClient(c1, "c1", "bio1", 1);
-   Client* c2 = malloc(sizeof(Client));
-   initializeClient(c2, "c2", "bio2", 2);
-   Client* c3 = malloc(sizeof(Client));
-   initializeClient(c3, "c3", "bio3", 3);
+   // Client clients[10]; 
+   // Client* c1 = malloc(sizeof(Client));
+   // initializeClient(c1, "c1", "bio1", 1);
+   // Client* c2 = malloc(sizeof(Client));
+   // initializeClient(c2, "c2", "bio2", 2);
+   // Client* c3 = malloc(sizeof(Client));
+   // initializeClient(c3, "c3", "bio3", 3);
 
-   clients[0] = *c1;
-   clients[1] = *c2;
-   clients[2] = *c3;
+   // clients[0] = *c1;
+   // clients[1] = *c2;
+   // clients[2] = *c3;
 
-   int actual = 3;
+   // int actual = 3;
 
-   // sending the friend request
-   Client *receiver = get_client_by_name(clients, actual, "c2");
+   // // sending the friend request
+   // Client *reciever = get_client_by_name(clients, actual, "c2");
 
-   send_friend_request(c1, receiver);
+   // send_friend_request(c1, reciever);
 
-   printf("this is the friends requests list of %s\n", c2->nickname);
-   displayList(c2->friends_requests);
+   // printf("this is the friends requests list of %s\n", c2->nickname);
+   // displayList(c2->friends_requests);
    
-   // accepting the friend request
-   reply_to_friend_request(receiver, c1, 1);
+   // // accepting the friend request
+   // reply_to_friend_request(reciever, c1, 1);
 
-   receiver = get_client_by_name(clients, actual, "c3");
-   send_friend_request(c1, receiver);
-   reply_to_friend_request(receiver, c1, 1);
+   // reciever = get_client_by_name(clients, actual, "c3");
+   // send_friend_request(c1, reciever);
+   // reply_to_friend_request(reciever, c1, 1);
 
-   for(int i = 0; i < actual; i++) {
-      printf("this is the friends requests list of %s\n", clients[i].nickname);
-      displayList(clients[i].friends_requests);
-      printf("this is the friends list of %s\n", clients[i].nickname);
-      displayList(clients[i].friends);
-   }
+   // for(int i = 0; i < actual; i++) {
+   //    printf("this is the friends requests list of %s\n", clients[i].nickname);
+   //    displayList(clients[i].friends_requests);
+   //    printf("this is the friends list of %s\n", clients[i].nickname);
+   //    displayList(clients[i].friends);
+   // }
 
    return EXIT_SUCCESS;
 }

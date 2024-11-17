@@ -41,20 +41,15 @@ void freeClient(void *c) {
     free(p);
 }
 
-void client_add_friend_request(Client* receiver, Client* sender) {
-    insertNode(receiver->friends_requests, sender, NULL, client_print_name);
+void client_add_friend_request(Client* clientAdded, Client* clientAdding) {
+    insertNode(clientAdded->friends_requests, clientAdding, NULL, printClient);
 }
 
-void client_print_name(void *c) {
-    Client *p = (Client *)c;
-    printf("Client: %s\n", p->nickname);
-}
-
-void client_get_profile_information(const Client c, char* buffer) {
+void client_get_profile_information(const Client* c, char* buffer) {
     strcat(buffer, "Name: ");
-    strcat(buffer, c.nickname);
+    strcat(buffer, c->nickname);
     strcat(buffer, "\nBio: ");
-    strcat(buffer, c.bio);
+    strcat(buffer, c->bio);
     strcat(buffer, "\n");
 }
 

@@ -65,26 +65,23 @@ static void remove_client(Client *clients, int to_remove, int *actual);
 static void clear_clients(Client *clients, int actual);
 
 // Functions added
-static void send_message_to_client(const Client client, const char *buffer);
-static void send_main_menu(Client client); 
-static void display_online_players(const Client* clients, const int actual, const Client c); 
-static void display_games();
-static void display_client_profile(const Client c);  
-static void watch_finished_game(const Client c); 
+static void send_message_to_client(const Client* sender, const char *buffer);
+static void send_main_menu(const Client* reciever); 
+static void display_online_players(const Client* clients, const int actual, const Client* sender); 
 static int getValue(const char *val);
-static void send_friend_request(Client* sender, Client* receiver);
+static void send_friend_request(Client* sender, Client* reciever);
 static Client* get_client_by_name(Client* clients, const int actual, const char* name);
 
 /**
 @brief fonction pour repondre a une demande d'ami
 @param sender joueur qui reponds a la demande
-@param receiver joueur qui recoit la reponse
+@param reciever joueur qui recoit la reponse
 @param reply 1 si le joueur accepte la demande, 0 sinon
  */
-static void reply_to_friend_request(Client* sender, Client* receiver, const int reply);
+static void reply_to_friend_request(Client* sender, Client* reciever, const int reply);
 
-static void send_game_invite(Client* sender, Client* receiver); 
+static void send_game_invite(Client* sender, Client* reciever); 
 
-static void reply_to_game_invite(Client* sender, Client* receiver, int reply, List* games);
+static void reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games);
 
 #endif /* guard */

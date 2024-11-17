@@ -62,14 +62,12 @@ int compareClients(void *p1, void *p2); // TODO: non doublon nom
 
 /**
 @brief fonction pour ajouter une demande d'ami a la liste d'amis
-@param receiver joueur qui a recu la demande
-@param sender joueur qui a envoye la demande
+@param clientAdded joueur qui a recu la demande
+@param clientAdding joueur qui a envoye la demande
  */
-void client_add_friend_request(Client* receiver, Client* sender); 
+void client_add_friend_request(Client* clientAdded, Client* clientAdding); 
 
-void client_get_profile_information(const Client c, char* buffer);
-
-void client_print_name(void *name); 
+void client_get_profile_information(const Client* c, char* buffer);
 
 
 #endif // CLIENT_H
