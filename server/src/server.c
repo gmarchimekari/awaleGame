@@ -132,9 +132,6 @@ static void app(void)
                   const char val[] = {buffer[0], buffer[1], buffer[2], '\0'};
                   printf("[LOG] User Option %s\n", val);
                   printf("[LOG] Value from enum %d\n", getValue(val));
-                  // printf("\n\n ---- DEBUG ---- \n\n"); // BUG
-                  // debug(clients, actual); // BUG
-                  // printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
 
                   switch(getValue(val)) {
                      case LOP:
@@ -143,8 +140,6 @@ static void app(void)
 
                      case APF: {
                         printf("[LOG] Sending friend request from %s to %s\n", sender->nickname, buffer + 4);
-                        printf("[DEBUG] before sending the friend request\n"); // BUG
-                        // debug(clients, actual); // BUG
                         reciever = get_client_by_name(clients, actual, buffer + 4);
                         if(!reciever)
                            send_message_to_client(sender, "Player not found\n");
@@ -152,9 +147,6 @@ static void app(void)
                            send_friend_request(sender, reciever);
                            send_message_to_client(sender, "Friend request sent\n");
                         }
-
-                        printf("[DEBUG] after sending the friend request\n"); // BUG
-                        // debug(clients, actual); // BUG
                         break;
                      }
                      case CAP: {
@@ -167,8 +159,6 @@ static void app(void)
                            send_game_invite(sender, reciever);  // TODO to be modified later to save the game
                            send_message_to_client(sender, "Game invite sent\n");
                         }
-                        printf("[DEBUG] after sending the game invite\n"); // BUG
-                        // debug_game_challenge(clients, actual, games);
                         break;
                      }
                      case LOG:
@@ -192,7 +182,6 @@ static void app(void)
                         send_message_to_client(sender, profile);
                         break;
                      }
-
 
                      case BIO: {
                         strcpy(sender->bio, buffer + 4);
@@ -281,15 +270,14 @@ static void app(void)
                         }
                         break;
                      } 
-                        break;
 
                      default:
                         printf("Option invalide\n");
                         break;
                   }
-                  printf("\n\n ---- DEBUG ---- \n\n"); // BUG
-                  debug(clients, actual); // BUG
-                  printf("\n\n ---- END DEBUG ---- \n\n"); // BUG
+                  printf("[DEBUG] list of games\n");
+                  debug_game_challenge(clients, actual, games);
+                  printf("[DEBUG] end of list\n");
                }
                break;
             }
@@ -456,8 +444,8 @@ static void display_online_players(const Client *clients, const int actual, cons
 static void send_main_menu(const Client* reciever) {
    char* buffer = "Welcome to the Awale game\n"
    "[LOP] List online players\n" // DONE
-   "[APF] [**player name**] Add a player to your friends list\n" // BUG
-   "[CAP] [**player name**] Challenge a player\n" 
+   "[APF] [**player name**] Add a player to your friends list\n" // DONE
+   "[CAP] [**player name**] Challenge a player\n" // BUG
    "[LOG] List ongoing games\n"
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
@@ -529,14 +517,15 @@ static void send_game_invite(Client* sender, Client* reciever) {
 static void reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games) {
    if(reply) {
       // remove the game invite from the list
-      void* data = removeNode(sender->game_invites, reciever->nickname, game_check_player);
+      void* data = removeNode(sender->game_invites, reciever, game_check_player);
       // add the game to the ongoing games of the two players
       insertNode(sender->ongoing_games, data, NULL, printGame);
       insertNode(reciever->ongoing_games, data, NULL, printGame);
       insertNode(games, data, freeGame, printGame);
+      send_message_to_client(reciever, "Game invite accepted\n");
    }
    else {
-      void* data = removeNode(reciever->game_invites, sender->nickname, game_check_player);
+      void* data = removeNode(sender->game_invites, reciever, game_check_player);
       Game* game = (Game*)data;
       freeGame(game); // since the game is not going to be played
       send_message_to_client(reciever, "Game invite rejected\n");

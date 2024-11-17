@@ -67,6 +67,7 @@ int updateAwaleBoard(Game* game, int move, const Client* Client) {
 }
 
 void displayAwaleBoard(const Game* game){
+    printf("this is a test\n");
     AwaleBoard* awaleBoard = game->board;
     printf("+--1-+--2-+--3-+--4-+--5-+--6-+\n");
     printf("-------------------------------\n");
