@@ -1,8 +1,7 @@
-#ifndef AwaleBoard_H
-#define AwaleBoard_H
+#ifndef AWALEBOARD_H
+#define AWALEBOARD_H
 
 #include <stdio.h>
-#include <client.h>
 #include <stdlib.h>
 
 /**
@@ -28,4 +27,4 @@ void freeAwaleBoard(AwaleBoard* awaleBoard);
 
 void awaleBoard_sprint(char* buffer, void* data);
 
-#endif // AwaleBoard_H
+#endif // AWALEBOARD_H

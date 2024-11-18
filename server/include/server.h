@@ -50,12 +50,17 @@ typedef struct in_addr IN_ADDR;
 #define LSF 14
 #define ACC 15
 #define RJC 16
+#define MMG 17
+#define EXT 18
+#define SPM 19
 
 // Replies that the client can send
 #define ACCEPT 1
 #define REJECT 0
 
 #include "client.h"
+typedef struct Game Game; // to not get a circular dependency
+
 
 static void init(void);
 static void end(void);
@@ -86,6 +91,8 @@ static void reply_to_friend_request(Client* sender, Client* reciever, const int 
 
 static void send_game_invite(Client* sender, Client* reciever); 
 
-static void reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games);
+static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games);
+
+static void send_game_commands(Client* player);
 
 #endif /* guard */

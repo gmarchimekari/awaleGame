@@ -10,9 +10,11 @@ void initializeGame(Game* game, Client* p1, Client* p2) {
     game->scoreP1 = 0;
     game->scoreP2 = 0;
     game->winner = NULL;
-    game->start = time(NULL);
+    game->start = 0;
     game->end = 0; // indique que la partie n'est pas terminee  
     game->board = (AwaleBoard*)malloc(sizeof(AwaleBoard));
+    game->history = (List*)malloc(sizeof(List));
+    game->spectators = (List*)malloc(sizeof(List));
     initAwaleBoard(game->board);
     initList(game->history);
     initList(game->spectators);
@@ -20,6 +22,7 @@ void initializeGame(Game* game, Client* p1, Client* p2) {
 
 void endGame(Game* game) {
     game->end = time(NULL);
+    game->playerTurn = NULL;
     if(game->scoreP1 > game->scoreP2) {
         game->winner = game->p1;
     } else if(game->scoreP1 < game->scoreP2) {
@@ -27,6 +30,10 @@ void endGame(Game* game) {
     } else { // egalite
         game->winner = NULL;
     }
+}
+
+void game_start(Game* game) {
+    game->start = time(NULL);
 }
 
 int checkEndGame(Game* game) {

@@ -5,8 +5,6 @@
 
 #include "server.h"
 #include "game.h"
-#include "client.h"
-#include "game.h"
 
 static void init(void)
 {
@@ -157,7 +155,7 @@ static void app(void)
                         if(!reciever)
                            send_message_to_client(sender, "Player not found\n");
                         else { // player found
-                           send_game_invite(sender, reciever);  // TODO to be modified later to save the game
+                           send_game_invite(sender, reciever);  
                            send_message_to_client(sender, "Game invite sent\n");
                         }
                         break;
@@ -273,8 +271,20 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to play a game
-                           if(findNode(sender->game_invites, reciever, game_check_player))
-                              reply_to_game_invite(sender, reciever, ACCEPT, games);
+                           if(findNode(sender->game_invites, reciever, game_check_player)) {
+                              Game* g = NULL; 
+                              g = reply_to_game_invite(sender, reciever, ACCEPT, games);
+                              // picking up a random player to start the game between sender and reciever
+                              g->playerTurn = (rand() % 2 == 0) ? sender : reciever;
+                              sprintf(buffer, "Game started! %s goes first.\n", g->playerTurn->nickname);
+                              game_sprint(buffer, g);
+                              send_message_to_client(sender, buffer);
+                              send_message_to_client(reciever, buffer);
+
+                              // sending the game commands to the rigth player
+                              send_game_commands(g->playerTurn); 
+                              game_start(g);
+                           }
                            else 
                               send_message_to_client(sender, "No game invite from this player\n");
                         }
@@ -297,7 +307,7 @@ static void app(void)
                      } 
 
                      default:
-                        printf("Option invalide\n");
+                        send_message_to_client(sender, "Not a valid command\n");
                         break;
                   }
                }
@@ -537,7 +547,8 @@ static void send_game_invite(Client* sender, Client* reciever) {
    send_message_to_client(reciever, buffer);
 }
 
-static void reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games) {
+static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games) {
+   Game* game = NULL;
    if(reply) {
       // remove the game invite from the list
       void* data = removeNode(sender->game_invites, reciever, game_check_player);
@@ -546,6 +557,7 @@ static void reply_to_game_invite(Client* sender, Client* reciever, int reply, Li
       insertNode(reciever->ongoing_games, data, NULL, printGame, game_sprint); 
       insertNode(games, data, freeGame, printGame, game_sprint); 
       send_message_to_client(reciever, "Game invite accepted\n");
+      game = (Game*)data;
    }
    else {
       void* data = removeNode(sender->game_invites, reciever, game_check_player);
@@ -553,53 +565,62 @@ static void reply_to_game_invite(Client* sender, Client* reciever, int reply, Li
       freeGame(game); // since the game is not going to be played
       send_message_to_client(reciever, "Game invite rejected\n");
    }
+   return game;
 }
 
-
+static void send_game_commands(Client* player) {
+   char buffer[BUF_SIZE];
+   strcpy(buffer, "Game commands:\n"
+   "[MMG] [**game id**] [**move**] Make a move in a game\n"
+   "[EXT] [**game id**] Give up on the game\n"
+   "[SPM] [**message**] Send a private message to your opponent\n"
+   "Select your option by entering the command: ");
+   send_message_to_client(player, buffer);
+}
 
 int main(int argc, char **argv)
 {
-   // init();
+   init();
 
-   // app();
+   app();
 
-   // end();
+   end();
 
-  Client *p1, *p2; 
-   p1 = (Client*)malloc(sizeof(Client));
-   p2 = (Client*)malloc(sizeof(Client));
+//   Client *p1, *p2; 
+//    p1 = (Client*)malloc(sizeof(Client));
+//    p2 = (Client*)malloc(sizeof(Client));
 
-   initializeClient(p1, "yano", "password1", 1);
-   initializeClient(p2, "xGdoubleMx", "password2", 1);
+//    initializeClient(p1, "yano", "password1", 1);
+//    initializeClient(p2, "xGdoubleMx", "password2", 1);
 
-   Game *game = (Game*) malloc(sizeof(Game));
-   initializeGame(game, p1, p2);
+//    Game *game = (Game*) malloc(sizeof(Game));
+//    initializeGame(game, p1, p2);
    
-   Client *Client = game->p1;
-   while(!game->end) {
-   int move;
-   displayAwaleBoard(game);
-   printf("C'est a %s de jouer, selectionne ton coup: ", Client->nickname);
+//    Client *Client = game->p1;
+//    while(!game->end) {
+//    int move;
+//    displayAwaleBoard(game);
+//    printf("C'est a %s de jouer, selectionne ton coup: ", Client->nickname);
    
-   scanf("%d", &move);
-   if(move < 1 || move > 6) {
-      printf("Coup invalide\n");
-      continue;
-   }
+//    scanf("%d", &move);
+//    if(move < 1 || move > 6) {
+//       printf("Coup invalide\n");
+//       continue;
+//    }
 
-   if(compareClientsNames(game->p1->nickname, Client->nickname)) { // Client 1
-      if(!updateAwaleBoard(game, move, Client))
-            Client = game->p2;
-   } else { // Client 2
-      if(!updateAwaleBoard(game, move + 6, Client))
-            Client = game->p1;  
-   }
+//    if(compareClientsNames(game->p1->nickname, Client->nickname)) { // Client 1
+//       if(!updateAwaleBoard(game, move, Client))
+//             Client = game->p2;
+//    } else { // Client 2
+//       if(!updateAwaleBoard(game, move + 6, Client))
+//             Client = game->p1;  
+//    }
 
-   if(checkEndGame(game)) {
-      endGame(game);
-      printf("Partie terminee\n");
-   }
-}
+//    if(checkEndGame(game)) {
+//       endGame(game);
+//       printf("Partie terminee\n");
+//    }
+// }
    return EXIT_SUCCESS;
 
 }
@@ -611,6 +632,7 @@ int main(int argc, char **argv)
 // TODO cannot send to a friend that is already in the friends list
 // TODO dont let the player send multiple friend requests and game invites (before finising a game) to the same player
 // TODO when a client sends a friend request or a challenge and disconnects before getting a reply, the lists of the reciever should be updated
+// TODO check that the client doesnt send requests to himself
 
 void debug(Client* clients, int actual) {
    printf("\n[DEBUG FUNCTION START]\n");

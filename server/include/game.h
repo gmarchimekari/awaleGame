@@ -102,5 +102,7 @@ int game_check_player(const void* game, const void* player);
 
 void game_sprint(char* buffer, void* data);
 
+void game_start(Game* game);
+
 
 #endif // GAME_H
