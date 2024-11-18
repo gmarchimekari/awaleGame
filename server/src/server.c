@@ -169,7 +169,10 @@ static void app(void)
                         break;
 
                      case WAG:
-                        //watchFinishedGame(clients[i]); 
+                        printf("[LOG] %s spectating a game\n", sender->nickname);
+                        // check if the game exists
+                        // check if the player is not in the game
+                         
                         break;
 
                      case SND:  
@@ -466,7 +469,7 @@ static void send_main_menu(const Client* reciever) {
    "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
    "[LSG] List ongoing games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
-   "[MMG] [**game id**] [**move**] Make a move in a game\n" 
+   "[MMG] [**game id**] [**move**] Make a move in a game\n" // TODO put after sending the game, and exit the game
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 

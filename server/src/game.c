@@ -14,6 +14,8 @@ void initializeGame(Game* game, Client* p1, Client* p2) {
     game->end = 0; // indique que la partie n'est pas terminee  
     game->board = (AwaleBoard*)malloc(sizeof(AwaleBoard));
     initAwaleBoard(game->board);
+    initList(game->history);
+    initList(game->spectators);
 }
 
 void endGame(Game* game) {

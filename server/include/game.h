@@ -18,6 +18,9 @@
 @end temps de fin de la partie
 @board plateau de jeu
 @ID identifiant de la partie
+@playerTurn joueur qui doit jouer
+@history historique des coups joues afin de pouvoir regarder la partie de nouveau
+@spectators liste des spectateurs
  */
 typedef struct Game {
     Client* p1; 
@@ -29,6 +32,9 @@ typedef struct Game {
     time_t end;
     AwaleBoard* board;
     int ID; 
+    Client* playerTurn;
+    List* history; 
+    List* spectators;
 } Game;
 
 /**
