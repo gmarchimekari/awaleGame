@@ -40,6 +40,7 @@ target_include_directories(server PRIVATE
 # Add the executable
 add_executable(client ${CLIENT_SOURCES})
 
+
 # Add include directories for this target (client executable)
 target_include_directories(client PRIVATE
   ${CLIENT_DIR}/include  # Include client headers
