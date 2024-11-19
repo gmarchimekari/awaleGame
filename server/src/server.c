@@ -324,7 +324,7 @@ static void app(void)
                            if(compareClients((void*)g->playerTurn, (void*)sender)) {
                               // check if the input is valid
                               int move = atoi(buffer + 3); 
-                              if(move < 0 || move > 5 || buffer[5] != ' ') {
+                              if(move < 0 || move > 6 || buffer[5] != ' ') {
                                  send_message_to_client(sender, "Invalid move, please try again with a valid input\n");
                                  break;
                               }
@@ -333,9 +333,9 @@ static void app(void)
                               if(compareClients((void*)g->p2, (void*)sender)) 
                                  move += 6; // we add 6 to the move to be in the range of player 2
                               
-
+                              int playAgain = updateAwaleBoard(g, move, sender);
                               // update the game
-                              if(!updateAwaleBoard(g, move, sender)) {
+                              if(!playAgain) {
                                  // change the player's turn
                                  g->playerTurn = (compareClients((void*)g->playerTurn, (void*)g->p1)) ? g->p2 : g->p1; 
                               }
@@ -350,14 +350,20 @@ static void app(void)
                                  insertNode(g->p2->finished_games, finishedGame, NULL, printGame, game_sprint);
                                  insertNode(finishedGames, finishedGame, freeGame, printGame, game_sprint);
                               } else {
+                                 if (!playAgain) {
                                  sprintf(buffer, "It's %s's turn\n\n", g->playerTurn->nickname);
                                  send_message_to_client(g->p1, buffer);
                                  send_message_to_client(g->p2, buffer);
+                                 } else {
+                                    sprintf(buffer, "You can play again\n");
+                                    send_message_to_client(sender, buffer);
+                                 }
                                  
                                  char gameBuffer[BUF_SIZE];
                                  game_sprint(gameBuffer, g);
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
+                                 bzero(gameBuffer, BUF_SIZE);
                               }
                            } else {
                               send_message_to_client(sender, "Not your turn\n");
@@ -371,11 +377,14 @@ static void app(void)
                         break;
 
                      case SPM:
+                        // send private message
                         break;
 
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
                         break;
+
+                     bzero(buffer, BUF_SIZE);
                   }
                }
                break;

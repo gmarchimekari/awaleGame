@@ -184,6 +184,12 @@ int updateAwaleBoard(Game* game, int move, const Client* client) {
 
     int priseToutesGraines = checkPriseToutesGraines(game, client, move);
 
+    // Check si case vide
+    if (awaleBoard->board[move] == 0) {
+        printf("Case vide\n");
+        return 1;
+    }
+
     // Gestion Famine
     if (simulationFamine(game, client, move) == 0) {
         if (checkImpossibleFamineResolution(game, client) == -1) {
@@ -303,7 +309,7 @@ int game_check_player(const void* game, const void* player) {
 
 void game_sprint(char* buffer, void* data) {
     Game* g = (Game*)data;
-    char temp[256];
+    char temp[1024];
     sprintf(temp, "Partie: %s VS %s\n", g->p1->nickname, g->p2->nickname);
     strcat(buffer, temp);
     sprintf(temp, "Identifiant: %d\n", g->ID);
@@ -311,7 +317,7 @@ void game_sprint(char* buffer, void* data) {
     
     if(g->end != 0) {
         time_t duration = g->end - g->start;
-        sprintf(temp, "Duree de la partie: %ld", duration);
+        sprintf(temp, "Duree de la partie: %ld\n", duration);
         strcat(buffer, temp);
         if(g->winner != NULL) {
             sprintf(temp, "Gagnant: %s\n", g->winner->nickname);
@@ -326,7 +332,7 @@ void game_sprint(char* buffer, void* data) {
 
 void awaleBoard_sprint(char* buffer, Game* data) {
     AwaleBoard* awaleBoard = data->board;
-    char temp[256];
+    char temp[1024];
     sprintf(temp, "+--6-+--5-+--4-+--3-+--2-+--1-+\n");
     strcat(buffer, temp);
     sprintf(temp, "-------------------------------\n");
