@@ -37,8 +37,12 @@ static void app(void)
    Client clients[MAX_CLIENTS];
 
    // list of all the games that were accepted by the players
-   List* games = (List*) malloc(sizeof(List)); // will be used to free the games at the end
-   initList(games);
+   List* ongoingGames = (List*) malloc(sizeof(List)); // will be used to free the games at the end
+   initList(ongoingGames);
+
+   // list of all the games that were finished
+   List* finishedGames = (List*) malloc(sizeof(List)); // will be used to free the games at the end
+   initList(finishedGames);
 
    fd_set rdfs;
 
@@ -163,7 +167,7 @@ static void app(void)
                      case LSG:
                         printf("[LOG] List of ongoing games\n");
                         strcpy(buffer, "Ongoing games:\n");
-                        sprintList(buffer, games);
+                        sprintList(buffer, ongoingGames);
                         send_message_to_client(sender, buffer);
                         break;
 
@@ -273,7 +277,7 @@ static void app(void)
                            // check if the player requested to play a game
                            if(findNode(sender->game_invites, reciever, game_check_player)) {
                               Game* g = NULL; 
-                              g = reply_to_game_invite(sender, reciever, ACCEPT, games);
+                              g = reply_to_game_invite(sender, reciever, ACCEPT, ongoingGames);
                               // picking up a random player to start the game between sender and reciever
                               g->playerTurn = (rand() % 2 == 0) ? sender : reciever;
                               sprintf(buffer, "Game started! %s goes first.\n", g->playerTurn->nickname);
@@ -299,12 +303,75 @@ static void app(void)
                         } else { // player found
                            // check if the player requested to play a game
                            if(findNode(sender->game_invites, reciever, game_check_player))
-                              reply_to_game_invite(sender, reciever, REJECT, games);
+                              reply_to_game_invite(sender, reciever, REJECT, ongoingGames);
                            else 
                               send_message_to_client(sender, "No game invite from this player\n");
                         }
                         break;
                      } 
+
+                     case MMG: {
+                        int gameId = extract_game_id(buffer + 6);
+                        printf("[LOG] %s making a move in the game number %d\n", sender->nickname, gameId);
+
+                        // check if the game exists
+                        Game* g = getNodeByID(sender->ongoing_games, &gameId, game_compare_id);
+                        if(!g) {
+                           send_message_to_client(sender, "Game not found\n");
+                           break;
+                        } else {
+                           // check if it's the player's turn
+                           if(compareClients((void*)g->playerTurn, (void*)sender)) {
+                              // check if the input is valid
+                              int move = atoi(buffer + 3); 
+                              if(move < 0 || move > 5 || buffer[5] != ' ') {
+                                 send_message_to_client(sender, "Invalid move, please try again with a valid input\n");
+                                 break;
+                              }
+
+                              // modifiying the move to be in the range of the player, based on player 1 or 2
+                              if(compareClients((void*)g->p2, (void*)sender)) 
+                                 move += 6; // we add 6 to the move to be in the range of player 2
+                              
+
+                              // update the game
+                              if(!updateAwaleBoard(g, move, sender)) {
+                                 // change the player's turn
+                                 g->playerTurn = (compareClients((void*)g->playerTurn, (void*)g->p1)) ? g->p2 : g->p1; 
+                              }
+                              // check if the game is finished
+                              if(checkEndGame(g)) {
+                                 endGame(g);
+                                 send_message_to_client(g->p1, "Game finished\n");
+                                 send_message_to_client(g->p2, "Game finished\n");
+                                 removeNode(g->p1->ongoing_games, &(g->ID), game_compare_id);
+                                 Game* finishedGame = removeNode(g->p2->ongoing_games, &(g->ID), game_compare_id);
+                                 insertNode(g->p1->finished_games, finishedGame, NULL, printGame, game_sprint);
+                                 insertNode(g->p2->finished_games, finishedGame, NULL, printGame, game_sprint);
+                                 insertNode(finishedGames, finishedGame, freeGame, printGame, game_sprint);
+                              } else {
+                                 sprintf(buffer, "It's %s's turn\n\n", g->playerTurn->nickname);
+                                 send_message_to_client(g->p1, buffer);
+                                 send_message_to_client(g->p2, buffer);
+                                 
+                                 char gameBuffer[BUF_SIZE];
+                                 game_sprint(gameBuffer, g);
+                                 send_message_to_client(g->playerTurn, gameBuffer);
+                                 send_game_commands(g->playerTurn);
+                              }
+                           } else {
+                              send_message_to_client(sender, "Not your turn\n");
+                           }
+                        }
+                        break;
+                     }
+
+                     case EXT:
+
+                        break;
+
+                     case SPM:
+                        break;
 
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
@@ -317,7 +384,8 @@ static void app(void)
       }
    }
 
-   freeList(games);
+   freeList(ongoingGames);
+   freeList(finishedGames);
    clear_clients(clients, actual);
    end_connection(sock);
 }
@@ -454,6 +522,12 @@ static int getValue(const char *val)
       return ACC;
    } else if(strcmp(val, "RJC") == 0) {
       return RJC;
+   } else if(strcmp(val, "MMG") == 0) {
+      return MMG;
+   } else if(strcmp(val, "EXT") == 0) {
+      return EXT;
+   } else if(strcmp(val, "SPM") == 0) {
+      return SPM;
    } else {
       return -1;
    }
@@ -477,15 +551,14 @@ static void send_main_menu(const Client* reciever) {
    char* buffer = "Welcome to the Awale game\n"
    "[LOP] List online players\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
-   "[CAP] [**player name**] Challenge a player\n" // DONE // TODO should also start the game here on the accept, later
+   "[CAP] [**player name**] Challenge a player\n" // DONE 
    "[LSG] List ongoing games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
-   "[MMG] [**game id**] [**move**] Make a move in a game\n" // TODO put after sending the game, and exit the game
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
-   "[SVG] Save next game to watch later\n"
+   "[WOG] Watch a game already played\n" // list finished games on the server and give ids to watch
    "[LFR] List friend requests\n" // DONE
    "[LSF] List friends\n" // DONE
    "Select your option by entering the command: ";
@@ -571,12 +644,29 @@ static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, L
 static void send_game_commands(Client* player) {
    char buffer[BUF_SIZE];
    strcpy(buffer, "Game commands:\n"
-   "[MMG] [**game id**] [**move**] Make a move in a game\n"
+   "[MMG] [**move**] [**game id**] Make a move in a game\n"
    "[EXT] [**game id**] Give up on the game\n"
-   "[SPM] [**message**] Send a private message to your opponent\n"
+   "[SPM] [**message**] [**game id**] Send a private message to your opponent\n"
    "Select your option by entering the command: ");
    send_message_to_client(player, buffer);
 }
+
+int extract_game_id(const char* buffer) {
+   int index = 0; // Starting index
+   char game_id_str[20]; // Assuming the game ID won't be longer than 19 characters
+   int game_id_index = 0;
+   int ch;
+
+   while ((ch = buffer[index++]) != ' ' && ch != '\0') {
+      game_id_str[game_id_index++] = ch;
+   }
+   game_id_str[game_id_index] = '\0'; // Null-terminate the string
+
+   // Convert the extracted string to an integer
+   int game_id = atoi(game_id_str);
+   return game_id;
+}
+
 
 int main(int argc, char **argv)
 {

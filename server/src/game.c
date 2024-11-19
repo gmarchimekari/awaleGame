@@ -36,11 +36,17 @@ void game_start(Game* game) {
     game->start = time(NULL);
 }
 
-int checkEndGame(Game* game) {
+int game_compare_id(const void* game, const void* id) {
+    Game* g = (Game*)game;
+    int* i = (int*)id;
+    return g->ID == *i;
+}
 
+
+int checkEndGame(Game* game) {
     if (game->scoreP1 >= 25 || game->scoreP2 >= 25) 
         return 1;
-    
+    return 0;
 }
 
 int checkPriseToutesGraines(Game* game, const Client* client, int move) {
@@ -251,7 +257,6 @@ int updateAwaleBoard(Game* game, int move, const Client* client) {
 }
 
 void displayAwaleBoard(const Game* game){
-    printf("this is a test\n");
     AwaleBoard* awaleBoard = game->board;
     printf("+--6-+--5-+--4-+--3-+--2-+--1-+\n");
     printf("-------------------------------\n");
@@ -277,15 +282,15 @@ void printGame(void* game) {
     Game* g = (Game*)game;
     printf("Partie: %s VS %s\n", g->p1->nickname, g->p2->nickname);
     printf("Identifiant: %d\n", g->ID);
-    printf("Score: %d - %d\n", g->scoreP1, g->scoreP2);
-    if(g->winner != NULL) {
-        printf("Gagnant: %s\n", g->winner->nickname);
-    } else {
-        printf("Egalite\n");
-    }
+
     if(g->end != 0) {
         time_t duration = g->end - g->start;
         printf("Duree de la partie: %ld", duration);
+        if(g->winner != NULL) {
+        printf("Gagnant: %s\n", g->winner->nickname);
+        } else {
+            printf("Egalite\n");
+        }
     }
     displayAwaleBoard(g);
 }
@@ -299,24 +304,53 @@ int game_check_player(const void* game, const void* player) {
 void game_sprint(char* buffer, void* data) {
     Game* g = (Game*)data;
     char temp[256];
-    sprintf(temp, "Partie: %s VS %s\nScore: %d - %d\n", g->p1->nickname, g->p2->nickname, g->scoreP1, g->scoreP2);
+    sprintf(temp, "Partie: %s VS %s\n", g->p1->nickname, g->p2->nickname);
     strcat(buffer, temp);
     sprintf(temp, "Identifiant: %d\n", g->ID);
     strcat(buffer, temp);
-    if(g->winner != NULL) {
-        sprintf(temp, "Gagnant: %s\n", g->winner->nickname);
-        strcat(buffer, temp);
-    } else {
-        sprintf(temp, "Egalite\n");
-        strcat(buffer, temp);
-    }
+    
     if(g->end != 0) {
         time_t duration = g->end - g->start;
         sprintf(temp, "Duree de la partie: %ld", duration);
         strcat(buffer, temp);
+        if(g->winner != NULL) {
+            sprintf(temp, "Gagnant: %s\n", g->winner->nickname);
+            strcat(buffer, temp);
+        } else {
+            sprintf(temp, "Egalite\n");
+            strcat(buffer, temp);
+        }
     }
-    awaleBoard_sprint(buffer, g->board);
+    awaleBoard_sprint(buffer, g);
 }
+
+void awaleBoard_sprint(char* buffer, Game* data) {
+    AwaleBoard* awaleBoard = data->board;
+    char temp[256];
+    sprintf(temp, "+--6-+--5-+--4-+--3-+--2-+--1-+\n");
+    strcat(buffer, temp);
+    sprintf(temp, "-------------------------------\n");
+    strcat(buffer, temp);
+    for (int i = 5; i >= 0; i--) {
+        sprintf(temp, "| %2d ", awaleBoard->board[i]);
+        strcat(buffer, temp);
+    }
+    sprintf(temp, "|\tJoueur 1: %s, Score : %d\n", data->p1->nickname, data->scoreP1);
+    strcat(buffer, temp);
+
+    for (int i = 6; i < 12; i++) {
+        sprintf(temp, "| %2d ", awaleBoard->board[i]);
+        strcat(buffer, temp);
+    }
+    sprintf(temp, "|\tJoueur 2: %s, Score : %d\n", data->p2->nickname, data->scoreP2);
+    strcat(buffer, temp);
+
+    sprintf(temp, "-------------------------------\n");
+    strcat(buffer, temp);
+    sprintf(temp, "+--1-+--2-+--3-+--4-+--5-+--6-+\n");
+    strcat(buffer, temp);
+}
+
 
 
 

@@ -51,6 +51,18 @@ int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     return 0;
 }
 
+void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void*)) {
+    Node* current = list->head;
+    while (current != NULL) {
+        if (compareID(current->data, id)) {
+            return current->data;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+
 // frees the node, but not the data in the node
 void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     Node* current = list->head;

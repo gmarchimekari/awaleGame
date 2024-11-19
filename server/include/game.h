@@ -100,9 +100,15 @@ void printGame(void* game);
  */
 int game_check_player(const void* game, const void* player);
 
+int game_compare_id(const void* game, const void* id);
+
 void game_sprint(char* buffer, void* data);
 
+void awaleBoard_sprint(char* buffer, Game* g);
+
 void game_start(Game* game);
+
+
 
 
 #endif // GAME_H

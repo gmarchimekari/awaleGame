@@ -54,6 +54,7 @@ typedef struct in_addr IN_ADDR;
 #define EXT 18
 #define SPM 19
 
+
 // Replies that the client can send
 #define ACCEPT 1
 #define REJECT 0
@@ -94,5 +95,7 @@ static void send_game_invite(Client* sender, Client* reciever);
 static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, List* games);
 
 static void send_game_commands(Client* player);
+
+int extract_game_id(const char* buffer);
 
 #endif /* guard */

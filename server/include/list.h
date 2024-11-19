@@ -54,6 +54,8 @@ void insertNode(List* list, void* data, handler free, handler print, void (*spri
  */
 int findNode(List* list, void* data, int (*compare)(const void*, const void*));
 
+void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void*)); 
+
 /**
 @brief affiche une liste chainee
 @param list liste a afficher
