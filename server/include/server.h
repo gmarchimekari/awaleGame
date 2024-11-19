@@ -53,7 +53,9 @@ typedef struct in_addr IN_ADDR;
 #define MMG 17
 #define EXT 18
 #define SPM 19
-
+#define LFG 20
+#define LYG 21
+#define YFG 22
 
 // Replies that the client can send
 #define ACCEPT 1
@@ -97,5 +99,7 @@ static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, L
 static void send_game_commands(Client* player);
 
 int extract_game_id(const char* buffer);
+
+void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGames);
 
 #endif /* guard */

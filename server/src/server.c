@@ -165,9 +165,16 @@ static void app(void)
                         break;
                      }
                      case LSG:
-                        printf("[LOG] List of ongoing games\n");
-                        strcpy(buffer, "Ongoing games:\n");
+                        printf("[LOG] List of ongoing games on the server\n");
+                        strcpy(buffer, "Ongoing games on the server:\n");
                         sprintList(buffer, ongoingGames);
+                        send_message_to_client(sender, buffer);
+                        break;
+                     
+                     case LYG:
+                        printf("[LOG] List of the client's ongoing games\n");
+                        strcpy(buffer, "Your ongoing games:\n");
+                        sprintList(buffer, sender->ongoing_games);
                         send_message_to_client(sender, buffer);
                         break;
 
@@ -264,6 +271,20 @@ static void app(void)
                         printf("[LOG] Friends list of %s\n", sender->nickname);
                         strcpy(buffer, "Friends:\n");
                         sprintList(buffer, sender->friends);
+                        send_message_to_client(sender, buffer);
+                        break;
+
+                     case LFG:
+                        printf("[LOG] List of finished games\n");
+                        strcpy(buffer, "All finished games on the server:\n");
+                        sprintList(buffer, finishedGames);
+                        send_message_to_client(sender, buffer);
+                        break;
+
+                     case YFG:
+                        printf("[LOG] List the client's finished games\n");
+                        strcpy(buffer, "Your finished games:\n");
+                        sprintList(buffer, sender->finished_games);
                         send_message_to_client(sender, buffer);
                         break;
 
@@ -373,7 +394,19 @@ static void app(void)
                      }
 
                      case EXT:
-
+                        int gameId = extract_game_id(buffer + 4);
+                        printf("[LOG] %s giving up on the game number %d\n", sender->nickname, gameId);
+                        Game* g = getNodeByID(sender->ongoing_games, &gameId, game_compare_id);
+                        if(!g) {
+                           send_message_to_client(sender, "Game not found\n");
+                           break;
+                        } else {
+                           // check if it's the player's turn
+                           if(compareClients((void*)g->playerTurn, (void*)sender))
+                              exit_game(sender, g, ongoingGames, finishedGames);
+                           else
+                              send_message_to_client(sender, "Not your turn\n");
+                        }   
                         break;
 
                      case SPM:
@@ -537,6 +570,12 @@ static int getValue(const char *val)
       return EXT;
    } else if(strcmp(val, "SPM") == 0) {
       return SPM;
+   } else if(strcmp(val, "LFG") == 0) {
+      return LFG;
+   } else if(strcmp(val, "LYG") == 0) {
+      return LYG;
+   } else if(strcmp(val, "YFG") == 0) {
+      return YFG;
    } else {
       return -1;
    }
@@ -562,6 +601,9 @@ static void send_main_menu(const Client* reciever) {
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
    "[CAP] [**player name**] Challenge a player\n" // DONE 
    "[LSG] List ongoing games\n" // DONE
+   "[LYG] List your ongoing games\n" // DONE
+   "[LFG] List finished games\n" // DONE
+   "[YFG] List your finished games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[DYP] Display your profile\n" // DONE
@@ -674,6 +716,32 @@ int extract_game_id(const char* buffer) {
    // Convert the extracted string to an integer
    int game_id = atoi(game_id_str);
    return game_id;
+}
+
+void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGames) {
+   // remove the game from the ongoing games of the two players
+   removeNode(game->p2->ongoing_games, &(game->ID), game_compare_id);
+   removeNode(game->p1->ongoing_games, &(game->ID), game_compare_id);
+   removeNode(ongoingGames, &(game->ID), game_compare_id);
+
+   insertNode(game->p2->finished_games, game, NULL, printGame, game_sprint);
+   insertNode(game->p1->finished_games, game, NULL, printGame, game_sprint);
+   insertNode(finishedGames, game, freeGame, printGame, game_sprint);
+
+   if(compareClients((void*)game->p1, (void*)sender)) {
+      // update of the score, the winner gets the max points
+      game->scoreP1 = 0; 
+      game->scoreP2= 25;
+      send_message_to_client(game->p2, "Game finished, your opponent gave up\n");
+   } else {
+      // update of the score, the winner gets the max points
+      game->scoreP1 = 25;
+      game->scoreP2 = 0;
+      send_message_to_client(game->p1, "Game finished, your opponent gave up\n");
+   }
+
+   // ending the game
+   endGame(game);
 }
 
 
