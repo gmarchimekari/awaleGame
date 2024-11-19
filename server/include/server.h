@@ -57,6 +57,7 @@ typedef struct in_addr IN_ADDR;
 #define LYG 21
 #define YFG 22
 
+
 // Replies that the client can send
 #define ACCEPT 1
 #define REJECT 0

@@ -189,6 +189,32 @@ static void app(void)
                         send_message_to_all_clients(clients, *sender, actual, buffer + 4, 0);
                         break;
 
+                     case SPM:
+                        printf("[LOG] %s sending a private message\n", sender->nickname);
+                        // get the name of the reciever
+                        char receiver_name[10] = {0};
+                        int j = 0;
+                        while (buffer[4 + j] != ' ' && buffer[4 + j] != '\0') {
+                           receiver_name[j] = buffer[4 + j];
+                           j++;
+                        }
+                        receiver_name[j] = '\0';
+                        // check if the reciever is online
+                        reciever = get_client_by_name(clients, actual, receiver_name);
+                        if(!reciever) {
+                           send_message_to_client(sender, "Player not found\n");
+                           break;
+                        } else {
+                           // send the message
+                           send_message_to_client(reciever, "Private message from ");
+                           send_message_to_client(reciever, sender->nickname);
+                           send_message_to_client(reciever, ": ");
+                           send_message_to_client(reciever, buffer + 4 + j + 1);
+                        }
+
+                        // send the message
+                        break;
+
                      case DYP: {
                         char profile[BUF_SIZE] = {0};
 
@@ -409,10 +435,6 @@ static void app(void)
                         }   
                         break;
 
-                     case SPM:
-                        // send private message
-                        break;
-
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
                         break;
@@ -606,6 +628,7 @@ static void send_main_menu(const Client* reciever) {
    "[YFG] List your finished games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
+   "[SPM] [**player name**] [**message**] Send a private message to a player online\n" 
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
@@ -697,7 +720,6 @@ static void send_game_commands(Client* player) {
    strcpy(buffer, "Game commands:\n"
    "[MMG] [**move**] [**game id**] Make a move in a game\n"
    "[EXT] [**game id**] Give up on the game\n"
-   "[SPM] [**message**] [**game id**] Send a private message to your opponent\n"
    "Select your option by entering the command: ");
    send_message_to_client(player, buffer);
 }
