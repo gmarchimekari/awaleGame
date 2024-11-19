@@ -424,6 +424,7 @@ static void app(void)
                                  endGame(g);
                                  send_message_to_client(g->p1, "Game finished\n");
                                  send_message_to_client(g->p2, "Game finished\n");
+                                 handleNodes(g->spectators, "Game finished\n", send_message_to_client_handler);
                                  removeNode(g->p1->ongoing_games, &(g->ID), game_compare_id);
                                  Game* finishedGame = removeNode(g->p2->ongoing_games, &(g->ID), game_compare_id);
                                  insertNode(g->p1->finished_games, finishedGame, NULL, printGame, game_sprint);
@@ -440,11 +441,11 @@ static void app(void)
                                  }
                                  
                                  char gameBuffer[BUF_SIZE];
+                                 bzero(gameBuffer, BUF_SIZE);
                                  game_sprint(gameBuffer, g);
                                  handleNodes(g->spectators, gameBuffer, send_message_to_client_handler);
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
-                                 bzero(gameBuffer, BUF_SIZE);
                               }
                            } else {
                               send_message_to_client(sender, "Not your turn\n");
@@ -468,6 +469,23 @@ static void app(void)
                               send_message_to_client(sender, "Not your turn\n");
                         }   
                         break;
+
+                     case EXS: {
+                        printf("[LOG] %s exiting spectating mode\n", sender->nickname);
+                        int gameId = extract_game_id(buffer + 4);
+                        Game* g = getNodeByID(ongoingGames, &gameId, game_compare_id);
+                        if(!g) {
+                           send_message_to_client(sender, "Game not found\n");
+                        } else {
+                           if(findNode(g->spectators, sender, compareClients)) {
+                              removeNode(g->spectators, sender, compareClients);
+                              send_message_to_client(sender, "You are no longer spectating the game\n");
+                           } else {
+                              send_message_to_client(sender, "You are not spectating this game\n");
+                           }
+                        }
+                        break;
+                     } 
 
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
@@ -632,6 +650,8 @@ static int getValue(const char *val)
       return LYG;
    } else if(strcmp(val, "YFG") == 0) {
       return YFG;
+   } else if(strcmp(val, "EXS") == 0) {
+      return EXS;
    } else {
       return -1;
    }
@@ -795,6 +815,7 @@ void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGam
       game->scoreP2 = 0;
       send_message_to_client(game->p1, "Game finished, your opponent gave up\n");
    }
+   handleNodes(game->spectators, "Game finished, a player gave up\n", send_message_to_client_handler);
 
    // ending the game
    endGame(game);
@@ -804,6 +825,7 @@ static void send_message_to_client_handler(void* data, void* context){
    Client* client = (Client*)data;
    // the context is only a buffer in this case
    char* buffer = (char*)context;
+   send_message_to_client(client, "[EXS] [**game id**] Exit spectating mode\n");
    send_message_to_client(client, buffer);
 }
 
