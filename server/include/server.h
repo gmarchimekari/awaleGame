@@ -79,6 +79,7 @@ static void clear_clients(Client *clients, int ACFual);
 
 // Functions added
 static void send_message_to_client(const Client* sender, const char *buffer);
+static void send_message_to_client_handler(void* data, void* context); // will be used in the list to handle the nodes
 static void send_main_menu(const Client* reciever); 
 static void display_online_players(const Client* clients, const int ACFual, const Client* sender); 
 static int getValue(const char *val);

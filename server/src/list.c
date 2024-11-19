@@ -96,3 +96,11 @@ void sprintList(char* buffer, const List* list) {
         current = current->next;
     }
 }
+
+void handleNodes(List* list, void* context ,void (*handler)(void*, void*)) {
+    Node* current = list->head;
+    while (current != NULL) {
+        handler(current->data, context);
+        current = current->next;
+    }
+}

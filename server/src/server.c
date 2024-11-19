@@ -178,12 +178,44 @@ static void app(void)
                         send_message_to_client(sender, buffer);
                         break;
 
-                     case WAG:
+                     case WAG: {
                         printf("[LOG] %s spectating a game\n", sender->nickname);
                         // check if the game exists
-                        // check if the player is not in the game
-                         
-                        break;
+                        int gameId = extract_game_id(buffer + 4);
+                        Game* g = getNodeByID(ongoingGames, &gameId, game_compare_id);
+                        if(!g) {
+                           send_message_to_client(sender, "Game not found\n");
+                        } else {
+                           // check if he is not already spectating
+                           if(findNode(g->spectators, sender, compareClients)) {
+                              send_message_to_client(sender, "You are already spectating this game\n");
+                           }
+                           // check if the sender is not a player
+                           else if(compareClients((void*)g->p1, (void*)sender) || compareClients((void*)g->p2, (void*)sender)) {
+                              send_message_to_client(sender, "You are a player in this game, cannot spectate\n");
+                           } else {
+                              // check if he is a friend of one of the players, private mode wont matter
+                              if(findNode(g->p1->friends, sender, compareClients) || findNode(g->p2->friends, sender, compareClients)) {
+                                 insertNode(g->spectators, sender, NULL, printClient, client_sprint);
+                                 send_message_to_client(sender, "You are now spectating the game\n");
+                                 send_message_to_client(g->p1, "A player is spectating the game\n");
+                                 send_message_to_client(g->p2, "A player is spectating the game\n");
+                              } else {
+                                 // check if one of the players has his private mode on
+                                 if(g->p1->private == ON || g->p2->private == ON) {
+                                    send_message_to_client(sender, "One of the players has his private mode on, cannot spectate\n");
+                                 } else {
+                                    // none of the players has his private mode on
+                                    insertNode(g->spectators, sender, NULL, printClient, client_sprint);
+                                    send_message_to_client(sender, "You are now spectating the game\n");
+                                    send_message_to_client(g->p1, "A player is spectating the game\n");
+                                    send_message_to_client(g->p2, "A player is spectating the game\n");
+                                 }
+                              }
+                           }                           
+                        }   
+                        break;                  
+                     }
 
                      case SND:  
                         send_message_to_all_clients(clients, *sender, actual, buffer + 4, 0);
@@ -331,6 +363,7 @@ static void app(void)
                               game_sprint(buffer, g);
                               send_message_to_client(sender, buffer);
                               send_message_to_client(reciever, buffer);
+                              handleNodes(g->spectators, buffer, send_message_to_client_handler); // sends the game to the spectators
 
                               // sending the game commands to the rigth player
                               send_game_commands(g->playerTurn); 
@@ -408,6 +441,7 @@ static void app(void)
                                  
                                  char gameBuffer[BUF_SIZE];
                                  game_sprint(gameBuffer, g);
+                                 handleNodes(g->spectators, gameBuffer, send_message_to_client_handler);
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
                                  bzero(gameBuffer, BUF_SIZE);
@@ -628,7 +662,7 @@ static void send_main_menu(const Client* reciever) {
    "[YFG] List your finished games\n" // DONE
    "[WAG] [**game id**] Watch a game\n"
    "[SND] [**message**] Chat with online players\n" // DONE 
-   "[SPM] [**player name**] [**message**] Send a private message to a player online\n" 
+   "[SPM] [**player name**] [**message**] Send a private message to a player online\n" // DONE
    "[DYP] Display your profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
@@ -765,6 +799,14 @@ void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGam
    // ending the game
    endGame(game);
 }
+
+static void send_message_to_client_handler(void* data, void* context){ 
+   Client* client = (Client*)data;
+   // the context is only a buffer in this case
+   char* buffer = (char*)context;
+   send_message_to_client(client, buffer);
+}
+
 
 
 int main(int argc, char **argv)

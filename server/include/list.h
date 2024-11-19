@@ -72,5 +72,7 @@ void* removeNode(List* list, void* data, int (*compare)(const void*, const void*
 
 void sprintList(char* buffer, const List* list);
 
+void handleNodes(List* list, void* context ,void (*handler)(void*, void*));
+
 
 #endif // LIST_H
