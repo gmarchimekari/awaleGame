@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
+
 
 #include "client.h"
 
@@ -154,6 +156,8 @@ int main(int argc, char **argv)
       printf("Usage : %s [address] [pseudo]\n", argv[0]);
       return EXIT_FAILURE;
    }
+
+   signal(SIGINT, SIG_IGN);
 
    init();
 
