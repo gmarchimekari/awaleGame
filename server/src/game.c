@@ -330,6 +330,11 @@ void game_sprint(char* buffer, void* data) {
     awaleBoard_sprint(buffer, g);
 }
 
+void game_string_sprint(char* buffer, void* data) {
+    char* gameString = (char*)data;
+    strcat(buffer, gameString);
+}
+
 void awaleBoard_sprint(char* buffer, Game* data) {
     AwaleBoard* awaleBoard = data->board;
     char temp[1024];

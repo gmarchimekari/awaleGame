@@ -257,6 +257,21 @@ static void app(void)
                         break;
                      }
 
+                     case DPP : {
+                        printf("[LOG] %s displaying a player's profile\n", sender->nickname);
+                        reciever = get_client_by_name(clients, actual, buffer + 4);
+                        if(!reciever) {
+                           send_message_to_client(sender, "Player not found\n");
+                           break;
+                        } else {
+                           char profile[BUF_SIZE] = {0};
+                           client_get_profile_information(reciever, profile);
+                           send_message_to_client(reciever, "A player reviewed your profile\n");
+                           send_message_to_client(sender, profile);
+                        }
+                        break;
+                     }
+
                      case BIO: {
                         strncpy(sender->bio, buffer + 4, sizeof(sender->bio) - 1);
                         printf("[LOG] %s bio updated\n", sender->nickname);
@@ -443,7 +458,10 @@ static void app(void)
                                  char gameBuffer[BUF_SIZE];
                                  bzero(gameBuffer, BUF_SIZE);
                                  game_sprint(gameBuffer, g);
-                                 handleNodes(g->spectators, gameBuffer, send_message_to_client_handler);
+                                 char copy[BUF_SIZE];
+                                 game_sprint(copy, g);
+                                 insertNode(g->history, copy, NULL, NULL, game_string_sprint); // saving the game state, in strings, no need to get the reference or a copy of the object
+                                 handleNodes(g->spectators, gameBuffer, send_message_to_client_handler); // sending the game to the spectators
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
                               }
@@ -480,12 +498,30 @@ static void app(void)
                            if(findNode(g->spectators, sender, compareClients)) {
                               removeNode(g->spectators, sender, compareClients);
                               send_message_to_client(sender, "You are no longer spectating the game\n");
+                              send_message_to_client(g->p1, "A player is no longer spectating the game\n");
+                              send_message_to_client(g->p2, "A player is no longer spectating the game\n");
                            } else {
                               send_message_to_client(sender, "You are not spectating this game\n");
                            }
                         }
                         break;
                      } 
+
+                     case WFG: {
+                        int gameId = extract_game_id(buffer + 4);
+                        printf("[LOG] %s watching the game number %d\n", sender->nickname, gameId);
+                        Game* g = getNodeByID(finishedGames, &gameId, game_compare_id);
+                        if(!g) {
+                           send_message_to_client(sender, "Game not found\n");
+                        } else {
+                           char history[BUF_SIZE];
+                           bzero(history, BUF_SIZE);
+                           sprintList(history, g->history);  
+                           printf("%s\n", history);
+                           send_message_to_client(sender, history);
+                        }
+                        break;
+                     }
 
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
@@ -652,6 +688,10 @@ static int getValue(const char *val)
       return YFG;
    } else if(strcmp(val, "EXS") == 0) {
       return EXS;
+   } else if(strcmp(val, "WFG") == 0) {
+      return WFG;
+   } else if(strcmp(val, "DPP") == 0) {
+      return DPP;
    } else {
       return -1;
    }
@@ -680,13 +720,14 @@ static void send_main_menu(const Client* reciever) {
    "[LYG] List your ongoing games\n" // DONE
    "[LFG] List finished games\n" // DONE
    "[YFG] List your finished games\n" // DONE
-   "[WAG] [**game id**] Watch a game\n"
+   "[WAG] [**game id**] Watch a game\n" // DONE 
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[SPM] [**player name**] [**message**] Send a private message to a player online\n" // DONE
    "[DYP] Display your profile\n" // DONE
+   "[DPP] [**player name**] Display a player's profile\n" // TODO
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
-   "[WOG] Watch a game already played\n" // list finished games on the server and give ids to watch
+   "[WFG] Watch a game already played\n" // TODO
    "[LFR] List friend requests\n" // DONE
    "[LSF] List friends\n" // DONE
    "Select your option by entering the command: ";

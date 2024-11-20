@@ -108,7 +108,5 @@ void awaleBoard_sprint(char* buffer, Game* g);
 
 void game_start(Game* game);
 
-
-
-
+void game_string_sprint(char* buffer, void* data);
 #endif // GAME_H
