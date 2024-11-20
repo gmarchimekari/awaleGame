@@ -133,6 +133,7 @@ static void app(void)
                   Client* reciever = NULL;
 
                   const char val[] = {buffer[0], buffer[1], buffer[2], '\0'};
+                  printf("[LOG] %s sent %s\n", sender->nickname, buffer);
                   printf("[LOG] User Option %s\n", val);
                   printf("[LOG] Value from enum %d\n", getValue(val));
 
@@ -249,10 +250,7 @@ static void app(void)
 
                      case DYP: {
                         char profile[BUF_SIZE] = {0};
-
-                        printf("profile before %s\n", profile);   
                         client_get_profile_information(sender, profile); 
-                        printf("profile after %s\n", profile);
                         send_message_to_client(sender, profile);
                         break;
                      }
@@ -458,9 +456,11 @@ static void app(void)
                                  char gameBuffer[BUF_SIZE];
                                  bzero(gameBuffer, BUF_SIZE);
                                  game_sprint(gameBuffer, g);
-                                 char copy[BUF_SIZE];
-                                 game_sprint(copy, g);
-                                 insertNode(g->history, copy, NULL, NULL, game_string_sprint); // saving the game state, in strings, no need to get the reference or a copy of the object
+
+                                 // creation of the copy of the string 
+                                 char* copy = (char*)malloc(sizeof(char) * BUF_SIZE);
+                                 strcpy(copy, gameBuffer); 
+                                 insertNode(g->history, copy, free, NULL, game_string_sprint); // saving the game state, in strings, no need to get the reference or a copy of the object
                                  handleNodes(g->spectators, gameBuffer, send_message_to_client_handler); // sending the game to the spectators
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
@@ -472,7 +472,7 @@ static void app(void)
                         break;
                      }
 
-                     case EXT:
+                     case EXT: {
                         int gameId = extract_game_id(buffer + 4);
                         printf("[LOG] %s giving up on the game number %d\n", sender->nickname, gameId);
                         Game* g = getNodeByID(sender->ongoing_games, &gameId, game_compare_id);
@@ -487,7 +487,8 @@ static void app(void)
                               send_message_to_client(sender, "Not your turn\n");
                         }   
                         break;
-
+                     }
+                     
                      case EXS: {
                         printf("[LOG] %s exiting spectating mode\n", sender->nickname);
                         int gameId = extract_game_id(buffer + 4);
@@ -517,7 +518,6 @@ static void app(void)
                            char history[BUF_SIZE];
                            bzero(history, BUF_SIZE);
                            sprintList(history, g->history);  
-                           printf("%s\n", history);
                            send_message_to_client(sender, history);
                         }
                         break;
