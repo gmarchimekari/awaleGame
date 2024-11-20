@@ -281,6 +281,8 @@ void displayAwaleBoard(const Game* game){
 void freeGame(void* game) {
     Game* g = (Game*)game;
     freeAwaleBoard(g->board);
+    freeList(g->history);
+    freeList(g->spectators);
     free(g);
 }
 

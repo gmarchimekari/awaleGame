@@ -102,10 +102,19 @@ static void app(void)
          char name[BUF_SIZE] = {0};
          strncpy(name, buffer, BUF_SIZE - 1);
 
+         char id[5]; 
+         sprintf(id, "#%d", actual * 3); // randomizing the id
+         strncat(name, id, 5);
+
          Client c; 
          initializeClient(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
          actual++;
+         
+         send_message_to_client(&c, "You are now connected as ");
+         send_message_to_client(&c, name);
+         send_message_to_client(&c, "\n");
+
          send_main_menu(&c);
       }
       else
@@ -307,7 +316,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(sender->friends_requests, reciever, compareClients)) // TODO change the name of the function
+                           if(findNode(sender->friends_requests, reciever, compareClients)) 
                               reply_to_friend_request(sender, reciever, ACCEPT);
                            else 
                               send_message_to_client(sender, "No friend request from this player\n");
@@ -323,7 +332,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(sender->friends_requests, reciever, compareClients)) // TODO change the name of the function
+                           if(findNode(sender->friends_requests, reciever, compareClients)) 
                               reply_to_friend_request(sender, reciever, REJECT);
                            else 
                               send_message_to_client(sender, "No friend request from this player\n");
@@ -724,18 +733,14 @@ static void send_main_menu(const Client* reciever) {
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[SPM] [**player name**] [**message**] Send a private message to a player online\n" // DONE
    "[DYP] Display your profile\n" // DONE
-   "[DPP] [**player name**] Display a player's profile\n" // TODO
+   "[DPP] [**player name**] Display a player's profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
-   "[WFG] Watch a game already played\n" // TODO
+   "[WFG] Watch a game already played\n" // DONE
    "[LFR] List friend requests\n" // DONE
    "[LSF] List friends\n" // DONE
    "Select your option by entering the command: ";
    send_message_to_client(reciever, buffer);
-
-   // TODO
-   // voir pour le ranking des joueurs si le time nous 5alina
-
 }
 
 static void send_message_to_client(const Client* sender, const char *buffer) {
@@ -771,7 +776,7 @@ static void reply_to_friend_request(Client* sender, Client* reciever, const int 
    }
 
    // remove the friend request from the list
-   removeNode(sender->friends_requests, reciever, compareClients); // TODO fuite de memoire, et nom de la fonction a changer, donc ce qu'on passe
+   removeNode(sender->friends_requests, reciever, compareClients); 
 }
 
 static void send_game_invite(Client* sender, Client* reciever) {
