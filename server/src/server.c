@@ -158,9 +158,17 @@ static void app(void)
                      case APF: {
                         printf("[LOG] Sending friend request from %s to %s\n", sender->nickname, buffer + 4);
                         reciever = get_client_by_name(clients, actual, buffer + 4);
-                        if(!reciever)
+                        if(!reciever){ 
                            send_message_to_client(sender, "Player not found\n");
-                        else {
+                        } else if (compareClients(sender, reciever)) {
+                           send_message_to_client(sender, "You cannot add yourself as a friend\n");
+                        } else if(findNode(sender->friends, reciever, compareClients)) {
+                           send_message_to_client(sender, "You are already friends\n");
+                        } else if(findNode(reciever->friends_requests, sender, compareClients)) {
+                           send_message_to_client(sender, "Friend request already sent\n");
+                        } else if(findNode(sender->friends_requests, reciever, compareClients)) {
+                           send_message_to_client(sender, "You already have a friend request from this player\n");
+                        } else {
                            send_friend_request(sender, reciever);
                            send_message_to_client(sender, "Friend request sent\n");
                         }
