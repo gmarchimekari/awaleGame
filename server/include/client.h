@@ -26,8 +26,8 @@ typedef int PRIVATE_MODE; // 0 for public, 1 for private, used for spectating ma
  */
 typedef struct Client{
     SOCKET sock;
-    char nickname[10];
-    char bio[90];
+    char nickname[25];
+    char bio[125];
     PRIVATE_MODE private; 
     List* games; 
     List* friends; 

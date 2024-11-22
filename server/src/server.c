@@ -36,6 +36,9 @@ static void app(void)
    /* an array for all clients */
    Client clients[MAX_CLIENTS];
 
+   // generating the random seed
+   srand(time(NULL));
+
    // list of all the games that were accepted by the players
    List* ongoingGames = (List*) malloc(sizeof(List)); // will be used to free the games at the end
    initList(ongoingGames);
@@ -102,10 +105,11 @@ static void app(void)
          char name[BUF_SIZE] = {0};
          strncpy(name, buffer, BUF_SIZE - 1);
 
-         char id[5]; 
-         sprintf(id, "#%d", actual * 3); // randomizing the id
-         strncat(name, id, 5);
-
+         char id[14]; 
+         sprintf(id, "#%05d", rand() % 10000); // randomizing the id between 0 and 9999
+         printf("[LOG] %s connected\n", id);
+         strncat(name, id, 6);
+         strncat(name, "\0", 1);
          Client c; 
          initializeClient(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
@@ -234,7 +238,7 @@ static void app(void)
                      case SPM:
                         printf("[LOG] %s sending a private message\n", sender->nickname);
                         // get the name of the reciever
-                        char receiver_name[10] = {0};
+                        char receiver_name[25] = {0};
                         int j = 0;
                         while (buffer[4 + j] != ' ' && buffer[4 + j] != '\0') {
                            receiver_name[j] = buffer[4 + j];
@@ -535,9 +539,8 @@ static void app(void)
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
                         break;
-
-                     bzero(buffer, BUF_SIZE);
                   }
+                  bzero(buffer, BUF_SIZE);
                }
                break;
             }
