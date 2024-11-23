@@ -149,7 +149,7 @@ La documentation pour ce projet est générée à l'aide de Doxygen. Suivez les 
 
 La documentation générée se trouve dans le répertoire doc/
 
-. Pour consulter la documentation, ouvrez le fichier `index.html` dans votre navigateur web. Vous pouvez le faire en exécutant l'une des commandes suivantes, selon votre système d'exploitation :
+Pour consulter la documentation, ouvrez le fichier `index.html` dans votre navigateur web. Vous pouvez le faire en exécutant l'une des commandes suivantes, selon votre système d'exploitation :
 
 - Sur Linux :
 
