@@ -29,14 +29,14 @@ typedef struct AwaleBoard {
  * @brief initialise un plateau de jeu
  * @param awaleBoard plateau a initialiser
  */
-void initAwaleBoard(AwaleBoard* awaleBoard);
+void awaleBoard_init(AwaleBoard* awaleBoard);
 
 
 /**
  * @brief libere la memoire allouee pour un plateau de jeu
  * @param awaleBoard plateau a liberer
  */
-void freeAwaleBoard(AwaleBoard* awaleBoard);
+void awaleBoard_free(AwaleBoard* awaleBoard);
 
 
 #endif // AWALEBOARD_H

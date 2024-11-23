@@ -189,7 +189,7 @@ static void display_online_players(const Client* clients, const int actual, cons
  * @param val La chaîne de caractères.
  * @return La valeur associée.
  */
-static int getValue(const char *val);
+static int get_value(const char *val);
 
 /**
  * @brief Envoie une demande d'ami à un autre client.

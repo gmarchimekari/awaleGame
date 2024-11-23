@@ -41,11 +41,11 @@ static void app(void)
 
    // list of all the games that were accepted by the players
    List* ongoingGames = (List*) malloc(sizeof(List)); // will be used to free the games at the end
-   initList(ongoingGames);
+   list_init(ongoingGames);
 
    // list of all the games that were finished
    List* finishedGames = (List*) malloc(sizeof(List)); // will be used to free the games at the end
-   initList(finishedGames);
+   list_init(finishedGames);
 
    fd_set rdfs;
 
@@ -111,7 +111,7 @@ static void app(void)
          strncat(name, id, 6);
          strncat(name, "\0", 1);
          Client c; 
-         initializeClient(&c, name, "Trying to play some awale and chill around\n", csock);
+         client_init(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
          actual++;
          
@@ -148,9 +148,9 @@ static void app(void)
                   const char val[] = {buffer[0], buffer[1], buffer[2], '\0'};
                   printf("[LOG] %s sent %s\n", sender->nickname, buffer);
                   printf("[LOG] User Option %s\n", val);
-                  printf("[LOG] Value from enum %d\n", getValue(val));
+                  printf("[LOG] Value from enum %d\n", get_value(val));
 
-                  switch(getValue(val)) {
+                  switch(get_value(val)) {
                      case LOP:
                         display_online_players(clients, actual, sender);
                         break;
@@ -160,13 +160,13 @@ static void app(void)
                         reciever = get_client_by_name(clients, actual, buffer + 4);
                         if(!reciever){ 
                            send_message_to_client(sender, "Player not found\n");
-                        } else if (compareClients(sender, reciever)) {
+                        } else if (client_compare(sender, reciever)) {
                            send_message_to_client(sender, "You cannot add yourself as a friend\n");
-                        } else if(findNode(sender->friends, reciever, compareClients)) {
+                        } else if(list_find_node(sender->friends, reciever, client_compare)) {
                            send_message_to_client(sender, "You are already friends\n");
-                        } else if(findNode(reciever->friends_requests, sender, compareClients)) {
+                        } else if(list_find_node(reciever->friends_requests, sender, client_compare)) {
                            send_message_to_client(sender, "Friend request already sent\n");
-                        } else if(findNode(sender->friends_requests, reciever, compareClients)) {
+                        } else if(list_find_node(sender->friends_requests, reciever, client_compare)) {
                            send_message_to_client(sender, "You already have a friend request from this player\n");
                         } else {
                            send_friend_request(sender, reciever);
@@ -181,7 +181,7 @@ static void app(void)
                         reciever = get_client_by_name(clients, actual, buffer + 4);
                         if(!reciever) {
                            send_message_to_client(sender, "Player not found\n");
-                        } else if(compareClients(sender, reciever)) {
+                        } else if(client_compare(sender, reciever)) {
                            send_message_to_client(sender, "You cannot challenge yourself\n");
                         } else { 
                            // and we want him to be able to send a challenge to a player that he is playing with
@@ -193,14 +193,14 @@ static void app(void)
                      case LSG:
                         printf("[LOG] List of ongoing games on the server\n");
                         strcpy(buffer, "Ongoing games on the server:\n");
-                        sprintList(buffer, ongoingGames);
+                        list_sprint(buffer, ongoingGames);
                         send_message_to_client(sender, buffer);
                         break;
                      
                      case LYG:
                         printf("[LOG] List of the client's ongoing games\n");
                         strcpy(buffer, "Your ongoing games:\n");
-                        sprintList(buffer, sender->ongoing_games);
+                        list_sprint(buffer, sender->ongoing_games);
                         send_message_to_client(sender, buffer);
                         break;
 
@@ -208,21 +208,21 @@ static void app(void)
                         printf("[LOG] %s spectating a game\n", sender->nickname);
                         // check if the game exists
                         int gameId = extract_game_id(buffer + 4);
-                        Game* g = getNodeByID(ongoingGames, &gameId, game_compare_id);
+                        Game* g = list_get_node_by_id(ongoingGames, &gameId, game_compare_id);
                         if(!g) {
                            send_message_to_client(sender, "Game not found\n");
                         } else {
                            // check if he is not already spectating
-                           if(findNode(g->spectators, sender, compareClients)) {
+                           if(list_find_node(g->spectators, sender, client_compare)) {
                               send_message_to_client(sender, "You are already spectating this game\n");
                            }
                            // check if the sender is not a player
-                           else if(compareClients((void*)g->p1, (void*)sender) || compareClients((void*)g->p2, (void*)sender)) {
+                           else if(client_compare((void*)g->p1, (void*)sender) || client_compare((void*)g->p2, (void*)sender)) {
                               send_message_to_client(sender, "You are a player in this game, cannot spectate\n");
                            } else {
                               // check if he is a friend of one of the players, private mode wont matter
-                              if(findNode(g->p1->friends, sender, compareClients) || findNode(g->p2->friends, sender, compareClients)) {
-                                 insertNode(g->spectators, sender, NULL, printClient, client_sprint);
+                              if(list_find_node(g->p1->friends, sender, client_compare) || list_find_node(g->p2->friends, sender, client_compare)) {
+                                 list_insert_node(g->spectators, sender, NULL, client_print, client_sprint);
                                  send_message_to_client(sender, "You are now spectating the game\n");
                                  send_message_to_client(g->p1, "A player is spectating the game\n");
                                  send_message_to_client(g->p2, "A player is spectating the game\n");
@@ -232,7 +232,7 @@ static void app(void)
                                     send_message_to_client(sender, "One of the players has his private mode on, cannot spectate\n");
                                  } else {
                                     // none of the players has his private mode on
-                                    insertNode(g->spectators, sender, NULL, printClient, client_sprint);
+                                    list_insert_node(g->spectators, sender, NULL, client_print, client_sprint);
                                     send_message_to_client(sender, "You are now spectating the game\n");
                                     send_message_to_client(g->p1, "A player is spectating the game\n");
                                     send_message_to_client(g->p2, "A player is spectating the game\n");
@@ -332,7 +332,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(sender->friends_requests, reciever, compareClients)) 
+                           if(list_find_node(sender->friends_requests, reciever, client_compare)) 
                               reply_to_friend_request(sender, reciever, ACCEPT);
                            else 
                               send_message_to_client(sender, "No friend request from this player\n");
@@ -348,7 +348,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to be a friend
-                           if(findNode(sender->friends_requests, reciever, compareClients)) 
+                           if(list_find_node(sender->friends_requests, reciever, client_compare)) 
                               reply_to_friend_request(sender, reciever, REJECT);
                            else 
                               send_message_to_client(sender, "No friend request from this player\n");
@@ -359,28 +359,28 @@ static void app(void)
                      case LFR:
                         printf("[LOG] Friend requests list of %s\n", sender->nickname);
                         strcpy(buffer, "Friend requests:\n");
-                        sprintList(buffer, sender->friends_requests);
+                        list_sprint(buffer, sender->friends_requests);
                         send_message_to_client(sender, buffer);
                         break;
 
                      case LSF:
                         printf("[LOG] Friends list of %s\n", sender->nickname);
                         strcpy(buffer, "Friends:\n");
-                        sprintList(buffer, sender->friends);
+                        list_sprint(buffer, sender->friends);
                         send_message_to_client(sender, buffer);
                         break;
 
                      case LFG:
                         printf("[LOG] List of finished games\n");
                         strcpy(buffer, "All finished games on the server:\n");
-                        sprintList(buffer, finishedGames);
+                        list_sprint(buffer, finishedGames);
                         send_message_to_client(sender, buffer);
                         break;
 
                      case YFG:
                         printf("[LOG] List the client's finished games\n");
                         strcpy(buffer, "Your finished games:\n");
-                        sprintList(buffer, sender->finished_games);
+                        list_sprint(buffer, sender->finished_games);
                         send_message_to_client(sender, buffer);
                         break;
 
@@ -392,7 +392,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to play a game
-                           if(findNode(sender->game_invites, reciever, game_check_player)) {
+                           if(list_find_node(sender->game_invites, reciever, game_check_player)) {
                               Game* g = NULL; 
                               g = reply_to_game_invite(sender, reciever, ACCEPT, ongoingGames);
                               // picking up a random player to start the game between sender and reciever
@@ -401,7 +401,7 @@ static void app(void)
                               game_sprint(buffer, g);
                               send_message_to_client(sender, buffer);
                               send_message_to_client(reciever, buffer);
-                              handleNodes(g->spectators, buffer, send_message_to_client_handler); // sends the game to the spectators
+                              list_handle_nodes(g->spectators, buffer, send_message_to_client_handler); // sends the game to the spectators
 
                               // sending the game commands to the rigth player
                               send_game_commands(g->playerTurn); 
@@ -420,7 +420,7 @@ static void app(void)
                            break;
                         } else { // player found
                            // check if the player requested to play a game
-                           if(findNode(sender->game_invites, reciever, game_check_player))
+                           if(list_find_node(sender->game_invites, reciever, game_check_player))
                               reply_to_game_invite(sender, reciever, REJECT, ongoingGames);
                            else 
                               send_message_to_client(sender, "No game invite from this player\n");
@@ -433,13 +433,13 @@ static void app(void)
                         printf("[LOG] %s making a move in the game number %d\n", sender->nickname, gameId);
 
                         // check if the game exists
-                        Game* g = getNodeByID(sender->ongoing_games, &gameId, game_compare_id);
+                        Game* g = list_get_node_by_id(sender->ongoing_games, &gameId, game_compare_id);
                         if(!g) {
                            send_message_to_client(sender, "Game not found\n");
                            break;
                         } else {
                            // check if it's the player's turn
-                           if(compareClients((void*)g->playerTurn, (void*)sender)) {
+                           if(client_compare((void*)g->playerTurn, (void*)sender)) {
                               // check if the input is valid
                               int move = atoi(buffer + 3); 
                               if(move < 0 || move > 6 || buffer[5] != ' ') {
@@ -448,26 +448,26 @@ static void app(void)
                               }
 
                               // modifiying the move to be in the range of the player, based on player 1 or 2
-                              if(compareClients((void*)g->p2, (void*)sender)) 
+                              if(client_compare((void*)g->p2, (void*)sender)) 
                                  move += 6; // we add 6 to the move to be in the range of player 2
                               
-                              int playAgain = updateAwaleBoard(g, move, sender);
+                              int playAgain = game_update_board(g, move, sender);
                               // update the game
                               if(!playAgain) {
                                  // change the player's turn
-                                 g->playerTurn = (compareClients((void*)g->playerTurn, (void*)g->p1)) ? g->p2 : g->p1; 
+                                 g->playerTurn = (client_compare((void*)g->playerTurn, (void*)g->p1)) ? g->p2 : g->p1; 
                               }
                               // check if the game is finished
-                              if(checkEndGame(g)) {
-                                 endGame(g);
+                              if(game_check_end(g)) {
+                                 game_end(g);
                                  send_message_to_client(g->p1, "Game finished\n");
                                  send_message_to_client(g->p2, "Game finished\n");
-                                 handleNodes(g->spectators, "Game finished\n", send_message_to_client_handler);
-                                 removeNode(g->p1->ongoing_games, &(g->ID), game_compare_id);
-                                 Game* finishedGame = removeNode(g->p2->ongoing_games, &(g->ID), game_compare_id);
-                                 insertNode(g->p1->finished_games, finishedGame, NULL, printGame, game_sprint);
-                                 insertNode(g->p2->finished_games, finishedGame, NULL, printGame, game_sprint);
-                                 insertNode(finishedGames, finishedGame, freeGame, printGame, game_sprint);
+                                 list_handle_nodes(g->spectators, "Game finished\n", send_message_to_client_handler);
+                                 list_remove_node(g->p1->ongoing_games, &(g->ID), game_compare_id);
+                                 Game* finishedGame = list_remove_node(g->p2->ongoing_games, &(g->ID), game_compare_id);
+                                 list_insert_node(g->p1->finished_games, finishedGame, NULL, game_print, game_sprint);
+                                 list_insert_node(g->p2->finished_games, finishedGame, NULL, game_print, game_sprint);
+                                 list_insert_node(finishedGames, finishedGame, game_free, game_print, game_sprint);
                               } else {
                                  if (!playAgain) {
                                  sprintf(buffer, "It's %s's turn\n\n", g->playerTurn->nickname);
@@ -485,8 +485,8 @@ static void app(void)
                                  // creation of the copy of the string 
                                  char* copy = (char*)malloc(sizeof(char) * BUF_SIZE);
                                  strcpy(copy, gameBuffer); 
-                                 insertNode(g->history, copy, free, NULL, game_string_sprint); // saving the game state, in strings, no need to get the reference or a copy of the object
-                                 handleNodes(g->spectators, gameBuffer, send_message_to_client_handler); // sending the game to the spectators
+                                 list_insert_node(g->history, copy, free, NULL, game_string_sprint); // saving the game state, in strings, no need to get the reference or a copy of the object
+                                 list_handle_nodes(g->spectators, gameBuffer, send_message_to_client_handler); // sending the game to the spectators
                                  send_message_to_client(g->playerTurn, gameBuffer);
                                  send_game_commands(g->playerTurn);
                               }
@@ -500,13 +500,13 @@ static void app(void)
                      case EXT: {
                         int gameId = extract_game_id(buffer + 4);
                         printf("[LOG] %s giving up on the game number %d\n", sender->nickname, gameId);
-                        Game* g = getNodeByID(sender->ongoing_games, &gameId, game_compare_id);
+                        Game* g = list_get_node_by_id(sender->ongoing_games, &gameId, game_compare_id);
                         if(!g) {
                            send_message_to_client(sender, "Game not found\n");
                            break;
                         } else {
                            // check if it's the player's turn
-                           if(compareClients((void*)g->playerTurn, (void*)sender))
+                           if(client_compare((void*)g->playerTurn, (void*)sender))
                               exit_game(sender, g, ongoingGames, finishedGames);
                            else
                               send_message_to_client(sender, "Not your turn\n");
@@ -517,12 +517,12 @@ static void app(void)
                      case EXS: {
                         printf("[LOG] %s exiting spectating mode\n", sender->nickname);
                         int gameId = extract_game_id(buffer + 4);
-                        Game* g = getNodeByID(ongoingGames, &gameId, game_compare_id);
+                        Game* g = list_get_node_by_id(ongoingGames, &gameId, game_compare_id);
                         if(!g) {
                            send_message_to_client(sender, "Game not found\n");
                         } else {
-                           if(findNode(g->spectators, sender, compareClients)) {
-                              removeNode(g->spectators, sender, compareClients);
+                           if(list_find_node(g->spectators, sender, client_compare)) {
+                              list_remove_node(g->spectators, sender, client_compare);
                               send_message_to_client(sender, "You are no longer spectating the game\n");
                               send_message_to_client(g->p1, "A player is no longer spectating the game\n");
                               send_message_to_client(g->p2, "A player is no longer spectating the game\n");
@@ -536,13 +536,13 @@ static void app(void)
                      case WFG: {
                         int gameId = extract_game_id(buffer + 4);
                         printf("[LOG] %s watching the game number %d\n", sender->nickname, gameId);
-                        Game* g = getNodeByID(finishedGames, &gameId, game_compare_id);
+                        Game* g = list_get_node_by_id(finishedGames, &gameId, game_compare_id);
                         if(!g) {
                            send_message_to_client(sender, "Game not found\n");
                         } else {
                            char history[BUF_SIZE];
                            bzero(history, BUF_SIZE);
-                           sprintList(history, g->history);  
+                           list_sprint(history, g->history);  
                            send_message_to_client(sender, history);
                         }
                         break;
@@ -560,8 +560,8 @@ static void app(void)
       }
    }
 
-   freeList(ongoingGames);
-   freeList(finishedGames);
+   list_free(ongoingGames);
+   list_free(finishedGames);
    clear_clients(clients, actual);
    end_connection(sock);
 }
@@ -664,7 +664,7 @@ static void write_client(SOCKET sock, const char *buffer)
    }
 }
 
-static int getValue(const char *val) 
+static int get_value(const char *val) 
 {
    if(strcmp(val, "LOP") == 0) {
       return LOP;
@@ -782,8 +782,8 @@ static Client* get_client_by_name(Client* clients, const int actual, const char*
 static void reply_to_friend_request(Client* sender, Client* reciever, const int reply) {
 
    if(reply) {
-      insertNode(sender->friends, reciever, NULL, printClient, client_sprint);
-      insertNode(reciever->friends, sender, NULL, printClient, client_sprint);
+      list_insert_node(sender->friends, reciever, NULL, client_print, client_sprint);
+      list_insert_node(reciever->friends, sender, NULL, client_print, client_sprint);
       send_message_to_client(reciever, "Friend request accepted\n");
    }
    else {
@@ -791,7 +791,7 @@ static void reply_to_friend_request(Client* sender, Client* reciever, const int 
    }
 
    // remove the friend request from the list
-   removeNode(sender->friends_requests, reciever, compareClients); 
+   list_remove_node(sender->friends_requests, reciever, client_compare); 
 }
 
 static void send_game_invite(Client* sender, Client* reciever) {
@@ -802,10 +802,10 @@ static void send_game_invite(Client* sender, Client* reciever) {
 
    // creation of the game that will be sent to the client and that will be stored in the game invites
    Game *game = (Game*)malloc(sizeof(Game));
-   initializeGame(game, sender, reciever);
+   game_init(game, sender, reciever);
 
    // adding it to the list of game invites of the reciever
-   insertNode(reciever->game_invites, game, NULL, printGame, game_sprint);
+   list_insert_node(reciever->game_invites, game, NULL, game_print, game_sprint);
    send_message_to_client(reciever, buffer);
 }
 
@@ -813,18 +813,18 @@ static Game* reply_to_game_invite(Client* sender, Client* reciever, int reply, L
    Game* game = NULL;
    if(reply) {
       // remove the game invite from the list
-      void* data = removeNode(sender->game_invites, reciever, game_check_player);
+      void* data = list_remove_node(sender->game_invites, reciever, game_check_player);
       // add the game to the ongoing games of the two players
-      insertNode(sender->ongoing_games, data, NULL, printGame, game_sprint); 
-      insertNode(reciever->ongoing_games, data, NULL, printGame, game_sprint); 
-      insertNode(games, data, freeGame, printGame, game_sprint); 
+      list_insert_node(sender->ongoing_games, data, NULL, game_print, game_sprint); 
+      list_insert_node(reciever->ongoing_games, data, NULL, game_print, game_sprint); 
+      list_insert_node(games, data, game_free, game_print, game_sprint); 
       send_message_to_client(reciever, "Game invite accepted\n");
       game = (Game*)data;
    }
    else {
-      void* data = removeNode(sender->game_invites, reciever, game_check_player);
+      void* data = list_remove_node(sender->game_invites, reciever, game_check_player);
       Game* game = (Game*)data;
-      freeGame(game); // since the game is not going to be played
+      game_free(game); // since the game is not going to be played
       send_message_to_client(reciever, "Game invite rejected\n");
    }
    return game;
@@ -857,15 +857,15 @@ int extract_game_id(const char* buffer) {
 
 void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGames) {
    // remove the game from the ongoing games of the two players
-   removeNode(game->p2->ongoing_games, &(game->ID), game_compare_id);
-   removeNode(game->p1->ongoing_games, &(game->ID), game_compare_id);
-   removeNode(ongoingGames, &(game->ID), game_compare_id);
+   list_remove_node(game->p2->ongoing_games, &(game->ID), game_compare_id);
+   list_remove_node(game->p1->ongoing_games, &(game->ID), game_compare_id);
+   list_remove_node(ongoingGames, &(game->ID), game_compare_id);
 
-   insertNode(game->p2->finished_games, game, NULL, printGame, game_sprint);
-   insertNode(game->p1->finished_games, game, NULL, printGame, game_sprint);
-   insertNode(finishedGames, game, freeGame, printGame, game_sprint);
+   list_insert_node(game->p2->finished_games, game, NULL, game_print, game_sprint);
+   list_insert_node(game->p1->finished_games, game, NULL, game_print, game_sprint);
+   list_insert_node(finishedGames, game, game_free, game_print, game_sprint);
 
-   if(compareClients((void*)game->p1, (void*)sender)) {
+   if(client_compare((void*)game->p1, (void*)sender)) {
       // update of the score, the winner gets the max points
       game->scoreP1 = 0; 
       game->scoreP2= 25;
@@ -876,10 +876,10 @@ void exit_game(Client* sender, Game* game, List* ongoingGames, List* finishedGam
       game->scoreP2 = 0;
       send_message_to_client(game->p1, "Game finished, your opponent gave up\n");
    }
-   handleNodes(game->spectators, "Game finished, a player gave up\n", send_message_to_client_handler);
+   list_handle_nodes(game->spectators, "Game finished, a player gave up\n", send_message_to_client_handler);
 
    // ending the game
-   endGame(game);
+   game_end(game);
 }
 
 static void send_message_to_client_handler(void* data, void* context){ 

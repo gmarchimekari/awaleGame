@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void initializeGame(Game* game, Client* p1, Client* p2) {
+void game_init(Game* game, Client* p1, Client* p2) {
     static int ID = 1000; // static variable to generate unique ID
     game->ID = ID++;
     game->p1 = p1;
@@ -15,12 +15,12 @@ void initializeGame(Game* game, Client* p1, Client* p2) {
     game->board = (AwaleBoard*)malloc(sizeof(AwaleBoard));
     game->history = (List*)malloc(sizeof(List));
     game->spectators = (List*)malloc(sizeof(List));
-    initAwaleBoard(game->board);
-    initList(game->history);
-    initList(game->spectators);
+    awaleBoard_init(game->board);
+    list_init(game->history);
+    list_init(game->spectators);
 }
 
-void endGame(Game* game) {
+void game_end(Game* game) {
     game->end = time(NULL);
     game->playerTurn = NULL;
     if(game->scoreP1 > game->scoreP2) {
@@ -43,13 +43,13 @@ int game_compare_id(const void* game, const void* id) {
 }
 
 
-int checkEndGame(Game* game) {
+int game_check_end(Game* game) {
     if (game->scoreP1 >= 25 || game->scoreP2 >= 25) 
         return 1;
     return 0;
 }
 
-int checkPriseToutesGraines(Game* game, const Client* client, int move) {
+int game_check_all_graines_taken(Game* game, const Client* client, int move) {
     AwaleBoard* awaleBoard = game->board;
     int opponentStart, opponentEnd;
 
@@ -177,12 +177,12 @@ int checkImpossibleFamineResolution(Game* game, const Client* client) {
     return -1; // No move can resolve the famine
 }
 
-int updateAwaleBoard(Game* game, int move, const Client* client) {
+int game_update_board(Game* game, int move, const Client* client) {
     AwaleBoard* awaleBoard = game->board;
     int ret = 0; // Code de retour, 0 si le client ne rejoue pas, 1 sinon
     move--; // Pour les index de tableau
 
-    int priseToutesGraines = checkPriseToutesGraines(game, client, move);
+    int priseToutesGraines = game_check_all_graines_taken(game, client, move);
 
     // Check si case vide
     if (awaleBoard->board[move] == 0) {
@@ -262,7 +262,7 @@ int updateAwaleBoard(Game* game, int move, const Client* client) {
     return ret;
 }
 
-void displayAwaleBoard(const Game* game){
+void game_display_board(const Game* game){
     AwaleBoard* awaleBoard = game->board;
     printf("+--6-+--5-+--4-+--3-+--2-+--1-+\n");
     printf("-------------------------------\n");
@@ -278,15 +278,15 @@ void displayAwaleBoard(const Game* game){
     printf("+--1-+--2-+--3-+--4-+--5-+--6-+\n");
 }
 
-void freeGame(void* game) {
+void game_free(void* game) {
     Game* g = (Game*)game;
-    freeAwaleBoard(g->board);
-    freeList(g->history);
-    freeList(g->spectators);
+    awaleBoard_free(g->board);
+    list_free(g->history);
+    list_free(g->spectators);
     free(g);
 }
 
-void printGame(void* game) {
+void game_print(void* game) {
     Game* g = (Game*)game;
     printf("Partie: %s VS %s\n", g->p1->nickname, g->p2->nickname);
     printf("Identifiant: %d\n", g->ID);
@@ -300,7 +300,7 @@ void printGame(void* game) {
             printf("Egalite\n");
         }
     }
-    displayAwaleBoard(g);
+    game_display_board(g);
 }
 
 int game_check_player(const void* game, const void* player) {
@@ -329,7 +329,7 @@ void game_sprint(char* buffer, void* data) {
             strcat(buffer, temp);
         }
     }
-    awaleBoard_sprint(buffer, g);
+    game_sprint_board(buffer, g);
 }
 
 void game_string_sprint(char* buffer, void* data) {
@@ -337,7 +337,7 @@ void game_string_sprint(char* buffer, void* data) {
     strcat(buffer, gameString);
 }
 
-void awaleBoard_sprint(char* buffer, Game* data) {
+void game_sprint_board(char* buffer, Game* data) {
     AwaleBoard* awaleBoard = data->board;
     char temp[1024];
     sprintf(temp, "+--6-+--5-+--4-+--3-+--2-+--1-+\n");

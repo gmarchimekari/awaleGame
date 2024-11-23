@@ -55,14 +55,14 @@ typedef struct Game {
  * @param p1 Premier joueur.
  * @param p2 Deuxième joueur.
  */
-void initializeGame(Game* game, Client* p1, Client* p2);
+void game_init(Game* game, Client* p1, Client* p2);
 
 /**
  * @brief Termine une partie.
  * 
  * @param game Partie à terminer.
  */
-void endGame(Game* game);
+void game_end(Game* game);
 
 /**
  * @brief Vérifie si un joueur peut capturer toutes les graines de l'adversaire.
@@ -72,7 +72,7 @@ void endGame(Game* game);
  * @param move Coup joué.
  * @return 1 si le joueur peut capturer toutes les graines de l'adversaire, 0 sinon.
  */
-int checkPriseToutesGraines(Game* game, const Client* client, int move);
+int game_check_all_graines_taken(Game* game, const Client* client, int move);
 
 /**
  * @brief Met à jour le plateau de jeu après un coup.
@@ -82,14 +82,14 @@ int checkPriseToutesGraines(Game* game, const Client* client, int move);
  * @param Client Joueur qui joue.
  * @return 1 si le joueur rejoue, 0 sinon.
  */
-int updateAwaleBoard(Game* game, int move, const Client* Client); 
+int game_update_board(Game* game, int move, const Client* Client); 
 
 /**
  * @brief Affiche un plateau de jeu.
  * 
  * @param game Partie en cours.
  */
-void displayAwaleBoard(const Game* game);
+void game_display_board(const Game* game);
 
 /**
  * @brief Vérifie si la partie est terminée.
@@ -97,21 +97,21 @@ void displayAwaleBoard(const Game* game);
  * @param game Partie à vérifier.
  * @return 1 si la partie est terminée, 0 sinon.
  */
-int checkEndGame(Game* game);
+int game_check_end(Game* game);
 
 /** 
  * @brief Libère la mémoire allouée pour une partie.
  * 
  * @param game Partie à libérer.
  */
-void freeGame(void* game);
+void game_free(void* game);
 
 /**
  * @brief Affiche une partie.
  * 
  * @param game Partie à afficher.
  */
-void printGame(void* game);
+void game_print(void* game);
 
 /**
  * @brief Fonction pour vérifier si le joueur est bien un joueur de la partie.
@@ -145,7 +145,7 @@ void game_sprint(char* buffer, void* data);
  * @param buffer Buffer pour stocker la chaîne de caractères.
  * @param g Partie en cours.
  */
-void awaleBoard_sprint(char* buffer, Game* g);
+void game_sprint_board(char* buffer, Game* g);
 
 /**
  * @brief Démarre une partie.

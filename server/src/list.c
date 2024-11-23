@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "Client.h"
 
-void initList(List* list) {
+void list_init(List* list) {
     list->head = NULL;
 }
 
-void insertNode(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*)) {
+void list_insert_node(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*)) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
         fprintf(stderr, "Error: malloc failed\n");
@@ -20,7 +20,7 @@ void insertNode(List* list, void* data, handler free, handler print, void (*spri
     list->head = newNode;
 }
 
-void displayList(const List* list) {
+void list_display(const List* list) {
     Node* current = list->head;
     while (current != NULL) {
         current->print(current->data);
@@ -28,7 +28,7 @@ void displayList(const List* list) {
     }
 }
 
-void freeList(List* list) {
+void list_free(List* list) {
     Node* current = list->head;
     while (current != NULL) {
         Node* next = current->next;
@@ -40,7 +40,7 @@ void freeList(List* list) {
     list->head = NULL;
 }
 
-int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
+int list_find_node(List* list, void* data, int (*compare)(const void*, const void*)) {
     Node* current = list->head;
     while (current != NULL) {
         if (compare(current->data, data)) {
@@ -51,7 +51,7 @@ int findNode(List* list, void* data, int (*compare)(const void*, const void*)) {
     return 0;
 }
 
-void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void*)) {
+void* list_get_node_by_id(List* list, void* id, int (*compareID)(const void*, const void*)) {
     Node* current = list->head;
     while (current != NULL) {
         if (compareID(current->data, id)) {
@@ -64,7 +64,7 @@ void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void
 
 
 // frees the node, but not the data in the node
-void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)) {
+void* list_remove_node(List* list, void* data, int (*compare)(const void*, const void*)) {
     Node* current = list->head;
     Node* previous = NULL;
     while (current != NULL) {
@@ -86,7 +86,7 @@ void* removeNode(List* list, void* data, int (*compare)(const void*, const void*
     return NULL; // Data not found
 }
 
-void sprintList(char* buffer, const List* list) {
+void list_sprint(char* buffer, const List* list) {
     Node* current = list->head;
     while (current != NULL) {
         if(current->sprint != NULL)
@@ -97,7 +97,7 @@ void sprintList(char* buffer, const List* list) {
     }
 }
 
-void handleNodes(List* list, void* context ,void (*handler)(void*, void*)) {
+void list_handle_nodes(List* list, void* context ,void (*handler)(void*, void*)) {
     Node* current = list->head;
     while (current != NULL) {
         handler(current->data, context);

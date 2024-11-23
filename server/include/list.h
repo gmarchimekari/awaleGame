@@ -51,7 +51,7 @@ typedef struct List {
  * 
  * @param list Liste à créer.
  */
-void initList(List* list);
+void list_init(List* list);
 
 /**
  * @brief Insère un noeud dans une liste chaînée.
@@ -62,7 +62,7 @@ void initList(List* list);
  * @param print Fonction qui affiche la donnée du noeud.
  * @param sprint Fonction qui copie les informations du noeud dans un buffer.
  */
-void insertNode(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*));
+void list_insert_node(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*));
 
 /**
  * @brief Fonction qui cherche un élément dans la liste chaînée.
@@ -72,7 +72,7 @@ void insertNode(List* list, void* data, handler free, handler print, void (*spri
  * @param compare Fonction qui compare deux données.
  * @return 1 si l'élément est trouvé, 0 sinon.
  */
-int findNode(List* list, void* data, int (*compare)(const void*, const void*));
+int list_find_node(List* list, void* data, int (*compare)(const void*, const void*));
 
 /**
  * @brief Récupère un noeud par son identifiant.
@@ -82,21 +82,21 @@ int findNode(List* list, void* data, int (*compare)(const void*, const void*));
  * @param compareID Fonction qui compare deux identifiants.
  * @return Pointeur vers la donnée du noeud si trouvé, NULL sinon.
  */
-void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void*)); 
+void* list_get_node_by_id(List* list, void* id, int (*compareID)(const void*, const void*)); 
 
 /**
  * @brief Affiche une liste chaînée.
  * 
  * @param list Liste à afficher.
  */
-void displayList(const List* list);
+void list_display(const List* list);
 
 /**
  * @brief Libère la mémoire allouée pour une liste chaînée.
  * 
  * @param list Liste à libérer.
  */
-void freeList(List* list);
+void list_free(List* list);
 
 /**
  * @brief Supprime un noeud d'une liste chaînée.
@@ -106,7 +106,7 @@ void freeList(List* list);
  * @param compare Fonction qui compare deux données.
  * @return Pointeur vers la donnée du noeud supprimé si trouvé, NULL sinon.
  */
-void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)); 
+void* list_remove_node(List* list, void* data, int (*compare)(const void*, const void*)); 
 
 /**
  * @brief Copie les informations d'une liste chaînée dans un buffer.
@@ -114,7 +114,7 @@ void* removeNode(List* list, void* data, int (*compare)(const void*, const void*
  * @param buffer Buffer pour stocker les informations.
  * @param list Liste à copier.
  */
-void sprintList(char* buffer, const List* list);
+void list_sprint(char* buffer, const List* list);
 
 /**
  * @brief Applique une fonction à chaque noeud d'une liste chaînée.
@@ -123,6 +123,6 @@ void sprintList(char* buffer, const List* list);
  * @param context Contexte à passer à la fonction.
  * @param handler Fonction à appliquer à chaque noeud.
  */
-void handleNodes(List* list, void* context, void (*handler)(void*, void*));
+void list_handle_nodes(List* list, void* context, void (*handler)(void*, void*));
 
 #endif // LIST_H

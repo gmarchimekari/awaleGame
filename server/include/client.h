@@ -61,21 +61,21 @@ typedef struct Client{
  * @param bio Biographie du joueur.
  * @param sock Socket du joueur.
  */
-void initializeClient(Client *Client, const char *name, const char* bio, SOCKET sock); 
+void client_init(Client *Client, const char *name, const char* bio, SOCKET sock); 
 
 /**
  * @brief Affiche un joueur.
  *
  * @param Client Joueur à afficher.
  */
-void printClient(void *Client);
+void client_print(void *Client);
 
 /**
  * @brief Libère la mémoire allouée pour un joueur.
  *
  * @param Client Joueur à libérer.
  */
-void freeClient(void *Client);
+void client_free(void *Client);
 
 /**
  * @brief Compare deux joueurs.
@@ -84,7 +84,7 @@ void freeClient(void *Client);
  * @param p2 Nom du deuxième joueur.
  * @return 1 si les joueurs sont égaux, 0 sinon.
  */
-int compareClients(const void *p1, const void *p2); 
+int client_compare(const void *p1, const void *p2); 
 
 /**
  * @brief Fonction pour ajouter une demande d'ami à la liste d'amis.
