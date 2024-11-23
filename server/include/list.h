@@ -1,16 +1,31 @@
+/**
+ * @file list.h
+ * @brief Définition des structures et des fonctions pour manipuler une liste chaînée.
+ * 
+ * Ce fichier contient les définitions des structures Node et List, ainsi que les
+ * prototypes des fonctions permettant de créer, manipuler, afficher et libérer
+ * une liste chaînée. Chaque noeud de la liste peut contenir des données génériques
+ * et des fonctions pour afficher et libérer ces données.
+ */
+
 #ifndef LIST_H
 #define LIST_H
 
 #include <stdio.h>
 
 /**
-@brief pointeur vers une fonction qui prend un void* en parametre et ne retourne rien
+ * @brief Pointeur vers une fonction qui prend un void* en paramètre et ne retourne rien.
  */
 typedef void (*handler)(void*);
+
 /**
-@brief structure qui contient les informations d'un noeud d'une liste chainee
-@data donnee du noeud
-@next pointeur vers le noeud suivant
+ * @brief Structure qui contient les informations d'un noeud d'une liste chaînée.
+ * 
+ * @param data Donnée du noeud.
+ * @param next Pointeur vers le noeud suivant.
+ * @param print Fonction pour afficher la donnée du noeud.
+ * @param free Fonction pour libérer la mémoire allouée pour la donnée du noeud.
+ * @param sprint Fonction pour copier les informations du noeud dans un buffer.
  */
 typedef struct Node {
     void* data;
@@ -20,59 +35,94 @@ typedef struct Node {
     void (*sprint)(char*, void*); // fonction pour copier les informations du noeud dans un buffer
 } Node;
 
-
 /**
-@brief structure qui contient les informations d'une liste chainee
-@head pointeur vers le premier noeud de la liste
+ * @brief Structure qui contient les informations d'une liste chaînée.
+ * 
+ * @param head Pointeur vers le premier noeud de la liste.
  */
 typedef struct List {
     Node* head;
 } List;
 
-// Function prototypes
+// Prototypes des fonctions
+
 /**
-@brief cree une liste chainee
-@param list liste a creer
-*/
+ * @brief Crée une liste chaînée.
+ * 
+ * @param list Liste à créer.
+ */
 void initList(List* list);
 
 /**
-@brief insere un noeud dans une liste chainee
-@param list liste dans laquelle inserer le noeud
-@param data donnee du noeud
-@param free fonction qui libere la memoire allouee pour la donnee du noeud  
-@param print fonction qui affiche la donnee du noeud
-@param sprint fonction qui copie les informations du noeud dans un buffer
-*/
+ * @brief Insère un noeud dans une liste chaînée.
+ * 
+ * @param list Liste dans laquelle insérer le noeud.
+ * @param data Donnée du noeud.
+ * @param free Fonction qui libère la mémoire allouée pour la donnée du noeud.
+ * @param print Fonction qui affiche la donnée du noeud.
+ * @param sprint Fonction qui copie les informations du noeud dans un buffer.
+ */
 void insertNode(List* list, void* data, handler free, handler print, void (*sprint)(char*, void*));
+
 /**
-@brief fonction qui cherche un element dans la liste chainee
-@param list liste dans laquelle chercher
-@param data donnee a chercher
-@param compare fonction qui compare deux donnees
-@return 1 si l'element est trouve, 0 sinon
+ * @brief Fonction qui cherche un élément dans la liste chaînée.
+ * 
+ * @param list Liste dans laquelle chercher.
+ * @param data Donnée à chercher.
+ * @param compare Fonction qui compare deux données.
+ * @return 1 si l'élément est trouvé, 0 sinon.
  */
 int findNode(List* list, void* data, int (*compare)(const void*, const void*));
 
+/**
+ * @brief Récupère un noeud par son identifiant.
+ * 
+ * @param list Liste dans laquelle chercher.
+ * @param id Identifiant à chercher.
+ * @param compareID Fonction qui compare deux identifiants.
+ * @return Pointeur vers la donnée du noeud si trouvé, NULL sinon.
+ */
 void* getNodeByID(List* list, void* id, int (*compareID)(const void*, const void*)); 
 
 /**
-@brief affiche une liste chainee
-@param list liste a afficher
+ * @brief Affiche une liste chaînée.
+ * 
+ * @param list Liste à afficher.
  */
 void displayList(const List* list);
 
 /**
-@brief libere la memoire allouee pour une liste chainee
-@param list liste a liberer
+ * @brief Libère la mémoire allouée pour une liste chaînée.
+ * 
+ * @param list Liste à libérer.
  */
 void freeList(List* list);
 
+/**
+ * @brief Supprime un noeud d'une liste chaînée.
+ * 
+ * @param list Liste dans laquelle supprimer le noeud.
+ * @param data Donnée du noeud à supprimer.
+ * @param compare Fonction qui compare deux données.
+ * @return Pointeur vers la donnée du noeud supprimé si trouvé, NULL sinon.
+ */
 void* removeNode(List* list, void* data, int (*compare)(const void*, const void*)); 
 
+/**
+ * @brief Copie les informations d'une liste chaînée dans un buffer.
+ * 
+ * @param buffer Buffer pour stocker les informations.
+ * @param list Liste à copier.
+ */
 void sprintList(char* buffer, const List* list);
 
-void handleNodes(List* list, void* context ,void (*handler)(void*, void*));
-
+/**
+ * @brief Applique une fonction à chaque noeud d'une liste chaînée.
+ * 
+ * @param list Liste à parcourir.
+ * @param context Contexte à passer à la fonction.
+ * @param handler Fonction à appliquer à chaque noeud.
+ */
+void handleNodes(List* list, void* context, void (*handler)(void*, void*));
 
 #endif // LIST_H

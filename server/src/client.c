@@ -1,4 +1,4 @@
-#include <client.h>
+#include "client.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -39,6 +39,9 @@ void freeClient(void *c) {
     freeList(p->games);
     freeList(p->friends);
     freeList(p->friends_requests);
+    freeList(p->game_invites);
+    freeList(p->ongoing_games);
+    freeList(p->finished_games);
     free(p);
 }
 

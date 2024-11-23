@@ -176,11 +176,15 @@ static void app(void)
                      }
                      case CAP: {
                         printf("[LOG] %s challenging %s\n", sender->nickname, buffer + 4);
+
                         // checking if the player is online
                         reciever = get_client_by_name(clients, actual, buffer + 4);
-                        if(!reciever)
+                        if(!reciever) {
                            send_message_to_client(sender, "Player not found\n");
-                        else { // player found
+                        } else if(compareClients(sender, reciever)) {
+                           send_message_to_client(sender, "You cannot challenge yourself\n");
+                        } else { 
+                           // and we want him to be able to send a challenge to a player that he is playing with
                            send_game_invite(sender, reciever);  
                            send_message_to_client(sender, "Game invite sent\n");
                         }
@@ -896,84 +900,5 @@ int main(int argc, char **argv)
 
    end();
 
-//   Client *p1, *p2; 
-//    p1 = (Client*)malloc(sizeof(Client));
-//    p2 = (Client*)malloc(sizeof(Client));
-
-//    initializeClient(p1, "yano", "password1", 1);
-//    initializeClient(p2, "xGdoubleMx", "password2", 1);
-
-//    Game *game = (Game*) malloc(sizeof(Game));
-//    initializeGame(game, p1, p2);
-   
-//    Client *Client = game->p1;
-//    while(!game->end) {
-//    int move;
-//    displayAwaleBoard(game);
-//    printf("C'est a %s de jouer, selectionne ton coup: ", Client->nickname);
-   
-//    scanf("%d", &move);
-//    if(move < 1 || move > 6) {
-//       printf("Coup invalide\n");
-//       continue;
-//    }
-
-//    if(compareClientsNames(game->p1->nickname, Client->nickname)) { // Client 1
-//       if(!updateAwaleBoard(game, move, Client))
-//             Client = game->p2;
-//    } else { // Client 2
-//       if(!updateAwaleBoard(game, move + 6, Client))
-//             Client = game->p1;  
-//    }
-
-//    if(checkEndGame(game)) {
-//       endGame(game);
-//       printf("Partie terminee\n");
-//    }
-// }
    return EXIT_SUCCESS;
-
-}
-
-// TODO make the client nickname unique
-// TODO make the friend requests unique, dont have multiple friend requests from the same person
-// TODO check if the user has a frined request from the sender before accepting the request
-// TODO cannot send request to yourself 
-// TODO cannot send to a friend that is already in the friends list
-// TODO dont let the player send multiple friend requests and game invites (before finising a game) to the same player
-// TODO when a client sends a friend request or a challenge and disconnects before getting a reply, the lists of the reciever should be updated
-// TODO check that the client doesnt send requests to himself
-
-void debug(Client* clients, int actual) {
-   printf("\n[DEBUG FUNCTION START]\n");
-   for(int i = 0; i < actual; i++) {
-      printf("#################################################\n"); 
-      printf("Client %s\n", clients[i].nickname);
-      printf("--- LIST OF FRIEND REQUESTS ---\n");
-      displayList(clients[i].friends_requests);
-      printf("\n--- LIST OF FRIENDS ---\n");
-      displayList(clients[i].friends);
-      printf("#################################################\n"); 
-   }
-   printf("\n[DEBUG FUNCTION END]\n");
-
-}
-
-void debug_game_challenge(Client* clients, int actual, List* games) {
-   printf("\n[DEBUG FUNCTION START FOR GAME INVITES]\n");
-   printf("#################################################\n");
-   printf("--- LIST OF GAMES ON THE SERVER ---\n");
-   displayList(games);
-   printf("#################################################\n");
-   for(int i = 0; i < actual; i++) {
-      printf("#################################################\n"); 
-      printf("Client %s\n", clients[i].nickname);
-      printf("--- LIST OF GAME INVITES ---\n");
-      displayList(clients[i].game_invites);
-      printf("--- LIST OF ONGOING GAME ---\n");
-      displayList(clients[i].ongoing_games);
-      printf("#################################################\n"); 
-   }
-   printf("\n[DEBUG FUNCTION END GAME INVITES]\n");
-
 }

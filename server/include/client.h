@@ -1,7 +1,20 @@
+
+
+
+/**
+ * @file client.h
+ * @brief Déclaration des structures et fonctions pour la gestion des clients dans le jeu Awale.
+ *
+ * Ce fichier contient les déclarations des structures et des fonctions utilisées pour gérer les clients
+ * dans le jeu Awale. Il inclut des fonctions pour initialiser, afficher, libérer et comparer les clients,
+ * ainsi que pour gérer les demandes d'amis et les informations de profil.
+ *
+ * @date 2023-10-05
+ */
+
 #ifndef CLIENT_H
 #define CLIENT_H
 
-// #define BUF_SIZE 1024
 #include <stdio.h>
 #include <list.h>
 
@@ -13,16 +26,19 @@ typedef int PRIVATE_MODE; // 0 for public, 1 for private, used for spectating ma
 
 #include "server.h"
 
-// TODO : add ranking
 /**
-@brief structure qui contient les informations d'un joueur
-@nickname pseudo du joueur
-@bio biographie du joueur
-@mode mode du joueur (public ou prive), utilise pour l'observation des parties
-@games liste des parties jouees par le joueur
-@friends liste des amis du joueur
-@friends_requests liste des demandes d'amis recues par le joueur
-@sock socket du joueur
+ * @brief Structure qui contient les informations d'un joueur.
+ *
+ * @param nickname Pseudo du joueur.
+ * @param bio Biographie du joueur.
+ * @param mode Mode du joueur (public ou privé), utilisé pour l'observation des parties.
+ * @param games Liste des parties jouées par le joueur.
+ * @param friends Liste des amis du joueur.
+ * @param friends_requests Liste des demandes d'amis reçues par le joueur.
+ * @param sock Socket du joueur.
+ * @param game_invites Liste des invitations de parties reçues par le joueur.
+ * @param ongoing_games Liste des parties en cours du joueur.
+ * @param finished_games Liste des parties terminées du joueur.
  */
 typedef struct Client{
     SOCKET sock;
@@ -38,44 +54,60 @@ typedef struct Client{
 } Client;
 
 /**
-@brief initialise un joueur
-@param Client joueur a initialiser
-@param name pseudo du joueur
-@param bio biographie du joueur 
-@param sock socket du joueur    
+ * @brief Initialise un joueur.
+ *
+ * @param Client Joueur à initialiser.
+ * @param name Pseudo du joueur.
+ * @param bio Biographie du joueur.
+ * @param sock Socket du joueur.
  */
 void initializeClient(Client *Client, const char *name, const char* bio, SOCKET sock); 
 
 /**
-@brief affiche un joueur
-@param Client joueur a afficher
+ * @brief Affiche un joueur.
+ *
+ * @param Client Joueur à afficher.
  */
 void printClient(void *Client);
 
 /**
-@brief libere la memoire allouee pour un joueur
-@param Client joueur a liberer
+ * @brief Libère la mémoire allouée pour un joueur.
+ *
+ * @param Client Joueur à libérer.
  */
 void freeClient(void *Client);
 
 /**
-@brief compare deux joueurs
-@param nom du premier joueur
-@param nom du deuxieme joueur
-@return 1 si les joueurs sont egaux, 0 sinon
+ * @brief Compare deux joueurs.
+ *
+ * @param p1 Nom du premier joueur.
+ * @param p2 Nom du deuxième joueur.
+ * @return 1 si les joueurs sont égaux, 0 sinon.
  */
-int compareClients(const void *p1, const void *p2); // TODO: non doublon nom
+int compareClients(const void *p1, const void *p2); 
 
 /**
-@brief fonction pour ajouter une demande d'ami a la liste d'amis
-@param clientAdded joueur qui a recu la demande
-@param clientAdding joueur qui a envoye la demande
+ * @brief Fonction pour ajouter une demande d'ami à la liste d'amis.
+ *
+ * @param clientAdded Joueur qui a reçu la demande.
+ * @param clientAdding Joueur qui a envoyé la demande.
  */
-void client_add_friend_request(Client* clientAdded, Client* clientAdding); // TODO remove, can be done directy in the main
+void client_add_friend_request(Client* clientAdded, Client* clientAdding); 
 
+/**
+ * @brief Récupère les informations de profil d'un client.
+ *
+ * @param c Client dont les informations de profil sont récupérées.
+ * @param buffer Buffer où les informations de profil sont stockées.
+ */
 void client_get_profile_information(const Client* c, char* buffer);
 
+/**
+ * @brief Formate les informations d'un client en chaîne de caractères.
+ *
+ * @param buffer Buffer où les informations formatées sont stockées.
+ * @param data Données du client à formater.
+ */
 void client_sprint(char* buffer, void* data);
-
 
 #endif // CLIENT_H
