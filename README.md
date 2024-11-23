@@ -61,6 +61,28 @@ Lorsqu'un client se connecte avec son pseudo, le menu suivant est envoyé, perme
 
 ## Compilation et Exécution
 
+Depuis la racine du projet, générez les fichiers de compilation en exécutant la commande suivante :
+
+```sh
+mkdir build
+cd build
+cmake ..
+```
+
+Pour compiler le serveur et l'executer, lancer les commandes suivantes:
+
+```sh
+make server
+./server
+```
+
+Pour compiler le client et l'executer, lancer les commandes suivantes:
+
+```sh
+make client
+./client 127.0.0.1 <pseudo du client>
+```
+
 ### Prérequis
 
 - Assurez-vous d'avoir CMake installé sur votre système. Vous pouvez vérifier cela en exécutant la commande suivante :
@@ -82,11 +104,3 @@ Lorsqu'un client se connecte avec son pseudo, le menu suivant est envoyé, perme
   ```
 
   Sur Windows, vous pouvez télécharger l'installateur depuis le [site officiel de CMake](https://cmake.org/download/).
-
-### Génération des fichiers de compilation
-
-Depuis la racine du projet, générez les fichiers de compilation en exécutant la commande suivante :
-
-```sh
-cmake ..
-```
