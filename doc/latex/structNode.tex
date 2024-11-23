@@ -1,0 +1,62 @@
+\hypertarget{structNode}{}\doxysection{Node Struct Reference}
+\label{structNode}\index{Node@{Node}}
+
+
+Structure qui contient les informations d\textquotesingle{}un noeud d\textquotesingle{}une liste chaînée.  
+
+
+
+
+{\ttfamily \#include $<$list.\+h$>$}
+
+
+
+Collaboration diagram for Node\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=160pt]{structNode__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structNode_a38b733496e3eff5e0b4fcb11cd9b866a}\label{structNode_a38b733496e3eff5e0b4fcb11cd9b866a}} 
+void $\ast$ {\bfseries data}
+\item 
+\mbox{\Hypertarget{structNode_af67b110ca1a258b793bf69d306929b22}\label{structNode_af67b110ca1a258b793bf69d306929b22}} 
+struct \mbox{\hyperlink{structNode}{Node}} $\ast$ {\bfseries next}
+\item 
+\mbox{\Hypertarget{structNode_ad3ea17c43693f6cb002fb2f19886b0c2}\label{structNode_ad3ea17c43693f6cb002fb2f19886b0c2}} 
+\mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}} {\bfseries print}
+\item 
+\mbox{\Hypertarget{structNode_a305aad72baa2c35e7c5cc3e90f98d638}\label{structNode_a305aad72baa2c35e7c5cc3e90f98d638}} 
+\mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}} {\bfseries free}
+\item 
+\mbox{\Hypertarget{structNode_a316b2b37cc63667a8d75f11621f3357d}\label{structNode_a316b2b37cc63667a8d75f11621f3357d}} 
+void($\ast$ {\bfseries sprint} )(char $\ast$, void $\ast$)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure qui contient les informations d\textquotesingle{}un noeud d\textquotesingle{}une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Donnée du noeud. \\
+\hline
+{\em next} & Pointeur vers le noeud suivant. \\
+\hline
+{\em print} & Fonction pour afficher la donnée du noeud. \\
+\hline
+{\em free} & Fonction pour libérer la mémoire allouée pour la donnée du noeud. \\
+\hline
+{\em sprint} & Fonction pour copier les informations du noeud dans un buffer. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+server/include/\mbox{\hyperlink{list_8h}{list.\+h}}\end{DoxyCompactItemize}

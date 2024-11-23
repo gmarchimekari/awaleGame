@@ -1,0 +1,6 @@
+<map id="server/include/server.h" name="server/include/server.h">
+<area shape="rect" id="node1" title="Déclarations des fonctions et structures pour la gestion du serveur de jeu." alt="" coords="5,5,159,32"/>
+<area shape="rect" id="node2" href="$server_2include_2client_8h.html" title="Déclaration des structures et fonctions pour la gestion des clients dans le jeu Awale." alt="" coords="50,80,114,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="51,229,113,256"/>
+<area shape="rect" id="node4" href="$list_8h.html" title="Définition des structures et des fonctions pour manipuler une liste chaînée." alt="" coords="89,155,139,181"/>
+</map>

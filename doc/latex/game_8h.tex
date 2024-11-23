@@ -1,0 +1,359 @@
+\hypertarget{game_8h}{}\doxysection{server/include/game.h File Reference}
+\label{game_8h}\index{server/include/game.h@{server/include/game.h}}
+
+
+Déclarations des fonctions et structures pour la gestion d\textquotesingle{}une partie d\textquotesingle{}Awalé.  
+
+
+{\ttfamily \#include \char`\"{}client.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}awale\+Board.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}list.\+h\char`\"{}}\newline
+Include dependency graph for game.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{game_8h__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structGame}{Game}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}une partie. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structGame}{Game}} \mbox{\hyperlink{game_8h_a69b5df78d315f81ed77df30fdbfb7002}{Game}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}une partie. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{game_8h_ab77c1a537b1d77ee1953670a871f0654}{game\+\_\+init}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game, \mbox{\hyperlink{structClient}{Client}} $\ast$p1, \mbox{\hyperlink{structClient}{Client}} $\ast$p2)
+\begin{DoxyCompactList}\small\item\em Initialise une partie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a5aa98375ee16c163361802ca6ce25142}{game\+\_\+end}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game)
+\begin{DoxyCompactList}\small\item\em Termine une partie. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game_8h_a46a746221adc8e0f75f3bbd19f3c61e5}{game\+\_\+check\+\_\+all\+\_\+graines\+\_\+taken}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game, const \mbox{\hyperlink{structClient}{Client}} $\ast$client, int move)
+\begin{DoxyCompactList}\small\item\em Vérifie si un joueur peut capturer toutes les graines de l\textquotesingle{}adversaire. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game_8h_a940d1596c88b91dbaf44921ebdf1eaa4}{game\+\_\+update\+\_\+board}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game, int move, const \mbox{\hyperlink{structClient}{Client}} $\ast$\mbox{\hyperlink{structClient}{Client}})
+\begin{DoxyCompactList}\small\item\em Met à jour le plateau de jeu après un coup. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aa6a383dd1532b09c3f9e2842c72fc1df}{game\+\_\+display\+\_\+board}} (const \mbox{\hyperlink{structGame}{Game}} $\ast$game)
+\begin{DoxyCompactList}\small\item\em Affiche un plateau de jeu. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game_8h_a4796ad62c016bf5ded04077dbb33cf10}{game\+\_\+check\+\_\+end}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game)
+\begin{DoxyCompactList}\small\item\em Vérifie si la partie est terminée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a587ee0fe9ed743e1dd124a303b025392}{game\+\_\+free}} (void $\ast$game)
+\begin{DoxyCompactList}\small\item\em Libère la mémoire allouée pour une partie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aca260616ec8e3724f8bd0ff84d8b558f}{game\+\_\+print}} (void $\ast$game)
+\begin{DoxyCompactList}\small\item\em Affiche une partie. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game_8h_af31f4ce7c73552b2f5461cf414f109ab}{game\+\_\+check\+\_\+player}} (const void $\ast$game, const void $\ast$player)
+\begin{DoxyCompactList}\small\item\em Fonction pour vérifier si le joueur est bien un joueur de la partie. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game_8h_a7e33dfca068039d000f5883860e8b06d}{game\+\_\+compare\+\_\+id}} (const void $\ast$game, const void $\ast$id)
+\begin{DoxyCompactList}\small\item\em Compare l\textquotesingle{}identifiant d\textquotesingle{}une partie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a8310ebeb976f59f2b0fe9b7ec22dea63}{game\+\_\+sprint}} (char $\ast$buffer, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Formate les informations d\textquotesingle{}une partie en chaîne de caractères. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aa152df8b9ddef89b52637ed909e26d50}{game\+\_\+sprint\+\_\+board}} (char $\ast$buffer, \mbox{\hyperlink{structGame}{Game}} $\ast$g)
+\begin{DoxyCompactList}\small\item\em Formate le plateau de jeu en chaîne de caractères. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a1b079dacf7c25ae5d29f87151ee53e2b}{game\+\_\+start}} (\mbox{\hyperlink{structGame}{Game}} $\ast$game)
+\begin{DoxyCompactList}\small\item\em Démarre une partie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_adf9a81147f9aae9c5da312b774c1ed54}{game\+\_\+string\+\_\+sprint}} (char $\ast$buffer, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Formate les informations d\textquotesingle{}une partie en chaîne de caractères. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Déclarations des fonctions et structures pour la gestion d\textquotesingle{}une partie d\textquotesingle{}Awalé. 
+
+Ce fichier contient les déclarations des fonctions et structures nécessaires pour initialiser, gérer et terminer une partie d\textquotesingle{}Awalé. Il inclut également des fonctions pour vérifier les conditions de jeu, mettre à jour le plateau, afficher le plateau, et gérer les joueurs et spectateurs.
+
+\begin{DoxyDate}{Date}
+2024 
+\end{DoxyDate}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{game_8h_a69b5df78d315f81ed77df30fdbfb7002}\label{game_8h_a69b5df78d315f81ed77df30fdbfb7002}} 
+\index{game.h@{game.h}!Game@{Game}}
+\index{Game@{Game}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{Game}{Game}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structGame}{Game}} \mbox{\hyperlink{structGame}{Game}}}
+
+
+
+Structure qui contient les informations d\textquotesingle{}une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & Premier joueur. \\
+\hline
+{\em p2} & Deuxième joueur. \\
+\hline
+{\em score\+P1} & Score du premier joueur. \\
+\hline
+{\em score\+P2} & Score du deuxième joueur. \\
+\hline
+{\em winner} & Joueur gagnant. \\
+\hline
+{\em start} & Temps de début de la partie. \\
+\hline
+{\em end} & Temps de fin de la partie. \\
+\hline
+{\em board} & Plateau de jeu. \\
+\hline
+{\em ID} & Identifiant de la partie. \\
+\hline
+{\em player\+Turn} & Joueur qui doit jouer. \\
+\hline
+{\em history} & Historique des coups joués afin de pouvoir regarder la partie de nouveau. \\
+\hline
+{\em spectators} & Liste des spectateurs. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{game_8h_a46a746221adc8e0f75f3bbd19f3c61e5}\label{game_8h_a46a746221adc8e0f75f3bbd19f3c61e5}} 
+\index{game.h@{game.h}!game\_check\_all\_graines\_taken@{game\_check\_all\_graines\_taken}}
+\index{game\_check\_all\_graines\_taken@{game\_check\_all\_graines\_taken}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_check\_all\_graines\_taken()}{game\_check\_all\_graines\_taken()}}
+{\footnotesize\ttfamily int game\+\_\+check\+\_\+all\+\_\+graines\+\_\+taken (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game,  }\item[{const \mbox{\hyperlink{structClient}{Client}} $\ast$}]{client,  }\item[{int}]{move }\end{DoxyParamCaption})}
+
+
+
+Vérifie si un joueur peut capturer toutes les graines de l\textquotesingle{}adversaire. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie en cours. \\
+\hline
+{\em client} & Joueur qui joue. \\
+\hline
+{\em move} & Coup joué. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si le joueur peut capturer toutes les graines de l\textquotesingle{}adversaire, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{game_8h_a4796ad62c016bf5ded04077dbb33cf10}\label{game_8h_a4796ad62c016bf5ded04077dbb33cf10}} 
+\index{game.h@{game.h}!game\_check\_end@{game\_check\_end}}
+\index{game\_check\_end@{game\_check\_end}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_check\_end()}{game\_check\_end()}}
+{\footnotesize\ttfamily int game\+\_\+check\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Vérifie si la partie est terminée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à vérifier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si la partie est terminée, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{game_8h_af31f4ce7c73552b2f5461cf414f109ab}\label{game_8h_af31f4ce7c73552b2f5461cf414f109ab}} 
+\index{game.h@{game.h}!game\_check\_player@{game\_check\_player}}
+\index{game\_check\_player@{game\_check\_player}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_check\_player()}{game\_check\_player()}}
+{\footnotesize\ttfamily int game\+\_\+check\+\_\+player (\begin{DoxyParamCaption}\item[{const void $\ast$}]{game,  }\item[{const void $\ast$}]{player }\end{DoxyParamCaption})}
+
+
+
+Fonction pour vérifier si le joueur est bien un joueur de la partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie en cours. \\
+\hline
+{\em player} & Joueur à vérifier. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si le joueur est bien un joueur de la partie, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{game_8h_a7e33dfca068039d000f5883860e8b06d}\label{game_8h_a7e33dfca068039d000f5883860e8b06d}} 
+\index{game.h@{game.h}!game\_compare\_id@{game\_compare\_id}}
+\index{game\_compare\_id@{game\_compare\_id}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_compare\_id()}{game\_compare\_id()}}
+{\footnotesize\ttfamily int game\+\_\+compare\+\_\+id (\begin{DoxyParamCaption}\item[{const void $\ast$}]{game,  }\item[{const void $\ast$}]{id }\end{DoxyParamCaption})}
+
+
+
+Compare l\textquotesingle{}identifiant d\textquotesingle{}une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie en cours. \\
+\hline
+{\em id} & Identifiant à comparer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si les identifiants sont égaux, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{game_8h_aa6a383dd1532b09c3f9e2842c72fc1df}\label{game_8h_aa6a383dd1532b09c3f9e2842c72fc1df}} 
+\index{game.h@{game.h}!game\_display\_board@{game\_display\_board}}
+\index{game\_display\_board@{game\_display\_board}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_display\_board()}{game\_display\_board()}}
+{\footnotesize\ttfamily void game\+\_\+display\+\_\+board (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structGame}{Game}} $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Affiche un plateau de jeu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie en cours. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_a5aa98375ee16c163361802ca6ce25142}\label{game_8h_a5aa98375ee16c163361802ca6ce25142}} 
+\index{game.h@{game.h}!game\_end@{game\_end}}
+\index{game\_end@{game\_end}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_end()}{game\_end()}}
+{\footnotesize\ttfamily void game\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Termine une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à terminer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_a587ee0fe9ed743e1dd124a303b025392}\label{game_8h_a587ee0fe9ed743e1dd124a303b025392}} 
+\index{game.h@{game.h}!game\_free@{game\_free}}
+\index{game\_free@{game\_free}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_free()}{game\_free()}}
+{\footnotesize\ttfamily void game\+\_\+free (\begin{DoxyParamCaption}\item[{void $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Libère la mémoire allouée pour une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à libérer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_ab77c1a537b1d77ee1953670a871f0654}\label{game_8h_ab77c1a537b1d77ee1953670a871f0654}} 
+\index{game.h@{game.h}!game\_init@{game\_init}}
+\index{game\_init@{game\_init}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_init()}{game\_init()}}
+{\footnotesize\ttfamily void game\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game,  }\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{p1,  }\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{p2 }\end{DoxyParamCaption})}
+
+
+
+Initialise une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à initialiser. \\
+\hline
+{\em p1} & Premier joueur. \\
+\hline
+{\em p2} & Deuxième joueur. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_aca260616ec8e3724f8bd0ff84d8b558f}\label{game_8h_aca260616ec8e3724f8bd0ff84d8b558f}} 
+\index{game.h@{game.h}!game\_print@{game\_print}}
+\index{game\_print@{game\_print}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_print()}{game\_print()}}
+{\footnotesize\ttfamily void game\+\_\+print (\begin{DoxyParamCaption}\item[{void $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Affiche une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à afficher. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_a8310ebeb976f59f2b0fe9b7ec22dea63}\label{game_8h_a8310ebeb976f59f2b0fe9b7ec22dea63}} 
+\index{game.h@{game.h}!game\_sprint@{game\_sprint}}
+\index{game\_sprint@{game\_sprint}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_sprint()}{game\_sprint()}}
+{\footnotesize\ttfamily void game\+\_\+sprint (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Formate les informations d\textquotesingle{}une partie en chaîne de caractères. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Buffer pour stocker la chaîne de caractères. \\
+\hline
+{\em data} & Données de la partie. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_aa152df8b9ddef89b52637ed909e26d50}\label{game_8h_aa152df8b9ddef89b52637ed909e26d50}} 
+\index{game.h@{game.h}!game\_sprint\_board@{game\_sprint\_board}}
+\index{game\_sprint\_board@{game\_sprint\_board}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_sprint\_board()}{game\_sprint\_board()}}
+{\footnotesize\ttfamily void game\+\_\+sprint\+\_\+board (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{g }\end{DoxyParamCaption})}
+
+
+
+Formate le plateau de jeu en chaîne de caractères. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Buffer pour stocker la chaîne de caractères. \\
+\hline
+{\em g} & Partie en cours. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_a1b079dacf7c25ae5d29f87151ee53e2b}\label{game_8h_a1b079dacf7c25ae5d29f87151ee53e2b}} 
+\index{game.h@{game.h}!game\_start@{game\_start}}
+\index{game\_start@{game\_start}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_start()}{game\_start()}}
+{\footnotesize\ttfamily void game\+\_\+start (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game }\end{DoxyParamCaption})}
+
+
+
+Démarre une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Partie à démarrer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_adf9a81147f9aae9c5da312b774c1ed54}\label{game_8h_adf9a81147f9aae9c5da312b774c1ed54}} 
+\index{game.h@{game.h}!game\_string\_sprint@{game\_string\_sprint}}
+\index{game\_string\_sprint@{game\_string\_sprint}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_string\_sprint()}{game\_string\_sprint()}}
+{\footnotesize\ttfamily void game\+\_\+string\+\_\+sprint (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Formate les informations d\textquotesingle{}une partie en chaîne de caractères. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Buffer pour stocker la chaîne de caractères. \\
+\hline
+{\em data} & Données de la partie. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{game_8h_a940d1596c88b91dbaf44921ebdf1eaa4}\label{game_8h_a940d1596c88b91dbaf44921ebdf1eaa4}} 
+\index{game.h@{game.h}!game\_update\_board@{game\_update\_board}}
+\index{game\_update\_board@{game\_update\_board}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_update\_board()}{game\_update\_board()}}
+{\footnotesize\ttfamily int game\+\_\+update\+\_\+board (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game,  }\item[{int}]{move,  }\item[{const \mbox{\hyperlink{structClient}{Client}} $\ast$}]{Client }\end{DoxyParamCaption})}
+
+
+
+Met à jour le plateau de jeu après un coup. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em game} & Contient les informations de la partie et le plateau de jeu. \\
+\hline
+{\em move} & Coup joué. Représente la case jouée. \\
+\hline
+{\em \mbox{\hyperlink{structClient}{Client}}} & Joueur qui joue. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si le joueur rejoue, 0 sinon. 
+\end{DoxyReturn}

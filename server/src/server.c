@@ -738,22 +738,23 @@ static void display_online_players(const Client *clients, const int actual, cons
 static void send_main_menu(const Client* reciever) {
    char* buffer = "Welcome to the Awale game\n"
    "[LOP] List online players\n" // DONE
+   "[LSG] List all ongoing games\n" // DONE
+   "[LYG] List your ongoing games\n" // DONE
+   "[LFG] List all finished games\n" // DONE
+   "[YFG] List your finished games\n" // DONE
+   "[LFR] List friend requests\n" // DONE
+   "[LSF] List friends\n" // DONE
    "[APF] [**player name**] Add a player to your friends list\n" // DONE
    "[CAP] [**player name**] Challenge a player\n" // DONE 
-   "[LSG] List ongoing games\n" // DONE
-   "[LYG] List your ongoing games\n" // DONE
-   "[LFG] List finished games\n" // DONE
-   "[YFG] List your finished games\n" // DONE
    "[WAG] [**game id**] Watch a game\n" // DONE 
+   "[WFG] [**game id**] Watch a game already played\n" // DONE
    "[SND] [**message**] Chat with online players\n" // DONE 
    "[SPM] [**player name**] [**message**] Send a private message to a player online\n" // DONE
    "[DYP] Display your profile\n" // DONE
    "[DPP] [**player name**] Display a player's profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
-   "[WFG] Watch a game already played\n" // DONE
-   "[LFR] List friend requests\n" // DONE
-   "[LSF] List friends\n" // DONE
+
    "Select your option by entering the command: ";
    send_message_to_client(reciever, buffer);
 }

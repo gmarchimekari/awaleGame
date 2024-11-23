@@ -1,0 +1,87 @@
+\hypertarget{structClient}{}\doxysection{Client Struct Reference}
+\label{structClient}\index{Client@{Client}}
+
+
+Structure qui contient les informations d\textquotesingle{}un joueur.  
+
+
+
+
+{\ttfamily \#include $<$client.\+h$>$}
+
+
+
+Collaboration diagram for Client\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=174pt]{structClient__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structClient_a9f5f4242b5b07763460ef2c56c9e7a3c}\label{structClient_a9f5f4242b5b07763460ef2c56c9e7a3c}} 
+SOCKET {\bfseries sock}
+\item 
+\mbox{\Hypertarget{structClient_a4082f5087f3bee093934f9bb699faf9c}\label{structClient_a4082f5087f3bee093934f9bb699faf9c}} 
+char {\bfseries nickname} \mbox{[}25\mbox{]}
+\item 
+\mbox{\Hypertarget{structClient_a9ba3bff9e3d61a4434eb78986961c46c}\label{structClient_a9ba3bff9e3d61a4434eb78986961c46c}} 
+char {\bfseries bio} \mbox{[}125\mbox{]}
+\item 
+\mbox{\Hypertarget{structClient_a6ad7345df9163439c925ffbf5656bbb4}\label{structClient_a6ad7345df9163439c925ffbf5656bbb4}} 
+PRIVATE\+\_\+\+MODE {\bfseries private}
+\item 
+\mbox{\Hypertarget{structClient_a43fe53241027b612154ebb29c67204f9}\label{structClient_a43fe53241027b612154ebb29c67204f9}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries games}
+\item 
+\mbox{\Hypertarget{structClient_a66603e8ffb784015e50e0e42a708466c}\label{structClient_a66603e8ffb784015e50e0e42a708466c}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries friends}
+\item 
+\mbox{\Hypertarget{structClient_ac5c746f98f814cd7a6886eaca3c90e85}\label{structClient_ac5c746f98f814cd7a6886eaca3c90e85}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries friends\+\_\+requests}
+\item 
+\mbox{\Hypertarget{structClient_ae55d550a2402df48fa0b1ef5fe3a6870}\label{structClient_ae55d550a2402df48fa0b1ef5fe3a6870}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries game\+\_\+invites}
+\item 
+\mbox{\Hypertarget{structClient_aeadb58f59509abacdc386e9e5ffae8d7}\label{structClient_aeadb58f59509abacdc386e9e5ffae8d7}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries ongoing\+\_\+games}
+\item 
+\mbox{\Hypertarget{structClient_a0b44f7d26a2b37c445fa995e2592d7a4}\label{structClient_a0b44f7d26a2b37c445fa995e2592d7a4}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries finished\+\_\+games}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure qui contient les informations d\textquotesingle{}un joueur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nickname} & Pseudo du joueur. \\
+\hline
+{\em bio} & Biographie du joueur. \\
+\hline
+{\em mode} & Mode du joueur (public ou privé), utilisé pour l\textquotesingle{}observation des parties. \\
+\hline
+{\em games} & Liste des parties jouées par le joueur. \\
+\hline
+{\em friends} & Liste des amis du joueur. \\
+\hline
+{\em friends\+\_\+requests} & Liste des demandes d\textquotesingle{}amis reçues par le joueur. \\
+\hline
+{\em sock} & Socket du joueur. \\
+\hline
+{\em game\+\_\+invites} & Liste des invitations de parties reçues par le joueur. \\
+\hline
+{\em ongoing\+\_\+games} & Liste des parties en cours du joueur. \\
+\hline
+{\em finished\+\_\+games} & Liste des parties terminées du joueur. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+server/include/\mbox{\hyperlink{server_2include_2client_8h}{client.\+h}}\end{DoxyCompactItemize}

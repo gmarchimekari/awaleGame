@@ -1,0 +1,180 @@
+\hypertarget{server_8h}{}\doxysection{server/include/server.h File Reference}
+\label{server_8h}\index{server/include/server.h@{server/include/server.h}}
+
+
+Déclarations des fonctions et structures pour la gestion du serveur de jeu.  
+
+
+{\ttfamily \#include \char`\"{}client.\+h\char`\"{}}\newline
+Include dependency graph for server.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{server_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{server_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{server_8h_a6cb23a858b0a21bdaa644b9181dc415f}\label{server_8h_a6cb23a858b0a21bdaa644b9181dc415f}} 
+\#define {\bfseries CRLF}~\char`\"{}\textbackslash{}r\textbackslash{}n\char`\"{}
+\item 
+\mbox{\Hypertarget{server_8h_a614217d263be1fb1a5f76e2ff7be19a2}\label{server_8h_a614217d263be1fb1a5f76e2ff7be19a2}} 
+\#define {\bfseries PORT}~1977
+\item 
+\mbox{\Hypertarget{server_8h_a0a8f91f93d75a07f0ae45077db45b3eb}\label{server_8h_a0a8f91f93d75a07f0ae45077db45b3eb}} 
+\#define {\bfseries MAX\+\_\+\+CLIENTS}~100
+\item 
+\mbox{\Hypertarget{server_8h_a6821bafc3c88dfb2e433a095df9940c6}\label{server_8h_a6821bafc3c88dfb2e433a095df9940c6}} 
+\#define {\bfseries BUF\+\_\+\+SIZE}~1024
+\item 
+\mbox{\Hypertarget{server_8h_a7decf7774339d5dbf13fc30726d73bea}\label{server_8h_a7decf7774339d5dbf13fc30726d73bea}} 
+\#define {\bfseries LOP}~1
+\item 
+\mbox{\Hypertarget{server_8h_a046922a73acdd40d28809894a32f66de}\label{server_8h_a046922a73acdd40d28809894a32f66de}} 
+\#define {\bfseries APF}~2
+\item 
+\mbox{\Hypertarget{server_8h_a3aa216f6d9b942391fc15090d23256e5}\label{server_8h_a3aa216f6d9b942391fc15090d23256e5}} 
+\#define {\bfseries CAP}~3
+\item 
+\mbox{\Hypertarget{server_8h_a5495d5e2fb079a8a5f2564537aafa630}\label{server_8h_a5495d5e2fb079a8a5f2564537aafa630}} 
+\#define {\bfseries LSG}~4
+\item 
+\mbox{\Hypertarget{server_8h_a30a53421a019fddfbe387d650d187ff4}\label{server_8h_a30a53421a019fddfbe387d650d187ff4}} 
+\#define {\bfseries WAG}~5
+\item 
+\mbox{\Hypertarget{server_8h_a88f105c83089681860aa57c3e6f735fb}\label{server_8h_a88f105c83089681860aa57c3e6f735fb}} 
+\#define {\bfseries SND}~6
+\item 
+\mbox{\Hypertarget{server_8h_aade5aa111f49e844e07ee9c8d4283f75}\label{server_8h_aade5aa111f49e844e07ee9c8d4283f75}} 
+\#define {\bfseries DYP}~7
+\item 
+\mbox{\Hypertarget{server_8h_ae7efc9eee6e0c1561789c639f341e33a}\label{server_8h_ae7efc9eee6e0c1561789c639f341e33a}} 
+\#define {\bfseries BIO}~8
+\item 
+\mbox{\Hypertarget{server_8h_ae97b8113d7563118096326c0938792ea}\label{server_8h_ae97b8113d7563118096326c0938792ea}} 
+\#define {\bfseries PVM}~9
+\item 
+\mbox{\Hypertarget{server_8h_ab8c34bb94dfa05b7716b36d5dd93fe3e}\label{server_8h_ab8c34bb94dfa05b7716b36d5dd93fe3e}} 
+\#define {\bfseries SVG}~10
+\item 
+\mbox{\Hypertarget{server_8h_a45dc9d33f794ef0700ea47f0b11e94c2}\label{server_8h_a45dc9d33f794ef0700ea47f0b11e94c2}} 
+\#define {\bfseries ACF}~11
+\item 
+\mbox{\Hypertarget{server_8h_a1c7c585e06d611e3487fe992cf241f9d}\label{server_8h_a1c7c585e06d611e3487fe992cf241f9d}} 
+\#define {\bfseries RJF}~12
+\item 
+\mbox{\Hypertarget{server_8h_aba5212e9dab6cb03899fc58c572c9dbc}\label{server_8h_aba5212e9dab6cb03899fc58c572c9dbc}} 
+\#define {\bfseries LFR}~13
+\item 
+\mbox{\Hypertarget{server_8h_a384b5ce06eaea7ae9208b4bff7ee0c37}\label{server_8h_a384b5ce06eaea7ae9208b4bff7ee0c37}} 
+\#define {\bfseries LSF}~14
+\item 
+\mbox{\Hypertarget{server_8h_a09fc148003f20ecc4834d4ea6aefb15c}\label{server_8h_a09fc148003f20ecc4834d4ea6aefb15c}} 
+\#define {\bfseries ACC}~15
+\item 
+\mbox{\Hypertarget{server_8h_a967945e1add0d1057b67450541a0bc9a}\label{server_8h_a967945e1add0d1057b67450541a0bc9a}} 
+\#define {\bfseries RJC}~16
+\item 
+\mbox{\Hypertarget{server_8h_ab1de3189237bc35fc4e0fa5d32a86a68}\label{server_8h_ab1de3189237bc35fc4e0fa5d32a86a68}} 
+\#define {\bfseries MMG}~17
+\item 
+\mbox{\Hypertarget{server_8h_a0aac6c68a5a4eb4d5dbf7f94919de21c}\label{server_8h_a0aac6c68a5a4eb4d5dbf7f94919de21c}} 
+\#define {\bfseries EXT}~18
+\item 
+\mbox{\Hypertarget{server_8h_a46971bb142d9890f7ff3cbb1dffc7523}\label{server_8h_a46971bb142d9890f7ff3cbb1dffc7523}} 
+\#define {\bfseries SPM}~19
+\item 
+\mbox{\Hypertarget{server_8h_aeccc344254b52f8ca18a5670520d88f6}\label{server_8h_aeccc344254b52f8ca18a5670520d88f6}} 
+\#define {\bfseries LFG}~20
+\item 
+\mbox{\Hypertarget{server_8h_a67a6c0f65d37f5d32bc26603a353434e}\label{server_8h_a67a6c0f65d37f5d32bc26603a353434e}} 
+\#define {\bfseries LYG}~21
+\item 
+\mbox{\Hypertarget{server_8h_a3b5e46524c8e413ceb83b779a8c1a503}\label{server_8h_a3b5e46524c8e413ceb83b779a8c1a503}} 
+\#define {\bfseries YFG}~22
+\item 
+\mbox{\Hypertarget{server_8h_a24e749dd11fd7ef1dc5ec85db266a427}\label{server_8h_a24e749dd11fd7ef1dc5ec85db266a427}} 
+\#define {\bfseries EXS}~23
+\item 
+\mbox{\Hypertarget{server_8h_a3c0e0c059a5d225be76f27650273e028}\label{server_8h_a3c0e0c059a5d225be76f27650273e028}} 
+\#define {\bfseries WFG}~24
+\item 
+\mbox{\Hypertarget{server_8h_a80a6208b4ad582b3c86d25f5b244064e}\label{server_8h_a80a6208b4ad582b3c86d25f5b244064e}} 
+\#define {\bfseries DPP}~25
+\item 
+\mbox{\Hypertarget{server_8h_a68bba71affb47e257eda87eff8d3e028}\label{server_8h_a68bba71affb47e257eda87eff8d3e028}} 
+\#define {\bfseries ACCEPT}~1
+\item 
+\mbox{\Hypertarget{server_8h_a835f10dd1ab4bf9a80c4cd80ee6e3058}\label{server_8h_a835f10dd1ab4bf9a80c4cd80ee6e3058}} 
+\#define {\bfseries REJECT}~0
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{server_8h_a69b5df78d315f81ed77df30fdbfb7002}\label{server_8h_a69b5df78d315f81ed77df30fdbfb7002}} 
+typedef struct \mbox{\hyperlink{structGame}{Game}} {\bfseries Game}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{server_8h_a61cfd68bc9d2bf639d5b510363a215e7}{extract\+\_\+game\+\_\+id}} (const char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em Extrait l\textquotesingle{}identifiant du jeu à partir d\textquotesingle{}un buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_8h_a4da3ff00b6691150e9ad41ad5f7bc63f}{exit\+\_\+game}} (\mbox{\hyperlink{structClient}{Client}} $\ast$sender, \mbox{\hyperlink{structGame}{Game}} $\ast$game, \mbox{\hyperlink{structList}{List}} $\ast$ongoing\+Games, \mbox{\hyperlink{structList}{List}} $\ast$finished\+Games)
+\begin{DoxyCompactList}\small\item\em Quitte un jeu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Déclarations des fonctions et structures pour la gestion du serveur de jeu. 
+
+Ce fichier contient les déclarations des fonctions et structures nécessaires pour la gestion du serveur de jeu. Il inclut les fonctions pour initialiser et terminer le serveur, gérer les connexions des clients, envoyer et recevoir des messages, et gérer les invitations et demandes d\textquotesingle{}amis. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{server_8h_a4da3ff00b6691150e9ad41ad5f7bc63f}\label{server_8h_a4da3ff00b6691150e9ad41ad5f7bc63f}} 
+\index{server.h@{server.h}!exit\_game@{exit\_game}}
+\index{exit\_game@{exit\_game}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{exit\_game()}{exit\_game()}}
+{\footnotesize\ttfamily void exit\+\_\+game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{sender,  }\item[{\mbox{\hyperlink{structGame}{Game}} $\ast$}]{game,  }\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{ongoing\+Games,  }\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{finished\+Games }\end{DoxyParamCaption})}
+
+
+
+Quitte un jeu. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & Le client qui quitte le jeu. \\
+\hline
+{\em game} & Le jeu à quitter. \\
+\hline
+{\em ongoing\+Games} & La liste des jeux en cours. \\
+\hline
+{\em finished\+Games} & La liste des jeux terminés. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_8h_a61cfd68bc9d2bf639d5b510363a215e7}\label{server_8h_a61cfd68bc9d2bf639d5b510363a215e7}} 
+\index{server.h@{server.h}!extract\_game\_id@{extract\_game\_id}}
+\index{extract\_game\_id@{extract\_game\_id}!server.h@{server.h}}
+\doxysubsubsection{\texorpdfstring{extract\_game\_id()}{extract\_game\_id()}}
+{\footnotesize\ttfamily int extract\+\_\+game\+\_\+id (\begin{DoxyParamCaption}\item[{const char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Extrait l\textquotesingle{}identifiant du jeu à partir d\textquotesingle{}un buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Le buffer contenant l\textquotesingle{}identifiant du jeu. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+L\textquotesingle{}identifiant du jeu. 
+\end{DoxyReturn}

@@ -1,0 +1,97 @@
+\hypertarget{structGame}{}\doxysection{Game Struct Reference}
+\label{structGame}\index{Game@{Game}}
+
+
+Structure qui contient les informations d\textquotesingle{}une partie.  
+
+
+
+
+{\ttfamily \#include $<$game.\+h$>$}
+
+
+
+Collaboration diagram for Game\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{structGame__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structGame_a44e30ebf0bc73131629dcd10a741ebcd}\label{structGame_a44e30ebf0bc73131629dcd10a741ebcd}} 
+\mbox{\hyperlink{structClient}{Client}} $\ast$ {\bfseries p1}
+\item 
+\mbox{\Hypertarget{structGame_a0ce3cbb15c5f890536b2ffeb722b9585}\label{structGame_a0ce3cbb15c5f890536b2ffeb722b9585}} 
+\mbox{\hyperlink{structClient}{Client}} $\ast$ {\bfseries p2}
+\item 
+\mbox{\Hypertarget{structGame_a75f9ffaab85cb5e34571f1227df606cf}\label{structGame_a75f9ffaab85cb5e34571f1227df606cf}} 
+int {\bfseries score\+P1}
+\item 
+\mbox{\Hypertarget{structGame_a20dab225adbb552a8787d88c62453c81}\label{structGame_a20dab225adbb552a8787d88c62453c81}} 
+int {\bfseries score\+P2}
+\item 
+\mbox{\Hypertarget{structGame_a4b5326c2a8b61840eb6c7e58de9578ea}\label{structGame_a4b5326c2a8b61840eb6c7e58de9578ea}} 
+\mbox{\hyperlink{structClient}{Client}} $\ast$ {\bfseries winner}
+\item 
+\mbox{\Hypertarget{structGame_ac19fbb90132c4621c2937742cb8794a8}\label{structGame_ac19fbb90132c4621c2937742cb8794a8}} 
+time\+\_\+t {\bfseries start}
+\item 
+\mbox{\Hypertarget{structGame_a9b3edb346aba979a5bac752d607e7562}\label{structGame_a9b3edb346aba979a5bac752d607e7562}} 
+time\+\_\+t {\bfseries end}
+\item 
+\mbox{\Hypertarget{structGame_ab81cadb579dfad8b0dcaaadb1742040f}\label{structGame_ab81cadb579dfad8b0dcaaadb1742040f}} 
+\mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} $\ast$ {\bfseries board}
+\item 
+\mbox{\Hypertarget{structGame_a6f23d6ce51e97ad629b6f7c4d67fb70d}\label{structGame_a6f23d6ce51e97ad629b6f7c4d67fb70d}} 
+int {\bfseries ID}
+\item 
+\mbox{\Hypertarget{structGame_a70adfd73e6349f9cf6b680d4546d6d65}\label{structGame_a70adfd73e6349f9cf6b680d4546d6d65}} 
+\mbox{\hyperlink{structClient}{Client}} $\ast$ {\bfseries player\+Turn}
+\item 
+\mbox{\Hypertarget{structGame_a518971562201d27ff46ad4733f9a06ab}\label{structGame_a518971562201d27ff46ad4733f9a06ab}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries history}
+\item 
+\mbox{\Hypertarget{structGame_af091f8bb2a4eaf8ce7f46d974d442ed6}\label{structGame_af091f8bb2a4eaf8ce7f46d974d442ed6}} 
+\mbox{\hyperlink{structList}{List}} $\ast$ {\bfseries spectators}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure qui contient les informations d\textquotesingle{}une partie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & Premier joueur. \\
+\hline
+{\em p2} & Deuxième joueur. \\
+\hline
+{\em score\+P1} & Score du premier joueur. \\
+\hline
+{\em score\+P2} & Score du deuxième joueur. \\
+\hline
+{\em winner} & Joueur gagnant. \\
+\hline
+{\em start} & Temps de début de la partie. \\
+\hline
+{\em end} & Temps de fin de la partie. \\
+\hline
+{\em board} & Plateau de jeu. \\
+\hline
+{\em ID} & Identifiant de la partie. \\
+\hline
+{\em player\+Turn} & Joueur qui doit jouer. \\
+\hline
+{\em history} & Historique des coups joués afin de pouvoir regarder la partie de nouveau. \\
+\hline
+{\em spectators} & Liste des spectateurs. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+server/include/\mbox{\hyperlink{game_8h}{game.\+h}}\end{DoxyCompactItemize}

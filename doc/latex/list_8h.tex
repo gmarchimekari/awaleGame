@@ -1,0 +1,281 @@
+\hypertarget{list_8h}{}\doxysection{server/include/list.h File Reference}
+\label{list_8h}\index{server/include/list.h@{server/include/list.h}}
+
+
+Définition des structures et des fonctions pour manipuler une liste chaînée.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+Include dependency graph for list.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{list_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{list_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structNode}{Node}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}un noeud d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structList}{List}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{list_8h_aec2ed61de1167224cec990475e563c04}\label{list_8h_aec2ed61de1167224cec990475e563c04}} 
+typedef void($\ast$ \mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}}) (void $\ast$)
+\begin{DoxyCompactList}\small\item\em Pointeur vers une fonction qui prend un void$\ast$ en paramètre et ne retourne rien. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structNode}{Node}} \mbox{\hyperlink{list_8h_a3b09f37e675bcd48a01bf22155996872}{Node}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}un noeud d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structList}{List}} \mbox{\hyperlink{list_8h_a61366e7da8638d66a464a4a6f4799199}{List}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{list_8h_a19617f9bc48e93dcc29f867243d4ffb9}{list\+\_\+init}} (\mbox{\hyperlink{structList}{List}} $\ast$list)
+\begin{DoxyCompactList}\small\item\em Crée une liste chaînée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_a0c97fbdb8df27ab794d9fdc24bf9fd2a}{list\+\_\+insert\+\_\+node}} (\mbox{\hyperlink{structList}{List}} $\ast$list, void $\ast$data, \mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}} free, \mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}} print, void($\ast$sprint)(char $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Insère un noeud dans une liste chaînée. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{list_8h_a36115ade5cf1f5123f51e01e03e9858e}{list\+\_\+find\+\_\+node}} (\mbox{\hyperlink{structList}{List}} $\ast$list, void $\ast$data, int($\ast$compare)(const void $\ast$, const void $\ast$))
+\begin{DoxyCompactList}\small\item\em Fonction qui cherche un élément dans la liste chaînée. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_a8757b694c8cac112d79f445d8b810169}{list\+\_\+get\+\_\+node\+\_\+by\+\_\+id}} (\mbox{\hyperlink{structList}{List}} $\ast$list, void $\ast$id, int($\ast$compare\+ID)(const void $\ast$, const void $\ast$))
+\begin{DoxyCompactList}\small\item\em Récupère un noeud par son identifiant. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_ab54b6970f3abaecc454691f40eb3d205}{list\+\_\+display}} (const \mbox{\hyperlink{structList}{List}} $\ast$list)
+\begin{DoxyCompactList}\small\item\em Affiche une liste chaînée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_ac5dfd5e608c707f211a29fcd33662dcd}{list\+\_\+free}} (\mbox{\hyperlink{structList}{List}} $\ast$list)
+\begin{DoxyCompactList}\small\item\em Libère la mémoire allouée pour une liste chaînée. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_a2d3fb60e79ee424d4246d0b7649e481b}{list\+\_\+remove\+\_\+node}} (\mbox{\hyperlink{structList}{List}} $\ast$list, void $\ast$data, int($\ast$compare)(const void $\ast$, const void $\ast$))
+\begin{DoxyCompactList}\small\item\em Supprime un noeud d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_a7c10c00af6b931d98f3b538bbcf776fd}{list\+\_\+sprint}} (char $\ast$buffer, const \mbox{\hyperlink{structList}{List}} $\ast$list)
+\begin{DoxyCompactList}\small\item\em Copie les informations d\textquotesingle{}une liste chaînée dans un buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_a2d98e3b37ce640f0fd586a93286b4d21}{list\+\_\+handle\+\_\+nodes}} (\mbox{\hyperlink{structList}{List}} $\ast$list, void $\ast$context, void($\ast$\mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}})(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Applique une fonction à chaque noeud d\textquotesingle{}une liste chaînée. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Définition des structures et des fonctions pour manipuler une liste chaînée. 
+
+Ce fichier contient les définitions des structures \mbox{\hyperlink{structNode}{Node}} et \mbox{\hyperlink{structList}{List}}, ainsi que les prototypes des fonctions permettant de créer, manipuler, afficher et libérer une liste chaînée. Chaque noeud de la liste peut contenir des données génériques et des fonctions pour afficher et libérer ces données. 
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{list_8h_a61366e7da8638d66a464a4a6f4799199}\label{list_8h_a61366e7da8638d66a464a4a6f4799199}} 
+\index{list.h@{list.h}!List@{List}}
+\index{List@{List}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{List}{List}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structList}{List}} \mbox{\hyperlink{structList}{List}}}
+
+
+
+Structure qui contient les informations d\textquotesingle{}une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em head} & Pointeur vers le premier noeud de la liste. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a3b09f37e675bcd48a01bf22155996872}\label{list_8h_a3b09f37e675bcd48a01bf22155996872}} 
+\index{list.h@{list.h}!Node@{Node}}
+\index{Node@{Node}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{Node}{Node}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structNode}{Node}} \mbox{\hyperlink{structNode}{Node}}}
+
+
+
+Structure qui contient les informations d\textquotesingle{}un noeud d\textquotesingle{}une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Donnée du noeud. \\
+\hline
+{\em next} & Pointeur vers le noeud suivant. \\
+\hline
+{\em print} & Fonction pour afficher la donnée du noeud. \\
+\hline
+{\em free} & Fonction pour libérer la mémoire allouée pour la donnée du noeud. \\
+\hline
+{\em sprint} & Fonction pour copier les informations du noeud dans un buffer. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{list_8h_ab54b6970f3abaecc454691f40eb3d205}\label{list_8h_ab54b6970f3abaecc454691f40eb3d205}} 
+\index{list.h@{list.h}!list\_display@{list\_display}}
+\index{list\_display@{list\_display}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_display()}{list\_display()}}
+{\footnotesize\ttfamily void list\+\_\+display (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structList}{List}} $\ast$}]{list }\end{DoxyParamCaption})}
+
+
+
+Affiche une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste à afficher. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a36115ade5cf1f5123f51e01e03e9858e}\label{list_8h_a36115ade5cf1f5123f51e01e03e9858e}} 
+\index{list.h@{list.h}!list\_find\_node@{list\_find\_node}}
+\index{list\_find\_node@{list\_find\_node}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_find\_node()}{list\_find\_node()}}
+{\footnotesize\ttfamily int list\+\_\+find\+\_\+node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list,  }\item[{void $\ast$}]{data,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Fonction qui cherche un élément dans la liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste dans laquelle chercher. \\
+\hline
+{\em data} & Donnée à chercher. \\
+\hline
+{\em compare} & Fonction qui compare deux données. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si l\textquotesingle{}élément est trouvé, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{list_8h_ac5dfd5e608c707f211a29fcd33662dcd}\label{list_8h_ac5dfd5e608c707f211a29fcd33662dcd}} 
+\index{list.h@{list.h}!list\_free@{list\_free}}
+\index{list\_free@{list\_free}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_free()}{list\_free()}}
+{\footnotesize\ttfamily void list\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list }\end{DoxyParamCaption})}
+
+
+
+Libère la mémoire allouée pour une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste à libérer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a8757b694c8cac112d79f445d8b810169}\label{list_8h_a8757b694c8cac112d79f445d8b810169}} 
+\index{list.h@{list.h}!list\_get\_node\_by\_id@{list\_get\_node\_by\_id}}
+\index{list\_get\_node\_by\_id@{list\_get\_node\_by\_id}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_get\_node\_by\_id()}{list\_get\_node\_by\_id()}}
+{\footnotesize\ttfamily void$\ast$ list\+\_\+get\+\_\+node\+\_\+by\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list,  }\item[{void $\ast$}]{id,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare\+ID }\end{DoxyParamCaption})}
+
+
+
+Récupère un noeud par son identifiant. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste dans laquelle chercher. \\
+\hline
+{\em id} & Identifiant à chercher. \\
+\hline
+{\em compare\+ID} & Fonction qui compare deux identifiants. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointeur vers la donnée du noeud si trouvé, NULL sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{list_8h_a2d98e3b37ce640f0fd586a93286b4d21}\label{list_8h_a2d98e3b37ce640f0fd586a93286b4d21}} 
+\index{list.h@{list.h}!list\_handle\_nodes@{list\_handle\_nodes}}
+\index{list\_handle\_nodes@{list\_handle\_nodes}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_handle\_nodes()}{list\_handle\_nodes()}}
+{\footnotesize\ttfamily void list\+\_\+handle\+\_\+nodes (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list,  }\item[{void $\ast$}]{context,  }\item[{void($\ast$)(void $\ast$, void $\ast$)}]{handler }\end{DoxyParamCaption})}
+
+
+
+Applique une fonction à chaque noeud d\textquotesingle{}une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste à parcourir. \\
+\hline
+{\em context} & Contexte à passer à la fonction. \\
+\hline
+{\em handler} & Fonction à appliquer à chaque noeud. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a19617f9bc48e93dcc29f867243d4ffb9}\label{list_8h_a19617f9bc48e93dcc29f867243d4ffb9}} 
+\index{list.h@{list.h}!list\_init@{list\_init}}
+\index{list\_init@{list\_init}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_init()}{list\_init()}}
+{\footnotesize\ttfamily void list\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list }\end{DoxyParamCaption})}
+
+
+
+Crée une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste à créer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a0c97fbdb8df27ab794d9fdc24bf9fd2a}\label{list_8h_a0c97fbdb8df27ab794d9fdc24bf9fd2a}} 
+\index{list.h@{list.h}!list\_insert\_node@{list\_insert\_node}}
+\index{list\_insert\_node@{list\_insert\_node}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_insert\_node()}{list\_insert\_node()}}
+{\footnotesize\ttfamily void list\+\_\+insert\+\_\+node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list,  }\item[{void $\ast$}]{data,  }\item[{\mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}}}]{free,  }\item[{\mbox{\hyperlink{list_8h_aec2ed61de1167224cec990475e563c04}{handler}}}]{print,  }\item[{void($\ast$)(char $\ast$, void $\ast$)}]{sprint }\end{DoxyParamCaption})}
+
+
+
+Insère un noeud dans une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste dans laquelle insérer le noeud. \\
+\hline
+{\em data} & Donnée du noeud. \\
+\hline
+{\em free} & Fonction qui libère la mémoire allouée pour la donnée du noeud. \\
+\hline
+{\em print} & Fonction qui affiche la donnée du noeud. \\
+\hline
+{\em sprint} & Fonction qui copie les informations du noeud dans un buffer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{list_8h_a2d3fb60e79ee424d4246d0b7649e481b}\label{list_8h_a2d3fb60e79ee424d4246d0b7649e481b}} 
+\index{list.h@{list.h}!list\_remove\_node@{list\_remove\_node}}
+\index{list\_remove\_node@{list\_remove\_node}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_remove\_node()}{list\_remove\_node()}}
+{\footnotesize\ttfamily void$\ast$ list\+\_\+remove\+\_\+node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structList}{List}} $\ast$}]{list,  }\item[{void $\ast$}]{data,  }\item[{int($\ast$)(const void $\ast$, const void $\ast$)}]{compare }\end{DoxyParamCaption})}
+
+
+
+Supprime un noeud d\textquotesingle{}une liste chaînée. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & Liste dans laquelle supprimer le noeud. \\
+\hline
+{\em data} & Donnée du noeud à supprimer. \\
+\hline
+{\em compare} & Fonction qui compare deux données. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointeur vers la donnée du noeud supprimé si trouvé, NULL sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{list_8h_a7c10c00af6b931d98f3b538bbcf776fd}\label{list_8h_a7c10c00af6b931d98f3b538bbcf776fd}} 
+\index{list.h@{list.h}!list\_sprint@{list\_sprint}}
+\index{list\_sprint@{list\_sprint}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{list\_sprint()}{list\_sprint()}}
+{\footnotesize\ttfamily void list\+\_\+sprint (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{const \mbox{\hyperlink{structList}{List}} $\ast$}]{list }\end{DoxyParamCaption})}
+
+
+
+Copie les informations d\textquotesingle{}une liste chaînée dans un buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Buffer pour stocker les informations. \\
+\hline
+{\em list} & Liste à copier. \\
+\hline
+\end{DoxyParams}

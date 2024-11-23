@@ -1,0 +1,105 @@
+\hypertarget{awaleBoard_8h}{}\doxysection{server/include/awale\+Board.h File Reference}
+\label{awaleBoard_8h}\index{server/include/awaleBoard.h@{server/include/awaleBoard.h}}
+
+
+Fichier d\textquotesingle{}en-\/tête pour la structure du plateau de jeu Awale et ses fonctions associées.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for awale\+Board.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{awaleBoard_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{awaleBoard_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structAwaleBoard}{Awale\+Board}}
+\begin{DoxyCompactList}\small\item\em structure qui contient les informations d\textquotesingle{}un plateau de jeu Awale \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} \mbox{\hyperlink{awaleBoard_8h_a8ad9ca1152d743e44499b832cf8263ae}{Awale\+Board}}
+\begin{DoxyCompactList}\small\item\em structure qui contient les informations d\textquotesingle{}un plateau de jeu Awale \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{awaleBoard_8h_a36c91db32509b36fad3c070576582fb9}{awale\+Board\+\_\+init}} (\mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} $\ast$awale\+Board)
+\begin{DoxyCompactList}\small\item\em initialise un plateau de jeu \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{awaleBoard_8h_a6c71430a9cedb5be3d66ad687e0ea7fc}{awale\+Board\+\_\+free}} (\mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} $\ast$awale\+Board)
+\begin{DoxyCompactList}\small\item\em libere la memoire allouee pour un plateau de jeu \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Fichier d\textquotesingle{}en-\/tête pour la structure du plateau de jeu Awale et ses fonctions associées. 
+
+Ce fichier contient la définition de la structure \mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} et les déclarations des fonctions pour initialiser et libérer le plateau de jeu Awale.
+
+Le plateau de jeu Awale est représenté comme un tableau d\textquotesingle{}entiers, où chaque élément du tableau correspond au nombre de graines dans une case spécifique du plateau.
+
+\begin{DoxyDate}{Date}
+2024 
+\end{DoxyDate}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{awaleBoard_8h_a8ad9ca1152d743e44499b832cf8263ae}\label{awaleBoard_8h_a8ad9ca1152d743e44499b832cf8263ae}} 
+\index{awaleBoard.h@{awaleBoard.h}!AwaleBoard@{AwaleBoard}}
+\index{AwaleBoard@{AwaleBoard}!awaleBoard.h@{awaleBoard.h}}
+\doxysubsubsection{\texorpdfstring{AwaleBoard}{AwaleBoard}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} \mbox{\hyperlink{structAwaleBoard}{Awale\+Board}}}
+
+
+
+structure qui contient les informations d\textquotesingle{}un plateau de jeu Awale 
+
+
+\begin{DoxyParams}{Parameters}
+{\em board} & tableau de int qui represente le plateau. Chaque case contient le nombre de graines dans la case \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{awaleBoard_8h_a6c71430a9cedb5be3d66ad687e0ea7fc}\label{awaleBoard_8h_a6c71430a9cedb5be3d66ad687e0ea7fc}} 
+\index{awaleBoard.h@{awaleBoard.h}!awaleBoard\_free@{awaleBoard\_free}}
+\index{awaleBoard\_free@{awaleBoard\_free}!awaleBoard.h@{awaleBoard.h}}
+\doxysubsubsection{\texorpdfstring{awaleBoard\_free()}{awaleBoard\_free()}}
+{\footnotesize\ttfamily void awale\+Board\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} $\ast$}]{awale\+Board }\end{DoxyParamCaption})}
+
+
+
+libere la memoire allouee pour un plateau de jeu 
+
+
+\begin{DoxyParams}{Parameters}
+{\em awale\+Board} & plateau a liberer \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{awaleBoard_8h_a36c91db32509b36fad3c070576582fb9}\label{awaleBoard_8h_a36c91db32509b36fad3c070576582fb9}} 
+\index{awaleBoard.h@{awaleBoard.h}!awaleBoard\_init@{awaleBoard\_init}}
+\index{awaleBoard\_init@{awaleBoard\_init}!awaleBoard.h@{awaleBoard.h}}
+\doxysubsubsection{\texorpdfstring{awaleBoard\_init()}{awaleBoard\_init()}}
+{\footnotesize\ttfamily void awale\+Board\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structAwaleBoard}{Awale\+Board}} $\ast$}]{awale\+Board }\end{DoxyParamCaption})}
+
+
+
+initialise un plateau de jeu 
+
+
+\begin{DoxyParams}{Parameters}
+{\em awale\+Board} & plateau a initialiser \\
+\hline
+\end{DoxyParams}

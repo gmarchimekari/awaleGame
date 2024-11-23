@@ -1,0 +1,236 @@
+\hypertarget{server_2include_2client_8h}{}\doxysection{server/include/client.h File Reference}
+\label{server_2include_2client_8h}\index{server/include/client.h@{server/include/client.h}}
+
+
+Déclaration des structures et fonctions pour la gestion des clients dans le jeu Awale.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$list.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}server.\+h\char`\"{}}\newline
+Include dependency graph for client.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{server_2include_2client_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{server_2include_2client_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structClient}{Client}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}un joueur. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{server_2include_2client_8h_ad76d1750a6cdeebd506bfcd6752554d2}\label{server_2include_2client_8h_ad76d1750a6cdeebd506bfcd6752554d2}} 
+\#define {\bfseries ON}~1
+\item 
+\mbox{\Hypertarget{server_2include_2client_8h_a29e413f6725b2ba32d165ffaa35b01e5}\label{server_2include_2client_8h_a29e413f6725b2ba32d165ffaa35b01e5}} 
+\#define {\bfseries OFF}~0
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structClient}{Client}} \mbox{\hyperlink{server_2include_2client_8h_a7302c9ba9fef6f7473f52cc61bd4bc40}{Client}}
+\begin{DoxyCompactList}\small\item\em Structure qui contient les informations d\textquotesingle{}un joueur. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{server_2include_2client_8h_a98a503639fa97122dc9a427d553f5e7f}\label{server_2include_2client_8h_a98a503639fa97122dc9a427d553f5e7f}} 
+typedef int {\bfseries PRIVATE\+\_\+\+MODE}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{server_2include_2client_8h_a8bd6c3f1b65a3afe1c8a1a71379b844d}{client\+\_\+init}} (\mbox{\hyperlink{structClient}{Client}} $\ast$\mbox{\hyperlink{structClient}{Client}}, const char $\ast$name, const char $\ast$bio, SOCKET sock)
+\begin{DoxyCompactList}\small\item\em Initialise un joueur. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_2include_2client_8h_a308442c6f2e78f590d69a10959595c2f}{client\+\_\+print}} (void $\ast$\mbox{\hyperlink{structClient}{Client}})
+\begin{DoxyCompactList}\small\item\em Affiche un joueur. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_2include_2client_8h_ab4ad5060bd4897253f28ee41c501ad6c}{client\+\_\+free}} (void $\ast$\mbox{\hyperlink{structClient}{Client}})
+\begin{DoxyCompactList}\small\item\em Libère la mémoire allouée pour un joueur. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{server_2include_2client_8h_af1db90813f031bbf51e9919f613fa5e2}{client\+\_\+compare}} (const void $\ast$p1, const void $\ast$p2)
+\begin{DoxyCompactList}\small\item\em Compare deux joueurs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_2include_2client_8h_ad41abeb4f71715a3805c658ac6f47b75}{client\+\_\+add\+\_\+friend\+\_\+request}} (\mbox{\hyperlink{structClient}{Client}} $\ast$client\+Added, \mbox{\hyperlink{structClient}{Client}} $\ast$client\+Adding)
+\begin{DoxyCompactList}\small\item\em Fonction pour ajouter une demande d\textquotesingle{}ami à la liste d\textquotesingle{}amis. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_2include_2client_8h_a6cdd1c0c5661e57be0f0ba74f1a43799}{client\+\_\+get\+\_\+profile\+\_\+information}} (const \mbox{\hyperlink{structClient}{Client}} $\ast$c, char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em Récupère les informations de profil d\textquotesingle{}un client. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{server_2include_2client_8h_a21d49897c6f172e8c2fb6ee37628b18c}{client\+\_\+sprint}} (char $\ast$buffer, void $\ast$data)
+\begin{DoxyCompactList}\small\item\em Formate les informations d\textquotesingle{}un client en chaîne de caractères. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Déclaration des structures et fonctions pour la gestion des clients dans le jeu Awale. 
+
+Ce fichier contient les déclarations des structures et des fonctions utilisées pour gérer les clients dans le jeu Awale. Il inclut des fonctions pour initialiser, afficher, libérer et comparer les clients, ainsi que pour gérer les demandes d\textquotesingle{}amis et les informations de profil.
+
+\begin{DoxyDate}{Date}
+2023-\/10-\/05 
+\end{DoxyDate}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{server_2include_2client_8h_a7302c9ba9fef6f7473f52cc61bd4bc40}\label{server_2include_2client_8h_a7302c9ba9fef6f7473f52cc61bd4bc40}} 
+\index{client.h@{client.h}!Client@{Client}}
+\index{Client@{Client}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{Client}{Client}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structClient}{Client}} \mbox{\hyperlink{structClient}{Client}}}
+
+
+
+Structure qui contient les informations d\textquotesingle{}un joueur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nickname} & Pseudo du joueur. \\
+\hline
+{\em bio} & Biographie du joueur. \\
+\hline
+{\em mode} & Mode du joueur (public ou privé), utilisé pour l\textquotesingle{}observation des parties. \\
+\hline
+{\em games} & Liste des parties jouées par le joueur. \\
+\hline
+{\em friends} & Liste des amis du joueur. \\
+\hline
+{\em friends\+\_\+requests} & Liste des demandes d\textquotesingle{}amis reçues par le joueur. \\
+\hline
+{\em sock} & Socket du joueur. \\
+\hline
+{\em game\+\_\+invites} & Liste des invitations de parties reçues par le joueur. \\
+\hline
+{\em ongoing\+\_\+games} & Liste des parties en cours du joueur. \\
+\hline
+{\em finished\+\_\+games} & Liste des parties terminées du joueur. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{server_2include_2client_8h_ad41abeb4f71715a3805c658ac6f47b75}\label{server_2include_2client_8h_ad41abeb4f71715a3805c658ac6f47b75}} 
+\index{client.h@{client.h}!client\_add\_friend\_request@{client\_add\_friend\_request}}
+\index{client\_add\_friend\_request@{client\_add\_friend\_request}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_add\_friend\_request()}{client\_add\_friend\_request()}}
+{\footnotesize\ttfamily void client\+\_\+add\+\_\+friend\+\_\+request (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{client\+Added,  }\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{client\+Adding }\end{DoxyParamCaption})}
+
+
+
+Fonction pour ajouter une demande d\textquotesingle{}ami à la liste d\textquotesingle{}amis. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em client\+Added} & Joueur qui a reçu la demande. \\
+\hline
+{\em client\+Adding} & Joueur qui a envoyé la demande. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_2include_2client_8h_af1db90813f031bbf51e9919f613fa5e2}\label{server_2include_2client_8h_af1db90813f031bbf51e9919f613fa5e2}} 
+\index{client.h@{client.h}!client\_compare@{client\_compare}}
+\index{client\_compare@{client\_compare}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_compare()}{client\_compare()}}
+{\footnotesize\ttfamily int client\+\_\+compare (\begin{DoxyParamCaption}\item[{const void $\ast$}]{p1,  }\item[{const void $\ast$}]{p2 }\end{DoxyParamCaption})}
+
+
+
+Compare deux joueurs. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & Nom du premier joueur. \\
+\hline
+{\em p2} & Nom du deuxième joueur. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 si les joueurs sont égaux, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{server_2include_2client_8h_ab4ad5060bd4897253f28ee41c501ad6c}\label{server_2include_2client_8h_ab4ad5060bd4897253f28ee41c501ad6c}} 
+\index{client.h@{client.h}!client\_free@{client\_free}}
+\index{client\_free@{client\_free}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_free()}{client\_free()}}
+{\footnotesize\ttfamily void client\+\_\+free (\begin{DoxyParamCaption}\item[{void $\ast$}]{Client }\end{DoxyParamCaption})}
+
+
+
+Libère la mémoire allouée pour un joueur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structClient}{Client}}} & Joueur à libérer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_2include_2client_8h_a6cdd1c0c5661e57be0f0ba74f1a43799}\label{server_2include_2client_8h_a6cdd1c0c5661e57be0f0ba74f1a43799}} 
+\index{client.h@{client.h}!client\_get\_profile\_information@{client\_get\_profile\_information}}
+\index{client\_get\_profile\_information@{client\_get\_profile\_information}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_get\_profile\_information()}{client\_get\_profile\_information()}}
+{\footnotesize\ttfamily void client\+\_\+get\+\_\+profile\+\_\+information (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structClient}{Client}} $\ast$}]{c,  }\item[{char $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Récupère les informations de profil d\textquotesingle{}un client. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & \mbox{\hyperlink{structClient}{Client}} dont les informations de profil sont récupérées. \\
+\hline
+{\em buffer} & Buffer où les informations de profil sont stockées. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_2include_2client_8h_a8bd6c3f1b65a3afe1c8a1a71379b844d}\label{server_2include_2client_8h_a8bd6c3f1b65a3afe1c8a1a71379b844d}} 
+\index{client.h@{client.h}!client\_init@{client\_init}}
+\index{client\_init@{client\_init}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_init()}{client\_init()}}
+{\footnotesize\ttfamily void client\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structClient}{Client}} $\ast$}]{Client,  }\item[{const char $\ast$}]{name,  }\item[{const char $\ast$}]{bio,  }\item[{SOCKET}]{sock }\end{DoxyParamCaption})}
+
+
+
+Initialise un joueur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structClient}{Client}}} & Joueur à initialiser. \\
+\hline
+{\em name} & Pseudo du joueur. \\
+\hline
+{\em bio} & Biographie du joueur. \\
+\hline
+{\em sock} & Socket du joueur. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_2include_2client_8h_a308442c6f2e78f590d69a10959595c2f}\label{server_2include_2client_8h_a308442c6f2e78f590d69a10959595c2f}} 
+\index{client.h@{client.h}!client\_print@{client\_print}}
+\index{client\_print@{client\_print}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_print()}{client\_print()}}
+{\footnotesize\ttfamily void client\+\_\+print (\begin{DoxyParamCaption}\item[{void $\ast$}]{Client }\end{DoxyParamCaption})}
+
+
+
+Affiche un joueur. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structClient}{Client}}} & Joueur à afficher. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{server_2include_2client_8h_a21d49897c6f172e8c2fb6ee37628b18c}\label{server_2include_2client_8h_a21d49897c6f172e8c2fb6ee37628b18c}} 
+\index{client.h@{client.h}!client\_sprint@{client\_sprint}}
+\index{client\_sprint@{client\_sprint}!client.h@{client.h}}
+\doxysubsubsection{\texorpdfstring{client\_sprint()}{client\_sprint()}}
+{\footnotesize\ttfamily void client\+\_\+sprint (\begin{DoxyParamCaption}\item[{char $\ast$}]{buffer,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Formate les informations d\textquotesingle{}un client en chaîne de caractères. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Buffer où les informations formatées sont stockées. \\
+\hline
+{\em data} & Données du client à formater. \\
+\hline
+\end{DoxyParams}

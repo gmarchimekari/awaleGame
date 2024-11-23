@@ -1,0 +1,4 @@
+<map id="List" name="List">
+<area shape="rect" id="node1" title="Structure qui contient les informations d&#39;une liste chaînée." alt="" coords="11,95,53,121"/>
+<area shape="rect" id="node2" href="$structNode.html" title="Structure qui contient les informations d&#39;un noeud d&#39;une liste chaînée." alt="" coords="5,5,59,32"/>
+</map>
