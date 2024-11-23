@@ -85,22 +85,22 @@ make client
 
 ### Prérequis
 
-- Assurez-vous d'avoir CMake installé sur votre système. Vous pouvez vérifier cela en exécutant la commande suivante :
+Assurez-vous d'avoir CMake installé sur votre système. Vous pouvez vérifier cela en exécutant la commande suivante :
 
-  ```sh
-  cmake --version
-  ```
+```sh
+cmake --version
+```
 
-  Si CMake n'est pas installé, vous pouvez l'installer en utilisant votre gestionnaire de paquets. Par exemple, sur Ubuntu :
+Si CMake n'est pas installé, vous pouvez l'installer en utilisant votre gestionnaire de paquets. Par exemple, sur Ubuntu :
 
-  ```sh
-  sudo apt-get install cmake
-  ```
+```sh
+sudo apt-get install cmake
+```
 
-  Sur macOS, vous pouvez utiliser Homebrew :
+Sur macOS, vous pouvez utiliser Homebrew :
 
-  ```sh
-  brew install cmake
-  ```
+```sh
+brew install cmake
+```
 
-  Sur Windows, vous pouvez télécharger l'installateur depuis le [site officiel de CMake](https://cmake.org/download/).
+Sur Windows, vous pouvez télécharger l'installateur depuis le [site officiel de CMake](https://cmake.org/download/).
