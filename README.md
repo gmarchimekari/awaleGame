@@ -69,8 +69,6 @@ cd build
 cmake ..
 ```
 
-````
-
 Pour compiler le serveur et l'exécuter, lancez les commandes suivantes :
 
 ```sh
@@ -172,4 +170,7 @@ La documentation générée se trouve dans le répertoire doc/
   ```
 
 Alternativement, vous pouvez naviguer manuellement vers le répertoire et ouvrir le fichier `index.html` dans votre navigateur web.
-````
+
+```
+
+```
