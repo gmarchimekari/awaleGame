@@ -176,7 +176,3 @@ Pour consulter la documentation, ouvrez le fichier `index.html` dans votre navig
   ```
 
 Alternativement, vous pouvez naviguer manuellement vers le répertoire et ouvrir le fichier `index.html` dans votre navigateur web.
-
-```
-
-```
