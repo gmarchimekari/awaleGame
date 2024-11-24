@@ -53,7 +53,6 @@ typedef struct in_addr IN_ADDR;
 #define DYP 7
 #define BIO 8
 #define PVM 9
-#define SVG 10
 #define ACF 11
 #define RJF 12
 #define LFR 13
@@ -69,6 +68,7 @@ typedef struct in_addr IN_ADDR;
 #define EXS 23
 #define WFG 24
 #define DPP 25
+#define DSC 26
 
 // Réponses que le client peut envoyer
 #define ACCEPT 1

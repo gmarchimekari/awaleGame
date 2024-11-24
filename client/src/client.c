@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
 
 #include "client.h"
 
@@ -68,6 +69,11 @@ static void app(const char *address, const char *name)
                buffer[BUF_SIZE - 1] = 0;
             }
          }
+
+         if(feof(stdin))
+         {
+            strcpy(buffer, "DSC");
+         }
          write_server(sock, buffer);
       }
       else if(FD_ISSET(sock, &rdfs))
@@ -76,7 +82,7 @@ static void app(const char *address, const char *name)
          /* server down */
          if(n == 0)
          {
-            printf("Server disconnected !\n");
+            printf("Disconnected !\n");
             break;
          }
          puts(buffer);
@@ -149,11 +155,13 @@ static void write_server(SOCKET sock, const char *buffer)
 
 int main(int argc, char **argv)
 {
-   if(argc < 2)
+   if(argc < 3)
    {
       printf("Usage : %s [address] [pseudo]\n", argv[0]);
       return EXIT_FAILURE;
    }
+
+   signal(SIGINT, SIG_IGN);
 
    init();
 

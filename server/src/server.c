@@ -107,9 +107,9 @@ static void app(void)
 
          char id[14]; 
          sprintf(id, "#%05d", rand() % 10000); // randomizing the id between 0 and 9999
-         printf("[LOG] %s connected\n", id);
          strncat(name, id, 6);
          strncat(name, "\0", 1);
+         printf("[LOG] %s connected\n", name);
          Client c; 
          client_init(&c, name, "Trying to play some awale and chill around\n", csock);
          clients[actual] = c;
@@ -134,11 +134,10 @@ static void app(void)
                /* client disconnected */
                if(c == 0)
                {
+                  printf("[LOG] A client disconnected\n");
                   closesocket(clients[i].sock);
                   remove_client(clients, i, &actual);
                   strncpy(buffer, client.nickname, BUF_SIZE - 1);
-                  strncat(buffer, " disconnected !", BUF_SIZE - strlen(buffer) - 1);
-                  send_message_to_all_clients(clients, client, actual, buffer, 1);
                }
                else
                {
@@ -319,10 +318,6 @@ static void app(void)
                         }
                         break;
                      }
-
-                     case SVG:
-                        //displayClientProfile(clients[i]); 
-                        break;
 
                      case ACF: {
                         printf("[LOG] %s accepting friend request from %s\n", sender->nickname, buffer + 4);
@@ -548,6 +543,14 @@ static void app(void)
                         break;
                      }
 
+                     case DSC: {
+                        printf("[LOG] %s disconnecting\n", sender->nickname);
+                        closesocket(sender->sock);
+                        remove_client(clients, i, &actual);
+                        strncpy(buffer, sender->nickname, BUF_SIZE - 1);
+                        break;
+                     }
+
                      default:
                         send_message_to_client(sender, "Not a valid command\n");
                         break;
@@ -684,8 +687,6 @@ static int get_value(const char *val)
       return BIO;
    } else if(strcmp(val, "PVM") == 0) {
       return PVM;
-   } else if(strcmp(val, "SVG") == 0) {
-      return SVG;
    } else if(strcmp(val, "ACF") == 0) {
       return ACF;
    } else if(strcmp(val, "RJF") == 0) {
@@ -716,6 +717,8 @@ static int get_value(const char *val)
       return WFG;
    } else if(strcmp(val, "DPP") == 0) {
       return DPP;
+   } else if(strcmp(val, "DSC") == 0) {
+      return DSC;
    } else {
       return -1;
    }
@@ -754,6 +757,7 @@ static void send_main_menu(const Client* reciever) {
    "[DPP] [**player name**] Display a player's profile\n" // DONE
    "[BIO] [**new bio**] Modify your bio\n" // DONE 
    "[PVM] [**on/off**] Turn private mode on/off\n" // DONE
+   "[DSC] Disconnect\n"; // DONE
 
    "Select your option by entering the command: ";
    send_message_to_client(reciever, buffer);

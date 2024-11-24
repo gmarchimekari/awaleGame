@@ -59,6 +59,12 @@ Lorsqu'un client se connecte avec son pseudo, le menu suivant est envoyé, perme
 - **[LSF] List Friends**  
   Montre la liste complète des amis de l'utilisateur.
 
+- **[DSC] Disconnect**
+  Deconnecte le client
+
+Si le client ferme le terminal ou tappe un CTRL + D, il est deconnecté sans aucun soucis.
+Si le client tappe CTRL + C, le signal est ignoré, et il ne sera pas deconnecté.
+
 ## Compilation et Exécution
 
 Depuis la racine du projet, générez les fichiers de compilation en exécutant la commande suivante :
